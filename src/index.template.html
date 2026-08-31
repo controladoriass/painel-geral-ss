@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Geral · Silva &amp; Silva Advogados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* BUILD:INJECT_CSS */
+</style>
+</head>
+<body class="loading">
+
+<!-- ============ Cortina de loading ============ -->
+<div class="curtain" id="curtain">
+  <div class="curtain-half curtain-left"></div>
+  <div class="curtain-half curtain-right"></div>
+  <div class="curtain-center">
+    <div class="curtain-logo-wrap">
+      <span class="curtain-caption" style="font-size:15px;letter-spacing:2px">SILVA &amp; SILVA ADVOGADOS</span>
+      <div class="curtain-shine"></div>
+    </div>
+    <div class="curtain-caption">Painel Geral do Escritório</div>
+    <div class="curtain-dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="eyebrow">Controladoria · Visão Executiva</span>
+      <div class="doc-meta">
+        <div>Atualizado em <b id="meta-data">—</b></div>
+        <div>Fonte: <b>EasyJur OS</b></div>
+      </div>
+    </div>
+    <div class="hero-title">
+      <div class="kicker">Silva &amp; Silva Advogados</div>
+      <h1>Painel Geral <em>do Escritório</em></h1>
+      <p>Visão consolidada de projetos, financeiro, produção e comercial. Indicadores de gestão
+         extraídos do EasyJur e atualizados periodicamente pela Controladoria.</p>
+    </div>
+    <div class="hero-rule"></div>
+  </div>
+</header>
+
+<!-- ============ Navegação de abas ============ -->
+<nav class="tabs-nav" id="tabs-nav">
+  <div class="wrap">
+    <button class="tab-btn on" data-tab="financeiro">Financeiro</button>
+    <button class="tab-btn" data-tab="producao">Produção</button>
+    <button class="tab-btn" data-tab="comercial">Comercial</button>
+    <button class="tab-btn" data-tab="projetos">Projetos</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ================= ABA FINANCEIRO ================= -->
+  <div class="tab-panel on" id="tab-financeiro">
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">01</div>
+        <div class="sec-titles">
+          <h2>Assessoria mensal recorrente</h2>
+          <div class="sec-desc">Receita fixa contratada dos clientes de assessoria mensal vigentes.</div>
+        </div>
+      </div>
+      <div class="fin-cards" id="fin-mrr-cards"><!-- app.js preenche --></div>
+      <div class="panel">
+        <div class="panel-label">Distribuição dos contratos por faixa de valor</div>
+        <div class="hbar-list" id="fin-mrr-faixas"></div>
+        <div class="data-note" id="fin-mrr-note"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">02</div>
+        <div class="sec-titles">
+          <h2>Histórico de faturamento por ano</h2>
+          <div class="sec-desc">Receitas efetivamente recebidas (pagas), por ano, e comparação com competência.</div>
+        </div>
+      </div>
+      <div class="panel" id="fin-fat-ano"><div class="stub"><span class="stub-ico">⏳</span>
+        <b>Coletando</b> o histórico de faturamento do EasyJur…<div class="stub-tag">em coleta</div></div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">03</div>
+        <div class="sec-titles">
+          <h2>Planos de contas (DRE)</h2>
+          <div class="sec-desc">Receitas e despesas por plano de contas — base para separar êxito de mensal.</div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><div class="panel-label">Receitas por plano de contas</div>
+          <div class="hbar-list" id="fin-planos-rec"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+        <div class="panel"><div class="panel-label">Despesas por plano de contas</div>
+          <div class="hbar-list" id="fin-planos-desp"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">04</div>
+        <div class="sec-titles">
+          <h2>Receita fixa × Despesa fixa · Fluxo de caixa futuro</h2>
+          <div class="sec-desc">Comparativo e projeção dos próximos 6 meses (contas a receber − a pagar em aberto).</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="stub"><span class="stub-ico">⚙️</span>Depende de definir com o financeiro <b>quais planos de conta são "fixos"</b>
+          (aluguel, salários, software). <div class="stub-tag falta">a definir</div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= ABA PRODUÇÃO ================= -->
+  <div class="tab-panel" id="tab-producao">
+    <section>
+      <div class="sec-head">
+        <div class="roman">01</div>
+        <div class="sec-titles"><h2>Carteira de processos</h2>
+          <div class="sec-desc">Total em carteira por status e por área do direito.</div></div>
+      </div>
+      <div class="fin-cards" id="prod-carteira-cards"></div>
+      <div class="panel"><div class="panel-label">Processos ativos por área</div>
+        <div class="hbar-list" id="prod-por-area"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">02</div>
+        <div class="sec-titles"><h2>Processos novos</h2>
+          <div class="sec-desc">Entradas por mês e por advogado no ano corrente.</div></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><div class="panel-label">Novos por mês (2025–2026)</div>
+          <div id="prod-novos-mes"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+        <div class="panel"><div class="panel-label">Novos por advogado (2026)</div>
+          <div class="hbar-list" id="prod-novos-adv"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">03</div>
+        <div class="sec-titles"><h2>Alertas de carteira</h2>
+          <div class="sec-desc">Processos grandes e processos parados (sem movimentação).</div></div>
+      </div>
+      <div class="fin-cards" id="prod-alertas-cards"></div>
+      <div class="data-note warn" id="prod-alertas-note"></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">04</div>
+        <div class="sec-titles"><h2>Timesheet e petições</h2>
+          <div class="sec-desc">Horas registradas por advogado/cliente e produção de petições.</div></div>
+      </div>
+      <div class="panel">
+        <div class="stub"><span class="stub-ico">⚙️</span>Timesheet por advogado/cliente já existe no Painel de Produtividade.
+          <b>"Petições produzidas"</b> precisa de critério definido (não há contador nativo no EasyJur).
+          <div class="stub-tag falta">a definir</div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= ABA COMERCIAL ================= -->
+  <div class="tab-panel" id="tab-comercial">
+    <section>
+      <div class="sec-head">
+        <div class="roman">01</div>
+        <div class="sec-titles"><h2>Funil de oportunidades</h2>
+          <div class="sec-desc">Pipeline por etapa: briefing, proposta, negociação, fechado, recusado.</div></div>
+      </div>
+      <div class="fin-cards" id="com-funil-cards"></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">02</div>
+        <div class="sec-titles"><h2>Desempenho por vendedor</h2>
+          <div class="sec-desc">Propostas enviadas, fechadas e valor em aberto por responsável.</div></div>
+      </div>
+      <div class="panel"><div class="panel-label">Propostas por vendedor</div>
+        <div class="hbar-list" id="com-por-vendedor"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">03</div>
+        <div class="sec-titles"><h2>Maiores oportunidades em aberto</h2>
+          <div class="sec-desc">Top propostas por valor, ainda em negociação.</div></div>
+      </div>
+      <div class="panel" id="com-top-oport"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">04</div>
+        <div class="sec-titles"><h2>Metas e ligações</h2>
+          <div class="sec-desc">Metas semanais/mensais por vendedor e atividade de prospecção.</div></div>
+      </div>
+      <div class="panel">
+        <div class="stub"><span class="stub-ico">📋</span>Metas e ligações <b>não existem no EasyJur</b> — serão preenchidas por
+          formulário do comercial. Valor da proposta também precisa ser cadastrado (hoje vem zerado).
+          <div class="stub-tag falta">vira formulário</div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= ABA PROJETOS ================= -->
+  <div class="tab-panel" id="tab-projetos">
+    <section>
+      <div class="sec-head">
+        <div class="roman">01</div>
+        <div class="sec-titles"><h2>Controladoria geral</h2>
+          <div class="sec-desc">Pipeline de projetos em andamento e reajustes de assessoria mensal.</div></div>
+      </div>
+      <div class="panel">
+        <div class="stub"><span class="stub-ico">❓</span>A definir com o Dr. Kim: <b>"projetos"</b> = projetos consultivos
+          do EasyJur ou projetos internos de gestão? Reajustes de assessoria precisam de controle de histórico
+          (EasyJur guarda só o valor atual). <div class="stub-tag falta">a confirmar</div></div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer style="border-top:1px solid var(--line);padding:26px 0;margin-top:40px">
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <span style="font-size:11px;color:var(--muted)">Silva &amp; Silva Advogados · Controladoria · Uso interno</span>
+    <button class="back-top" id="theme-toggle" style="border:1px solid var(--line);background:var(--card);
+      padding:8px 16px;border-radius:2px;cursor:pointer;font-size:11px;font-weight:700;color:var(--navy);
+      letter-spacing:.5px">Alternar tema</button>
+  </div>
+</footer>
+
+<script id="dados-embed">/* BUILD:INJECT_DATA_EMBED */</script>
+<script>
+/* BUILD:INJECT_JS */
+</script>
+</body>
+</html>

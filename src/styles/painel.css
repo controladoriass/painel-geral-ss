@@ -1,0 +1,83 @@
+/* ============================================================
+   painel.css — estilos específicos do Painel Geral do Escritório
+   (complementa base.css: navegação por abas + cards financeiros)
+   ============================================================ */
+
+/* ---- Navegação de abas (sticky) ---- */
+.tabs-nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);
+  box-shadow:0 4px 18px -14px rgba(30,34,63,.3);transition:background-color .5s ease,border-color .5s ease}
+.tabs-nav .wrap{display:flex;align-items:center;gap:4px;padding-top:0;padding-bottom:0;flex-wrap:wrap}
+.tab-btn{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--navy2);background:transparent;border:0;padding:18px 22px;cursor:pointer;position:relative;
+  transition:color .2s;white-space:nowrap}
+.tab-btn:hover{color:var(--gold)}
+.tab-btn.on{color:var(--navy)}
+.tab-btn.on::after{content:"";position:absolute;left:16px;right:16px;bottom:-1px;height:3px;
+  background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:2px}
+.tab-btn .tb-ico{margin-right:8px;opacity:.7}
+body.theme-dark .tabs-nav{background:#0a0d1e;border-bottom-color:#2B2F45}
+body.theme-dark .tab-btn{color:#a9b0c6}
+body.theme-dark .tab-btn.on{color:#EDE9DC}
+
+/* ---- Painéis de aba (mostra/esconde) ---- */
+.tab-panel{display:none}
+.tab-panel.on{display:block;animation:tabIn .5s cubic-bezier(.22,1,.36,1)}
+@keyframes tabIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---- Cards financeiros (KPI grande com contexto) ---- */
+.fin-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-bottom:26px}
+.fin-card{background:var(--card);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:4px;
+  padding:22px 22px 20px;box-shadow:0 1px 0 rgba(0,0,0,.02),0 8px 30px -22px rgba(30,34,63,.18);position:relative;overflow:hidden}
+.fin-card .fc-eyebrow{font-size:9.5px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.fin-card .fc-num{font-family:'Montserrat',sans-serif;font-size:30px;font-weight:800;line-height:1;color:var(--navy);
+  letter-spacing:-.8px;font-variant-numeric:tabular-nums}
+.fin-card .fc-num small{font-size:15px;color:var(--gold);font-weight:700;margin-right:2px}
+.fin-card .fc-desc{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5;font-weight:500}
+.fin-card .fc-desc b{color:var(--navy);font-weight:700}
+body.theme-dark .fin-card{background:#1B1F35;border-color:#2B2F45}
+body.theme-dark .fin-card .fc-num{color:#EDE9DC}
+body.theme-dark .fin-card .fc-desc{color:#a9b0c6}
+body.theme-dark .fin-card .fc-desc b{color:#EDE9DC}
+
+/* card destaque navy/dourado */
+.fin-card.hl{background:linear-gradient(160deg,var(--navy-deep) 0%,#191d38 100%);color:#fff;border-top-color:var(--gold)}
+.fin-card.hl .fc-eyebrow{color:var(--gold-soft)}
+.fin-card.hl .fc-num{color:#fff}
+.fin-card.hl .fc-num small{color:var(--gold-soft)}
+.fin-card.hl .fc-desc{color:#c2c6d6}
+.fin-card.hl .fc-desc b{color:#fff}
+.fin-card.hl::before{content:"";position:absolute;top:-30%;right:-25%;width:70%;height:80%;
+  background:radial-gradient(circle,rgba(181,134,66,.18),transparent 60%);pointer-events:none}
+
+/* ---- Estado "em construção" / aguardando dado ---- */
+.stub{border:1px dashed var(--line2);border-radius:4px;padding:34px 26px;text-align:center;color:var(--muted);
+  background:var(--paper);font-size:12.5px;line-height:1.7}
+.stub .stub-ico{font-size:26px;display:block;margin-bottom:10px;opacity:.5}
+.stub b{color:var(--navy);font-weight:700}
+.stub .stub-tag{display:inline-block;margin-top:12px;font-size:9.5px;font-weight:800;letter-spacing:1.4px;
+  text-transform:uppercase;padding:4px 12px;border-radius:2px;background:var(--paper2);color:var(--gold)}
+.stub .stub-tag.falta{background:rgba(166,61,56,.10);color:#a63d38}
+body.theme-dark .stub{background:#12162A;border-color:#2B2F45;color:#8a92ab}
+body.theme-dark .stub b{color:#EDE9DC}
+
+/* ---- Barra simples reaproveitável (ranking horizontal) ---- */
+.hbar-list{display:flex;flex-direction:column;gap:2px}
+.hbar-row{display:grid;grid-template-columns:190px 1fr 120px;align-items:center;gap:14px;padding:8px 4px;
+  border-bottom:1px solid var(--paper2)}
+.hbar-row:last-child{border-bottom:0}
+.hbar-row .hb-name{font-size:12px;font-weight:600;color:var(--navy);text-align:right;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.hbar-track{height:12px;background:var(--paper2);border-radius:6px;overflow:hidden}
+.hbar-fill{height:100%;background:linear-gradient(90deg,var(--navy3),var(--navy2));border-radius:6px;
+  transition:width 1s cubic-bezier(.22,1,.36,1)}
+.hbar-fill.gold{background:linear-gradient(90deg,var(--gold-soft),var(--gold))}
+.hbar-row .hb-val{font-size:13px;font-weight:800;color:var(--navy);text-align:right;font-family:'Montserrat',sans-serif;
+  font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.hbar-row .hb-val small{color:var(--muted);font-weight:500;font-size:9.5px;display:block;margin-top:1px}
+body.theme-dark .hbar-row .hb-name,body.theme-dark .hbar-row .hb-val{color:#EDE9DC}
+body.theme-dark .hbar-track{background:#2B2F45}
+body.theme-dark .hbar-row .hb-val small{color:#a9b0c6}
+
+/* ---- Aviso de coleta / rodapé de fonte ---- */
+.data-note{font-size:10.5px;color:var(--muted);margin-top:14px;font-style:italic;line-height:1.5}
+.data-note.warn{color:#a63d38}
