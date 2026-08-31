@@ -88,23 +88,37 @@
     }
 
     const rec = await carregar('receitas');
-    if(rec && rec.faturamento_por_ano){
-      const anos = rec.faturamento_por_ano.filter(a=>a.total_pago>0);
-      const mx = Math.max(...anos.map(a=>a.total_pago));
-      $('#fin-fat-ano').innerHTML = `<div class="panel-label">Faturamento recebido por ano</div>
-        <div class="hbar-list" id="fin-fat-bars"></div>`;
+    if(rec && rec.faturamento_por_plano_de_contas){
+      const planos = rec.faturamento_por_plano_de_contas;
+      // OPERACIONAL = planos que começam com "1." (honorários, êxito, sucumbência...)
+      // NÃO-OPERACIONAL = "2." (transferências internas, reembolsos) → excluir do faturamento
+      const isOp = p => (String(p.descricao||'').trim()).startsWith('1.');
+      const opPlanos = planos.filter(isOp);
+      // recompõe faturamento operacional por ano a partir do por_ano de cada plano
+      const anosSet = {};
+      opPlanos.forEach(p=>{ Object.entries(p.por_ano||{}).forEach(([ano,v])=>{ anosSet[ano]=(anosSet[ano]||0)+(v||0); }); });
+      const anos = Object.keys(anosSet).sort().map(a=>({ano:a, total:anosSet[a]})).filter(a=>a.total>0);
+      const mx = Math.max(...anos.map(a=>a.total));
+      const totalOp = opPlanos.reduce((s,p)=>s+(p.total_pago||p.total||0),0);
+      const totalGeral = planos.reduce((s,p)=>s+(p.total_pago||p.total||0),0);
+      $('#fin-fat-ano').innerHTML =
+        `<div class="fin-cards" style="margin-bottom:22px">
+           ${card('Faturamento operacional (total)', fmtBRLk(totalOp),
+             `Honorários pagos 2022–2026 · exclui transferências internas`, true)}
+           ${card('2026 parcial', fmtBRLk(anosSet['2026']||0), 'Até a data da coleta')}
+         </div>
+         <div class="panel-label">Faturamento operacional recebido por ano</div>
+         <div class="hbar-list" id="fin-fat-bars"></div>
+         <div class="data-note">Operacional (planos 1.x) = ${fmtBRLk(totalOp)}. Excluídos R$ ${fmtNum(Math.round((totalGeral-totalOp)))} de não-operacionais (transferências internas, reembolsos — planos 2.x), que inflariam o faturamento.</div>`;
       barras($('#fin-fat-bars'), anos.map(a=>({
-        nome:String(a.ano), valor:a.total_pago, label:fmtBRLk(a.total_pago),
-        sub:fmtNum(a.qtd_recebimentos)+' receb.'
+        nome:String(a.ano), valor:a.total, label:fmtBRLk(a.total)
       })), {gold:true, max:mx});
-      // planos de conta receita
-      if(rec.faturamento_por_plano_de_contas){
-        const top = rec.faturamento_por_plano_de_contas
-          .slice().sort((a,b)=>(b.total_pago||b.total||0)-(a.total_pago||a.total||0)).slice(0,10);
-        barras($('#fin-planos-rec'), top.map(p=>({
-          nome:p.descricao||p.nome, valor:p.total_pago||p.total||0, label:fmtBRLk(p.total_pago||p.total||0)
-        })), {gold:true});
-      }
+      // ranking planos operacionais
+      const top = opPlanos.slice().sort((a,b)=>(b.total_pago||b.total||0)-(a.total_pago||a.total||0)).slice(0,10);
+      barras($('#fin-planos-rec'), top.map(p=>({
+        nome:(p.descricao||p.nome||'').replace(/^1\.\d+\.\d+\s*-\s*/,''),
+        valor:p.total_pago||p.total||0, label:fmtBRLk(p.total_pago||p.total||0)
+      })), {gold:true});
     }
 
     const desp = await carregar('despesas');

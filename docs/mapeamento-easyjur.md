@@ -116,6 +116,9 @@ Dados já coletados e salvos em `dados/` (validados no painel):
 - **Comercial:** 3.085 oportunidades. Funil: 994 Fechado (R$ 20,5 mi), 1.165 Proposta (R$ 19,8 mi), 639 Recusado, 236 Briefing, 49 Negociação. **593 (19%) com valor zerado.** 25 vendedores (top: Yasmin 486 fechadas, Vanessa Maragno 241, Bruna Vidal 150).
 - **Produção:** carteira 16.761 ativos (24.622 total). Por área: Cível 7.087, Tributário 2.930, Trabalhista 1.440. **Parados >30d: 7.652 / >90d: 5.902.** Grandes: ≥1mi = 1.040, ≥500k = 1.574.
 
+**⚠️ REGRA CRÍTICA — faturamento operacional × não-operacional (aba Financeiro):**
+As receitas incluem **transferências bancárias internas** (plano "2.1.11 - Transferência Entrada" = R$ 45,7 mi!) e reembolsos/outras (planos "2.x"). Somar tudo bruto **infla o faturamento**. O faturamento REAL de honorários = só planos **"1.x"** = **R$ 111,5 mi** (2022-2026). Principais: Êxito (1.1.01) R$ 46,2M · Partido Mensal (1.1.02) R$ 31,3M · Honorários Diversos (1.1.08) R$ 27,6M · Sucumbências (1.1.06) R$ 5,7M. O painel já separa (planos 2.x excluídos do faturamento). Faturamento operacional por ano: 2022 ~R$ 11M, 2023 ~R$ 28M, 2024 ~R$ 30M, 2025 ~R$ 28M, 2026 ~R$ 21M parcial. **Aplicar a mesma limpeza nas despesas** (excluir "Transferência Saída" se houver).
+
 **⚠️ LIMITAÇÃO DA API descoberta na coleta (impacta a aba Produção):**
 - **"Processos novos POR ADVOGADO" NÃO é filtrável** por `list_processos`: o campo `id_advogado` da capa só traz 2 responsáveis genéricos (Maiko=2001, Kim=471). O advogado técnico real fica num **campo personalizado não filtrável**. → Para quebrar produção por advogado individual precisamos de: (a) outra abordagem (timesheet por responsável, que funciona), ou (b) ajuste no EasyJur para popular id_advogado corretamente. **Novo item de formulário/processo.**
 - Paginação do EasyJur é instável com datas repetidas (precisa dedup por id em múltiplas ordenações) — já tratado nos coletores.
