@@ -1,0 +1,112 @@
+{
+  "gerado_em": "2026-08-31",
+  "fonte": "EasyJur list_oportunidades - top 15 em aberto por valor",
+  "total": 15,
+  "oportunidades": [
+    {
+      "nome": "ALCIONEI TRIDAPALLI - EDIFICIO ENZO GABRIEL",
+      "cliente": "ALCIONEI TRIDAPALLI",
+      "vendedor": "VANESSA MARAGNO OSELLAME",
+      "status_label": "Proposta",
+      "valor_total": 1000000.0
+    },
+    {
+      "nome": "DEFESA JUDICIAL",
+      "cliente": "ERNANDO MACEDO SILVA",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 300000.0
+    },
+    {
+      "nome": "DEFESA JUDICIAL",
+      "cliente": "BETATEX COMERCIAL IMPORTADORA E EXPORTADORA LTDA",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 250000.0
+    },
+    {
+      "nome": "SIMONE SELENT - CRIMINAL",
+      "cliente": "SIMONE SELENT CORREIA",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 250000.0
+    },
+    {
+      "nome": "CENTRO DE TRIAGEM ITA. - AÇÃO ",
+      "cliente": "CENTRO DE TRIAGEM ITAPEMA EIRELI",
+      "vendedor": "VANESSA MARAGNO OSELLAME",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "RUAN ARNO BROCKVELD - CRIMINAL",
+      "cliente": "",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "GABRIEL SETENT - CRIMINAL",
+      "cliente": "GABRIEL SELENT GARGANO",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "FRANCISCO MOSER - CRIMINAL",
+      "cliente": "FRANCISCO MOSER",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "CRIMINAL",
+      "cliente": "MÁRIO CÉSAR ANGELO",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 180000.0
+    },
+    {
+      "nome": "FAMÍLIA GALLI - INVENTÁRIO",
+      "cliente": "Marco Aurélio Costa Galli",
+      "vendedor": "Bruna Gabrielli Vidal",
+      "status_label": "Proposta",
+      "valor_total": 175000.0
+    },
+    {
+      "nome": "AÇÃO JUDICIAL",
+      "cliente": "GRUPO MASTER COMERCIO IMPORTACAO E EXPORTACAO LTDA",
+      "vendedor": "Ana Bittencourt",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "agravo de instrumento",
+      "cliente": "INDUSFLORA PRODUTOS FLORESTAIS S/A - INDUSFLORA",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "DEMIAN CORREA - PROCESSO",
+      "cliente": "DEMIAN FRANCIS CORREA",
+      "vendedor": "VANESSA MARAGNO OSELLAME",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "LISSANDRA SELENT - CRIMINAL",
+      "cliente": "LISSANDRA SELENT GARGANO",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "ZIMMERMANN - CANTO DA PRAIA",
+      "cliente": "CONSTRUTORA ZIMMERMANN LTDA - ZIMMERMANN",
+      "vendedor": "Bruna Gabrielli Vidal",
+      "status_label": "Briefing",
+      "valor_total": 150000.0
+    }
+  ]
+}

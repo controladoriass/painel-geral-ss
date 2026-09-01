@@ -1,0 +1,62 @@
+{
+  "gerado_em": "2026-08-31",
+  "fonte": "EasyJur list_processos contagem por area juridica",
+  "total": 16761,
+  "areas": [
+    {
+      "id": 2,
+      "area": "Cível",
+      "ativos": 7087
+    },
+    {
+      "id": null,
+      "area": "Outras áreas",
+      "ativos": 3375
+    },
+    {
+      "id": 7,
+      "area": "Tributário",
+      "ativos": 2930
+    },
+    {
+      "id": 6,
+      "area": "Trabalhista",
+      "ativos": 1440
+    },
+    {
+      "id": 4,
+      "area": "Penal-Criminal",
+      "ativos": 957
+    },
+    {
+      "id": 35,
+      "area": "Bancário",
+      "ativos": 795
+    },
+    {
+      "id": 16,
+      "area": "Imobiliário",
+      "ativos": 96
+    },
+    {
+      "id": 10,
+      "area": "Família e Sucessões",
+      "ativos": 54
+    },
+    {
+      "id": 5,
+      "area": "Previdenciário",
+      "ativos": 27
+    },
+    {
+      "id": 11,
+      "area": "Empresarial",
+      "ativos": 0
+    },
+    {
+      "id": 31,
+      "area": "Consultivo",
+      "ativos": 0
+    }
+  ]
+}

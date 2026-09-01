@@ -25,6 +25,13 @@ MAPA = {
     "form_atividade": "formularios_atividade.json",
     "form_times":     "formularios_times.json",
     "form_reajustes": "formularios_reajustes.json",
+    # detalhes para drill-down (rastreabilidade/auditoria via drawer)
+    "detalhe_contratos":            "detalhe_contratos_mensais.json",
+    "detalhe_vendedores":           "detalhe_vendedores.json",
+    "detalhe_top_oportunidades":    "detalhe_top_oportunidades.json",
+    "detalhe_planos_receita":       "detalhe_planos_receita.json",
+    "detalhe_planos_despesa":       "detalhe_planos_despesa.json",
+    "detalhe_processos_por_area":   "detalhe_processos_por_area.json",
 }
 
 def main():

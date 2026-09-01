@@ -388,6 +388,8 @@
     initTabs(); initTema();
     // renderiza tudo (cada um tolera dado ausente)
     await Promise.allSettled([renderFinanceiro(), renderProducao(), renderComercial(), renderFormularios()]);
+    // Marca elementos clicáveis para drill-down / auditoria
+    marcarDrills();
     // data da última atualização — pega a mais recente dos JSONs carregados
     {
       const embed = window.DADOS_EMBED || {};
@@ -404,6 +406,309 @@
     }
     setTimeout(fecharCortina, 500);
   }
+
+  // ---------- Marca elementos clicáveis (drill-down) ----------
+  function marcarDrills(){
+    // Card MRR (assessoria mensal) → detalhe dos 53 contratos
+    const mrrCards = $$('#fin-mrr-cards .fin-card');
+    if(mrrCards[0]){ // 1º card = Receita Mensal Recorrente
+      mrrCards[0].classList.add('ss-drill');
+      mrrCards[0].setAttribute('data-drill','contratos-mensais');
+    }
+    // Cards do funil comercial → detalhe vendedores
+    const funilCards = $$('#com-funil-cards .fin-card');
+    funilCards.forEach(c=>{
+      c.classList.add('ss-drill');
+      c.setAttribute('data-drill','vendedores');
+    });
+    // Cards de faturamento (mensal, êxito, outros, total) → planos de receita
+    const fatCards = $$('#fin-fat-ano .fin-card');
+    fatCards.forEach(c=>{
+      c.classList.add('ss-drill');
+      c.setAttribute('data-drill','planos-receita');
+    });
+    // Panel de planos de receita e despesa → detalhes
+    const panelRec = $('#fin-planos-rec');
+    const parentRec = panelRec && panelRec.closest('.panel');
+    if(parentRec){ parentRec.classList.add('ss-drill'); parentRec.setAttribute('data-drill','planos-receita'); }
+    const panelDesp = $('#fin-planos-desp');
+    const parentDesp = panelDesp && panelDesp.closest('.panel');
+    if(parentDesp){ parentDesp.classList.add('ss-drill'); parentDesp.setAttribute('data-drill','planos-despesa'); }
+    // Produção: painel de processos por área
+    const panelArea = $('#prod-por-area');
+    const parentArea = panelArea && panelArea.closest('.panel');
+    if(parentArea){ parentArea.classList.add('ss-drill'); parentArea.setAttribute('data-drill','processos-por-area'); }
+    // Comercial: top oportunidades
+    const topOp = $('#com-top-oport');
+    if(topOp){ topOp.classList.add('ss-drill'); topOp.setAttribute('data-drill','top-oportunidades'); }
+    // Ranking vendedores
+    const panelVend = $('#com-por-vendedor');
+    const parentVend = panelVend && panelVend.closest('.panel');
+    if(parentVend){ parentVend.classList.add('ss-drill'); parentVend.setAttribute('data-drill','vendedores'); }
+  }
+
+  // ==========================================================
+  // DRILL-DOWN / AUDITORIA (drawer lateral)
+  // ==========================================================
+  // Cada "drill" define: source (arquivo JSON) + colunas + como filtrar pela busca.
+  // Registrado dinamicamente após render de cada seção via ssRegistrarDrill().
+  const DRILLS = {}; // {chave: {carregar, renderizar, titulo, eyebrow}}
+
+  function registrarDrill(chave, def){ DRILLS[chave] = def; }
+
+  function abrirDrawer(chave, ctx){
+    const def = DRILLS[chave];
+    if(!def){ console.warn('[drill] chave desconhecida:', chave); return; }
+    const overlay = ensureDrawer();
+    const drawer = document.getElementById('ss-drawer');
+    document.getElementById('ss-drawer-eyebrow').textContent = def.eyebrow || 'Detalhe';
+    document.getElementById('ss-drawer-title').textContent = (typeof def.titulo === 'function' ? def.titulo(ctx) : def.titulo) || 'Detalhes';
+    document.getElementById('ss-drawer-sub').innerHTML = '';
+    document.getElementById('ss-drawer-body').innerHTML =
+      '<div class="ss-drawer__empty">carregando…</div>';
+    overlay.classList.add('on'); drawer.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    Promise.resolve(def.carregar(ctx)).then(dados=>{
+      def.renderizar(dados, ctx);
+      atualizarContagemDrawer();
+    }).catch(e=>{
+      document.getElementById('ss-drawer-body').innerHTML =
+        '<div class="ss-drawer__empty"><b>Erro ao carregar</b>'+(e.message||'')+'</div>';
+    });
+  }
+  function fecharDrawer(){
+    const overlay = document.getElementById('ss-drawer-overlay');
+    const drawer = document.getElementById('ss-drawer');
+    if(overlay) overlay.classList.remove('on');
+    if(drawer) drawer.classList.remove('on');
+    document.body.style.overflow = '';
+  }
+  function ensureDrawer(){
+    let overlay = document.getElementById('ss-drawer-overlay');
+    if(overlay) return overlay;
+    overlay = document.createElement('div');
+    overlay.id = 'ss-drawer-overlay';
+    overlay.className = 'ss-drawer-overlay';
+    overlay.addEventListener('click', fecharDrawer);
+    const drawer = document.createElement('aside');
+    drawer.id = 'ss-drawer';
+    drawer.className = 'ss-drawer';
+    drawer.innerHTML = `
+      <div class="ss-drawer__head">
+        <div class="ss-drawer__head-left">
+          <div class="ss-drawer__eyebrow" id="ss-drawer-eyebrow">Detalhe</div>
+          <div class="ss-drawer__title" id="ss-drawer-title">—</div>
+          <div class="ss-drawer__sub" id="ss-drawer-sub"></div>
+        </div>
+        <button class="ss-drawer__close" id="ss-drawer-close" title="Fechar (ESC)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="ss-drawer__toolbar">
+        <div class="ss-drawer__search"><input type="text" id="ss-drawer-search" placeholder="Buscar…"></div>
+        <div class="ss-drawer__count" id="ss-drawer-count">—</div>
+        <button class="ss-drawer__export" id="ss-drawer-export">Exportar CSV</button>
+      </div>
+      <div class="ss-drawer__body" id="ss-drawer-body"></div>
+    `;
+    document.body.appendChild(overlay);
+    document.body.appendChild(drawer);
+    document.getElementById('ss-drawer-close').addEventListener('click', fecharDrawer);
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') fecharDrawer(); });
+    document.getElementById('ss-drawer-search').addEventListener('input', e=>{
+      const q = e.target.value.trim().toLowerCase();
+      const rows = document.querySelectorAll('#ss-drawer-body tbody tr[data-searchable]');
+      rows.forEach(r=>{
+        const txt = r.getAttribute('data-searchable').toLowerCase();
+        r.style.display = q && !txt.includes(q) ? 'none' : '';
+      });
+      atualizarContagemDrawer();
+    });
+    document.getElementById('ss-drawer-export').addEventListener('click', exportarCSVDrawer);
+    return overlay;
+  }
+  function atualizarContagemDrawer(){
+    const rows = document.querySelectorAll('#ss-drawer-body tbody tr[data-searchable]');
+    const visiveis = Array.from(rows).filter(r=>r.style.display !== 'none').length;
+    const el = document.getElementById('ss-drawer-count');
+    if(el) el.innerHTML = '<b>'+fmtNum(visiveis)+'</b> de '+fmtNum(rows.length);
+  }
+  function exportarCSVDrawer(){
+    const tbl = document.querySelector('#ss-drawer-body table');
+    if(!tbl) return;
+    const linhas = [];
+    const heads = Array.from(tbl.querySelectorAll('thead th')).map(th=>'"'+th.textContent.trim().replace(/"/g,'""')+'"');
+    linhas.push(heads.join(','));
+    tbl.querySelectorAll('tbody tr').forEach(tr=>{
+      if(tr.style.display==='none') return;
+      const cels = Array.from(tr.querySelectorAll('td')).map(td=>'"'+td.textContent.trim().replace(/"/g,'""')+'"');
+      linhas.push(cels.join(','));
+    });
+    const csv = linhas.join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'painel-detalhe-'+Date.now()+'.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // Helper: render tabela dentro do drawer
+  function drawerTabela(colunas, linhas){
+    if(!linhas || !linhas.length){
+      document.getElementById('ss-drawer-body').innerHTML =
+        '<div class="ss-drawer__empty"><b>Sem itens para exibir</b>Nenhum registro encontrado.</div>';
+      return;
+    }
+    const html = `<table class="ss-table">
+      <thead><tr>${colunas.map(c=>`<th class="${c.num?'num':''}">${c.h}</th>`).join('')}</tr></thead>
+      <tbody>${linhas.map(l=>{
+        const searchable = colunas.map(c=>c.render(l)).join(' ').replace(/<[^>]+>/g,'');
+        const warn = l._warn ? ' class="warn"' : '';
+        return `<tr${warn} data-searchable="${searchable.replace(/"/g,'&quot;')}">${
+          colunas.map(c=>`<td class="${c.num?'num':''} ${c.mute?'mute':''}">${c.render(l)}</td>`).join('')
+        }</tr>`;
+      }).join('')}</tbody>
+    </table>`;
+    document.getElementById('ss-drawer-body').innerHTML = html;
+  }
+
+  // ---------- Registrar drills disponíveis ----------
+  registrarDrill('contratos-mensais', {
+    eyebrow: 'Financeiro · Assessoria mensal',
+    titulo: 'Contratos de assessoria mensal',
+    carregar: ()=> carregar('detalhe_contratos') ,
+    renderizar: (d)=>{
+      if(!d || !d.contratos){ drawerTabela([],[]); return; }
+      const sub = document.getElementById('ss-drawer-sub');
+      sub.innerHTML = `<b>${fmtNum(d.total)}</b> contratos · MRR total <b>${fmtBRLk(d.total_valor_mensal)}</b>` +
+        (d.vigencia_vencida ? ` · <span style="color:var(--ss-warn)"><b>${d.vigencia_vencida}</b> com vigência vencida</span>` : '');
+      const linhas = d.contratos.slice().sort((a,b)=>b.valor-a.valor).map(c=>({
+        ...c, _warn: c.vigencia_vencida
+      }));
+      drawerTabela([
+        {h:'Nº', render:c=>c.numero||'—'},
+        {h:'Cliente', render:c=>c.cliente_hint || '<span style="color:var(--ss-mute)">'+c.titulo.slice(0,40)+'</span>'},
+        {h:'Início', render:c=>c.data_inicio || '—', mute:true},
+        {h:'Vigência até', render:c=>{
+          if(!c.data_final) return '<span style="color:var(--ss-mute)">indeterminada</span>';
+          return c.vigencia_vencida
+            ? `<span class="ss-tag warn">${c.data_final} · vencida</span>`
+            : c.data_final;
+        }},
+        {h:'Valor mensal', num:true, render:c=>{
+          if(!c.valor) return '<span class="ss-tag warn">R$ 0</span>';
+          return fmtBRL(c.valor);
+        }},
+      ], linhas);
+    }
+  });
+
+  registrarDrill('vendedores', {
+    eyebrow: 'Comercial · Vendedores',
+    titulo: 'Desempenho por vendedor',
+    carregar: ()=> carregar('detalhe_vendedores'),
+    renderizar: (d)=>{
+      if(!d || !d.vendedores){ drawerTabela([],[]); return; }
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(d.total)}</b> vendedores ativos`;
+      drawerTabela([
+        {h:'Vendedor', render:v=>v.vendedor||'—'},
+        {h:'Enviadas', num:true, render:v=>fmtNum(v.enviadas||0)},
+        {h:'Fechadas', num:true, render:v=>`<b>${fmtNum(v.fechadas||0)}</b>`},
+        {h:'Recusadas', num:true, render:v=>fmtNum(v.recusadas||0)},
+        {h:'Em aberto', num:true, render:v=>fmtNum(v.em_aberto||0)},
+        {h:'R$ Fechado', num:true, render:v=>fmtBRLk(v.valor_fechado||0)},
+        {h:'R$ Em aberto', num:true, render:v=>fmtBRLk(v.valor_em_aberto||0)},
+      ], d.vendedores);
+    }
+  });
+
+  registrarDrill('top-oportunidades', {
+    eyebrow: 'Comercial · Maiores propostas',
+    titulo: 'Top oportunidades em aberto',
+    carregar: ()=> carregar('detalhe_top_oportunidades'),
+    renderizar: (d)=>{
+      if(!d || !d.oportunidades){ drawerTabela([],[]); return; }
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `Top <b>${fmtNum(d.total)}</b> por valor · status 1-3`;
+      drawerTabela([
+        {h:'Cliente', render:o=>o.cliente||o.nome||'—'},
+        {h:'Nome', render:o=>o.nome||'', mute:true},
+        {h:'Vendedor', render:o=>o.vendedor||'—', mute:true},
+        {h:'Etapa', render:o=>`<span class="ss-tag pri">${o.status_label||'—'}</span>`},
+        {h:'Valor', num:true, render:o=>fmtBRL(o.valor_total||0)},
+      ], d.oportunidades);
+    }
+  });
+
+  registrarDrill('planos-receita', {
+    eyebrow: 'Financeiro · DRE',
+    titulo: 'Planos de contas · Receitas',
+    carregar: ()=> carregar('detalhe_planos_receita'),
+    renderizar: (d)=>{
+      if(!d || !d.planos){ drawerTabela([],[]); return; }
+      const totalOp = d.planos.filter(p=>(p.descricao||'').startsWith('1.')).reduce((s,p)=>s+(p.total_pago||0),0);
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(d.total)}</b> planos · operacional (1.x) <b>${fmtBRLk(totalOp)}</b>`;
+      drawerTabela([
+        {h:'Plano', render:p=>p.descricao||'—'},
+        {h:'Recebimentos', num:true, render:p=>fmtNum(p.qtd||0)},
+        {h:'Total pago', num:true, render:p=>fmtBRL(p.total_pago||p.total||0)},
+      ], d.planos.slice().sort((a,b)=>(b.total_pago||0)-(a.total_pago||0)));
+    }
+  });
+
+  registrarDrill('planos-despesa', {
+    eyebrow: 'Financeiro · DRE',
+    titulo: 'Planos de contas · Despesas',
+    carregar: ()=> carregar('detalhe_planos_despesa'),
+    renderizar: (d)=>{
+      if(!d || !d.planos){ drawerTabela([],[]); return; }
+      document.getElementById('ss-drawer-sub').innerHTML = `<b>${fmtNum(d.total)}</b> planos`;
+      drawerTabela([
+        {h:'Plano', render:p=>p.descricao||'—'},
+        {h:'Total pago', num:true, render:p=>fmtBRL(p.total_pago||p.total||0)},
+      ], d.planos.slice().sort((a,b)=>(b.total_pago||0)-(a.total_pago||0)));
+    }
+  });
+
+  registrarDrill('processos-por-area', {
+    eyebrow: 'Produção · Carteira',
+    titulo: 'Processos ativos por área',
+    carregar: ()=> carregar('detalhe_processos_por_area'),
+    renderizar: (d)=>{
+      if(!d || !d.areas){ drawerTabela([],[]); return; }
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(d.total)}</b> processos ativos · <b>${d.areas.length}</b> áreas`;
+      drawerTabela([
+        {h:'Área do direito', render:a=>a.area||a.nome||'—'},
+        {h:'Ativos', num:true, render:a=>fmtNum(a.ativos||a.total||0)},
+      ], d.areas);
+    }
+  });
+
+  // Expor globalmente pra os handlers onclick usarem
+  window.ssDrill = abrirDrawer;
+
+  // Delegação de clique nos elementos com [data-drill]
+  document.addEventListener('click', (e)=>{
+    const el = e.target.closest('[data-drill]');
+    if(!el) return;
+    const chave = el.getAttribute('data-drill');
+    const ctx = el.getAttribute('data-drill-ctx');
+    abrirDrawer(chave, ctx);
+  });
+
+  // Adicionar arquivos de detalhe ao ARQUIVOS pra carregamento
+  Object.assign(ARQUIVOS, {
+    detalhe_contratos: 'dados/detalhe_contratos_mensais.json',
+    detalhe_vendedores: 'dados/detalhe_vendedores.json',
+    detalhe_top_oportunidades: 'dados/detalhe_top_oportunidades.json',
+    detalhe_planos_receita: 'dados/detalhe_planos_receita.json',
+    detalhe_planos_despesa: 'dados/detalhe_planos_despesa.json',
+    detalhe_processos_por_area: 'dados/detalhe_processos_por_area.json',
+  });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
