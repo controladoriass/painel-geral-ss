@@ -6,7 +6,7 @@
 <title>Painel Geral · Silva &amp; Silva Advogados</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
 <style>
 /* BUILD:INJECT_CSS */
 </style>
@@ -27,31 +27,34 @@
   </div>
 </div>
 
-<!-- ============ HERO ============ -->
-<header class="hero">
-  <div class="wrap">
-    <div style="position:absolute;top:20px;right:32px;font-size:10.5px;color:var(--muted);letter-spacing:.3px;text-align:right;line-height:1.5">
-      Atualizado em <b style="color:var(--navy);font-weight:700" id="meta-data">—</b>
+<!-- ============ MASTHEAD (editorial) ============ -->
+<header class="masthead">
+  <div class="mw">
+    <div class="mh-top">
+      <img class="mh-logo" src="logo.png" alt="Silva &amp; Silva Advogados Associados">
+      <div class="mh-meta">
+        <span class="mh-meta-lbl">Atualizado</span>
+        <span class="mh-meta-val" id="meta-data">—</span>
+      </div>
     </div>
-    <div class="hero-title">
-      <div class="kicker">Silva &amp; Silva Advogados</div>
-      <h1>Painel Geral <em>do Escritório</em></h1>
+    <div class="mh-rule"></div>
+    <div class="mh-title">
+      <h1>Painel Geral do Escritório</h1>
     </div>
-    <div class="hero-rule"></div>
   </div>
 </header>
 
 <!-- ============ Navegação de abas ============ -->
-<nav class="tabs-nav" id="tabs-nav">
-  <div class="wrap">
-    <button class="tab-btn on" data-tab="financeiro">Financeiro</button>
-    <button class="tab-btn" data-tab="producao">Produção</button>
-    <button class="tab-btn" data-tab="comercial">Comercial</button>
-    <button class="tab-btn" data-tab="projetos">Projetos</button>
+<nav class="section-nav" id="tabs-nav">
+  <div class="mw">
+    <button class="sn-btn on" data-tab="financeiro"><span class="sn-num">I</span>Financeiro</button>
+    <button class="sn-btn" data-tab="producao"><span class="sn-num">II</span>Produção</button>
+    <button class="sn-btn" data-tab="comercial"><span class="sn-num">III</span>Comercial</button>
+    <button class="sn-btn" data-tab="projetos"><span class="sn-num">IV</span>Projetos</button>
   </div>
 </nav>
 
-<main class="wrap">
+<main class="mw">
 
   <!-- ================= ABA FINANCEIRO ================= -->
   <div class="tab-panel on" id="tab-financeiro">
