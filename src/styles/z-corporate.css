@@ -65,22 +65,11 @@ body{ padding-left:var(--ss-sidebar-w) !important }
 }
 
 .ss-sidebar__brand{
-  padding:26px 22px 22px; border-bottom:1px solid rgba(255,255,255,.06);
-  display:flex; flex-direction:column; gap:14px;
+  padding:24px 20px; border-bottom:1px solid rgba(255,255,255,.06);
 }
 .ss-sidebar__brand img{
-  height:24px; width:auto; display:block; filter:brightness(0) invert(1); opacity:.92;
-}
-.ss-sidebar__brand-sub{
-  font-size:10.5px; font-weight:600; letter-spacing:.16em;
-  text-transform:uppercase; color:rgba(255,255,255,.45);
-  padding-top:4px; border-top:1px solid rgba(255,255,255,.05);
-  display:flex; align-items:center; justify-content:space-between;
-}
-.ss-sidebar__brand-sub::after{
-  content:"v1.0"; font-size:9.5px; font-weight:500; letter-spacing:.05em;
-  color:rgba(255,255,255,.3); text-transform:none;
-  font-variant-numeric:tabular-nums;
+  max-width:170px; height:auto; width:100%; display:block;
+  filter:brightness(0) invert(1); opacity:.92;
 }
 
 .ss-sidebar__nav{ padding:20px 0; flex:1; overflow-y:auto }
