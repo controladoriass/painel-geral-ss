@@ -2,173 +2,114 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Metas Comerciais · Silva & Silva</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metas Comerciais — Silva &amp; Silva</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
-  --navy:#1E223F; --navy2:#3F5276; --navy-deep:#161A31;
-  --gold:#B58642; --gold-soft:#CFA36E;
-  --paper:#F5F1E8; --paper2:#EAE4D3; --line:#DDD5C0;
-  --ink:#20233B; --muted:#7a7f96;
-}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',system-ui,sans-serif}
-body{background:linear-gradient(180deg,#161A31 0%,#0d1024 100%);color:var(--ink);min-height:100vh;padding:32px 16px}
-.wrap{max-width:640px;margin:0 auto}
-.card{background:var(--paper);border-radius:6px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
-.hero{background:linear-gradient(160deg,var(--navy-deep) 0%,#191d38 100%);color:#fff;padding:34px 32px 30px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;top:-30%;right:-25%;width:70%;height:80%;background:radial-gradient(circle,rgba(181,134,66,.18),transparent 60%);pointer-events:none}
-.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;position:relative}
-h1{font-size:26px;font-weight:800;letter-spacing:-.5px;color:#fff;line-height:1.1;position:relative}
-h1 em{font-style:normal;color:var(--gold-soft);font-weight:600}
-.hero p{margin-top:12px;font-size:13px;color:#c2c6d6;line-height:1.55;position:relative}
-.gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:18px;position:relative}
-form{padding:28px 32px 32px}
-.grp{margin-bottom:18px}
-.grp.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label{display:block;font-size:10.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
-label .req{color:var(--gold)}
-input,select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:3px;padding:11px 12px;outline:0;transition:border-color .2s,box-shadow .2s}
-input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(181,134,66,.15)}
-textarea{resize:vertical;min-height:70px;font-size:13px}
-.grid-metas{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.sec-title{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold);margin:22px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.hint{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
-.btn{width:100%;margin-top:24px;background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;border:0;border-radius:3px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
-.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px -10px rgba(30,34,63,.5)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-.btn::after{content:"";position:absolute;left:14px;right:14px;bottom:6px;height:2px;background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:1px}
-.msg{margin-top:16px;padding:14px 16px;border-radius:3px;font-size:13px;font-weight:600;text-align:center;display:none}
-.msg.ok{background:rgba(47,122,68,.10);color:#2f7a44;border:1px solid rgba(47,122,68,.25);display:block}
-.msg.err{background:rgba(166,61,56,.10);color:#a63d38;border:1px solid rgba(166,61,56,.25);display:block}
-.msg.info{background:var(--paper2);color:var(--navy);border:1px solid var(--line);display:block}
-footer{text-align:center;padding:16px 0 0;font-size:10.5px;color:rgba(255,255,255,.45);letter-spacing:1px}
-@media(max-width:520px){.grp.two,.grid-metas{grid-template-columns:1fr}form,.hero{padding:24px 22px}h1{font-size:22px}}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../form.css">
 </head>
 <body>
 <div class="wrap">
-  <div class="card">
-    <header class="hero">
-      <div class="eyebrow">Silva &amp; Silva · Comercial</div>
-      <h1>Metas <em>Comerciais</em></h1>
-      <p>Cadastro de metas por vendedor e período. Alimenta a aba <b style="color:#fff">Comercial</b> do Painel Geral do Escritório.</p>
-      <div class="gold-rule"></div>
-    </header>
 
-    <form id="frm">
-      <div class="sec-title">Vendedor e período</div>
-      <div class="grp two">
-        <div>
-          <label>Vendedor <span class="req">*</span></label>
-          <select name="vendedor" required>
-            <option value="">Selecione…</option>
-            <option>Yasmin Lazouwnik</option>
-            <option>Vanessa Maragno Osellame</option>
-            <option>Bruna Gabrielli Vidal</option>
-            <option>Erika Martins da Silva</option>
-            <option>Kelly Bento</option>
-            <option>Giovanna Julia Paulina da Silva</option>
-            <option>Outro</option>
-          </select>
-        </div>
-        <div>
-          <label>Período <span class="req">*</span></label>
-          <select name="periodo" required>
-            <option value="mes">Mensal</option>
-            <option value="semana">Semanal</option>
-            <option value="trimestre">Trimestral</option>
-          </select>
-        </div>
+  <a class="back-hub" href="../">voltar aos formulários</a>
+
+  <header class="top">
+    <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
+    <h1><span class="tick"></span>Metas Comerciais</h1>
+    <div class="sub">Cadastro das metas por vendedor e período. Alimenta a aba Comercial do Painel Geral.</div>
+  </header>
+
+  <form id="form" class="card" autocomplete="off">
+
+    <div class="sec-title">Vendedor e período</div>
+
+    <div class="grid">
+      <div class="field full">
+        <label>Vendedor <span class="req">*</span></label>
+        <select name="vendedor" required>
+          <option value="" disabled selected>Selecione o vendedor…</option>
+          <option>Yasmin Lazouwnik</option>
+          <option>Vanessa Maragno Osellame</option>
+          <option>Bruna Gabrielli Vidal</option>
+          <option>Erika Martins da Silva</option>
+          <option>Kelly Bento</option>
+          <option>Giovanna Julia Paulina da Silva</option>
+          <option>Outro</option>
+        </select>
       </div>
-      <div class="grp">
+
+      <div class="field">
+        <label>Período <span class="req">*</span></label>
+        <select name="periodo" required>
+          <option value="mes" selected>Mensal</option>
+          <option value="semana">Semanal</option>
+          <option value="trimestre">Trimestral</option>
+        </select>
+      </div>
+
+      <div class="field">
         <label>Referência <span class="req">*</span></label>
-        <input type="text" name="referencia" placeholder="Ex: 2026-09 (mês) · 2026-W36 (semana) · 2026-Q3 (trim.)" required>
-        <div class="hint">Use o formato que combinou com o time. Padrão sugerido: <code>AAAA-MM</code> para mês.</div>
+        <input type="text" name="referencia" placeholder="Ex.: 2026-09" required>
       </div>
 
-      <div class="sec-title">Metas do período</div>
-      <div class="grid-metas">
-        <div>
-          <label>Propostas (nº)</label>
-          <input type="number" name="metaPropostasQtd" min="0" step="1" placeholder="Ex: 30">
-        </div>
-        <div>
-          <label>Propostas (R$)</label>
-          <input type="text" name="metaPropostasValor" placeholder="Ex: 500000" inputmode="decimal">
-        </div>
-        <div>
-          <label>Assessorias mensais fechar</label>
-          <input type="number" name="metaAssessorias" min="0" step="1" placeholder="Ex: 3">
-        </div>
-        <div>
-          <label>Ligações</label>
-          <input type="number" name="metaLigacoes" min="0" step="1" placeholder="Ex: 100">
-        </div>
-        <div>
-          <label>Leads novos</label>
-          <input type="number" name="metaLeads" min="0" step="1" placeholder="Ex: 20">
-        </div>
-        <div></div>
+      <div class="field full">
+        <div class="hint">Formato sugerido: <b>AAAA-MM</b> (mês) · <b>AAAA-Wnn</b> (semana) · <b>AAAA-Qn</b> (trimestre).</div>
+      </div>
+    </div>
+
+    <div class="sec-title mt">Metas do período</div>
+
+    <div class="grid">
+      <div class="field">
+        <label>Propostas (quantidade) <span class="opt">opcional</span></label>
+        <input type="number" name="metaPropostasQtd" min="0" step="1" placeholder="Ex.: 30">
       </div>
 
-      <div class="grp" style="margin-top:8px">
-        <label>Observações</label>
+      <div class="field">
+        <label>Propostas (valor) <span class="opt">opcional</span></label>
+        <div class="money">
+          <span class="cur">R$</span>
+          <input type="text" name="metaPropostasValor" id="metaValor" placeholder="0,00" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Assessorias mensais a fechar <span class="opt">opcional</span></label>
+        <input type="number" name="metaAssessorias" min="0" step="1" placeholder="Ex.: 3">
+      </div>
+
+      <div class="field">
+        <label>Ligações <span class="opt">opcional</span></label>
+        <input type="number" name="metaLigacoes" min="0" step="1" placeholder="Ex.: 100">
+      </div>
+
+      <div class="field full">
+        <label>Leads novos <span class="opt">opcional</span></label>
+        <input type="number" name="metaLeads" min="0" step="1" placeholder="Ex.: 20">
+      </div>
+
+      <div class="field full">
+        <label>Observações <span class="opt">opcional</span></label>
         <textarea name="observacoes" placeholder="Contexto do período, ajustes especiais, campanhas…"></textarea>
       </div>
+    </div>
 
-      <button type="submit" class="btn" id="btn">Salvar meta</button>
-      <div class="msg" id="msg"></div>
-    </form>
-  </div>
-  <footer>Painel Geral do Escritório · Controladoria</footer>
+    <div class="actions">
+      <button type="submit" class="submit">Salvar meta</button>
+    </div>
+  </form>
 </div>
 
+<script src="../form.js"></script>
 <script>
-// COLE AQUI a URL do Apps Script (termina em /exec). Vazio = MODO TESTE (não grava).
-const APPS_SCRIPT_URL = "";
-
-const frm = document.getElementById('frm');
-const btn = document.getElementById('btn');
-const msg = document.getElementById('msg');
-
-function mostrar(tipo, texto){
-  msg.className = 'msg ' + tipo;
-  msg.textContent = texto;
-}
-function limpar(){ msg.className='msg'; msg.textContent=''; }
-
-frm.addEventListener('submit', async (ev) => {
-  ev.preventDefault(); limpar();
-  const fd = new FormData(frm);
-  const dados = { _form: 'metas' };
-  fd.forEach((v,k) => dados[k] = v);
-  dados.dataHora = new Date().toLocaleString('pt-BR');
-
-  btn.disabled = true; btn.textContent = 'Enviando…';
-
-  if(!APPS_SCRIPT_URL){
-    mostrar('info', 'MODO TESTE — dados NÃO foram gravados (URL do Apps Script vazia).');
-    btn.disabled=false; btn.textContent='Salvar meta';
-    console.log('[TESTE] enviaria:', dados);
-    return;
-  }
-  try{
-    const r = await fetch(APPS_SCRIPT_URL, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify(dados)
-    });
-    // no-cors: não conseguimos ler a resposta, mas o POST vai. Assumimos sucesso.
-    mostrar('ok', '✓ Meta salva com sucesso.');
-    frm.reset();
-  }catch(e){
-    mostrar('err', 'Erro ao enviar: ' + e.message);
-  }finally{
-    btn.disabled=false; btn.textContent='Salvar meta';
-  }
+// COLE aqui a URL /exec do Apps Script (Parte 2 do INSTRUCOES.md).
+window.APPS_SCRIPT_URL = "";
+mascaraMoeda(document.getElementById('metaValor'));
+formSetup({
+  form: document.getElementById('form'),
+  formId: 'metas',
+  msgOk: 'Meta salva!'
 });
 </script>
 </body>

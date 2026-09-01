@@ -1,0 +1,162 @@
+/* ============================================================
+   form.css — padrão visual dos formulários do Painel Geral
+   (mesmo padrão de https://controladoriass.github.io/exitos/)
+   ============================================================ */
+:root{
+  --navy:#1E223F;
+  --gold:#CFA36E;
+  --gold-soft:#b98b4f;
+  --txt:#1E223F;
+  --txt-dim:#6b7183;
+  --line:rgba(30,34,63,.12);
+  --ok:#2e8b62;
+  --err:#c0392b;
+  --field-bg:#ffffff;
+  --field-border:#d7dae4;
+  --card-bg:#ffffff;
+  --page-bg:#f4f5f8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Montserrat',system-ui,Arial,sans-serif;
+  background:var(--page-bg);
+  color:var(--txt);
+  min-height:100vh;
+  padding:36px 16px 60px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto}
+
+/* ---- Cabeçalho ---- */
+header.top{text-align:center;margin-bottom:26px;display:flex;flex-direction:column;align-items:center}
+header.top img.logo{display:block;height:38px;width:auto;max-width:100%;margin:0 auto;opacity:.92}
+header.top h1{
+  margin-top:16px;font-size:23px;font-weight:700;line-height:1.15;letter-spacing:.01em;color:var(--navy);
+  display:inline-flex;align-items:center;gap:11px;justify-content:center;
+}
+header.top .sub{
+  margin-top:8px;font-size:12.5px;color:var(--txt-dim);font-weight:500;letter-spacing:.02em;
+  max-width:500px;line-height:1.5;
+}
+.tick{display:inline-block;width:13px;height:21px;background:var(--gold);transform:skewX(-16deg);border-radius:2px}
+
+/* ---- Nav de volta ao hub ---- */
+.back-hub{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;font-weight:600;color:var(--txt-dim);text-decoration:none;
+  letter-spacing:.03em;margin-bottom:18px;transition:color .15s;
+}
+.back-hub:hover{color:var(--gold-soft)}
+.back-hub::before{content:"←";font-size:14px}
+
+/* ---- Card ---- */
+.card{
+  background:var(--card-bg);border:1px solid var(--line);border-radius:16px;
+  padding:30px 30px 34px;box-shadow:0 10px 34px rgba(30,34,63,.08);
+}
+.sec-title{
+  display:flex;align-items:center;gap:12px;
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold-soft);font-weight:600;margin:6px 0 20px;
+}
+.sec-title:before{content:"";width:12px;height:20px;background:var(--gold);transform:skewX(-16deg);border-radius:2px;display:inline-block}
+.sec-title.mt{margin-top:30px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid.grid-4{grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1 / -1}
+label{
+  font-size:12.5px;font-weight:600;letter-spacing:.03em;color:var(--txt);
+  display:flex;align-items:center;gap:6px;
+}
+label .opt{font-size:10.5px;font-weight:500;color:var(--txt-dim);text-transform:uppercase;letter-spacing:.08em}
+label .req{color:var(--gold);font-weight:700}
+.hint{font-size:11px;color:var(--txt-dim);font-weight:500;line-height:1.4;margin-top:-2px}
+
+input,select,textarea{
+  font-family:inherit;font-size:15px;color:var(--txt);
+  background:var(--field-bg);border:1px solid var(--field-border);border-radius:10px;
+  padding:12px 14px;width:100%;
+  transition:border-color .18s, background .18s, box-shadow .18s;
+}
+input::placeholder,textarea::placeholder{color:#a3a8b6}
+input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--gold);background:#fffdf9;
+  box-shadow:0 0 0 3px rgba(207,163,110,.18);
+}
+select{
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23CFA36E' stroke-width='2.4'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;
+}
+select option{background:#ffffff;color:var(--txt)}
+textarea{resize:vertical;min-height:88px}
+
+/* campo valor com prefixo R$ */
+.money{position:relative}
+.money .cur{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gold);font-weight:600;font-size:15px;pointer-events:none}
+.money input{padding-left:38px}
+
+/* caixa de cálculo (usada em reajustes) */
+.calc-box{
+  background:linear-gradient(160deg,var(--navy) 0%,#161A31 100%);color:#fff;
+  padding:18px 22px;border-radius:12px;margin-top:6px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.calc-box .cb-lbl{font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.calc-box .cb-val{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.calc-box .cb-val.pos{color:#7fce9a}
+.calc-box .cb-val.neg{color:#e59993}
+.calc-box .cb-val.zero{color:#a9b0c6}
+
+/* ---- Botão ---- */
+.actions{margin-top:28px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+button.submit{
+  font-family:inherit;font-size:15px;font-weight:700;letter-spacing:.03em;
+  color:#ffffff;background:var(--navy);border:none;border-radius:10px;padding:14px 40px;cursor:pointer;
+  transition:transform .12s, box-shadow .18s, background .18s;
+  box-shadow:0 8px 22px rgba(30,34,63,.22);
+}
+button.submit:hover{background:#2a2f52;transform:translateY(-1px)}
+button.submit:active{transform:translateY(0)}
+button.submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* ---- Modal ---- */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(9,10,20,.55);
+  display:none;align-items:center;justify-content:center;padding:20px;z-index:50;
+  opacity:0;transition:opacity .18s;
+}
+.modal-overlay.show{display:flex;opacity:1}
+.modal-box{
+  background:#fff;border-radius:16px;padding:34px 30px 30px;
+  width:100%;max-width:360px;text-align:center;
+  box-shadow:0 24px 60px rgba(0,0,0,.28);
+  transform:translateY(8px) scale(.98);transition:transform .2s;
+}
+.modal-overlay.show .modal-box{transform:translateY(0) scale(1)}
+.modal-txt{font-size:16px;font-weight:600;color:var(--navy);line-height:1.4;margin-top:6px}
+.modal-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:6px 0}
+.spinner{width:46px;height:46px;border-radius:50%;border:4px solid rgba(30,34,63,.12);border-top-color:var(--gold);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal-done{display:flex;flex-direction:column;align-items:center;gap:14px}
+.check-circle{margin-bottom:2px}
+.ck-c{stroke:var(--ok);stroke-width:3;stroke-dasharray:150;stroke-dashoffset:150;animation:dash .5s ease forwards}
+.ck-p{stroke:var(--ok);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:dash .35s .4s ease forwards}
+@keyframes dash{to{stroke-dashoffset:0}}
+.modal-err{display:flex;flex-direction:column;align-items:center;gap:14px}
+.err-circle{width:52px;height:52px;border-radius:50%;background:var(--err);color:#fff;font-size:30px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.modal-close{
+  margin-top:12px;font-family:inherit;font-size:14px;font-weight:700;letter-spacing:.03em;
+  color:#fff;background:var(--navy);border:none;border-radius:9px;padding:11px 34px;cursor:pointer;transition:background .18s,transform .1s;
+}
+.modal-close:hover{background:#2a2f52;transform:translateY(-1px)}
+.modal-close.alt{background:var(--err)}
+.modal-close.alt:hover{background:#a93226}
+
+@media (max-width:560px){
+  .grid,.grid.grid-4{grid-template-columns:1fr}
+  header.top h1{font-size:22px}
+  .card{padding:24px 20px 28px}
+}

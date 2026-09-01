@@ -2,142 +2,95 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Atividade Comercial · Silva & Silva</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividade Diária — Silva &amp; Silva</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--navy:#1E223F;--navy2:#3F5276;--navy-deep:#161A31;--gold:#B58642;--gold-soft:#CFA36E;--paper:#F5F1E8;--paper2:#EAE4D3;--line:#DDD5C0;--ink:#20233B;--muted:#7a7f96}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',system-ui,sans-serif}
-body{background:linear-gradient(180deg,#161A31 0%,#0d1024 100%);color:var(--ink);min-height:100vh;padding:32px 16px}
-.wrap{max-width:560px;margin:0 auto}
-.card{background:var(--paper);border-radius:6px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
-.hero{background:linear-gradient(160deg,var(--navy-deep) 0%,#191d38 100%);color:#fff;padding:34px 32px 30px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;top:-30%;right:-25%;width:70%;height:80%;background:radial-gradient(circle,rgba(181,134,66,.18),transparent 60%);pointer-events:none}
-.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;position:relative}
-h1{font-size:26px;font-weight:800;letter-spacing:-.5px;color:#fff;line-height:1.1;position:relative}
-h1 em{font-style:normal;color:var(--gold-soft);font-weight:600}
-.hero p{margin-top:12px;font-size:13px;color:#c2c6d6;line-height:1.55;position:relative}
-.gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:18px;position:relative}
-form{padding:28px 32px 32px}
-.grp{margin-bottom:18px}
-.grp.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label{display:block;font-size:10.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
-label .req{color:var(--gold)}
-input,select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:3px;padding:11px 12px;outline:0;transition:border-color .2s,box-shadow .2s}
-input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(181,134,66,.15)}
-textarea{resize:vertical;min-height:70px;font-size:13px}
-.grid-4{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.sec-title{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold);margin:22px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.hint{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
-.btn{width:100%;margin-top:24px;background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;border:0;border-radius:3px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
-.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px -10px rgba(30,34,63,.5)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-.btn::after{content:"";position:absolute;left:14px;right:14px;bottom:6px;height:2px;background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:1px}
-.msg{margin-top:16px;padding:14px 16px;border-radius:3px;font-size:13px;font-weight:600;text-align:center;display:none}
-.msg.ok{background:rgba(47,122,68,.10);color:#2f7a44;border:1px solid rgba(47,122,68,.25);display:block}
-.msg.err{background:rgba(166,61,56,.10);color:#a63d38;border:1px solid rgba(166,61,56,.25);display:block}
-.msg.info{background:var(--paper2);color:var(--navy);border:1px solid var(--line);display:block}
-footer{text-align:center;padding:16px 0 0;font-size:10.5px;color:rgba(255,255,255,.45);letter-spacing:1px}
-@media(max-width:520px){.grp.two,.grid-4{grid-template-columns:1fr}form,.hero{padding:24px 22px}h1{font-size:22px}}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../form.css">
 </head>
 <body>
 <div class="wrap">
-  <div class="card">
-    <header class="hero">
-      <div class="eyebrow">Silva &amp; Silva · Comercial</div>
-      <h1>Atividade <em>Diária</em></h1>
-      <p>Registro rápido do que você fez hoje: ligações, leads, reuniões, propostas. Leva 30 segundos.</p>
-      <div class="gold-rule"></div>
-    </header>
 
-    <form id="frm">
-      <div class="grp two">
-        <div>
-          <label>Data <span class="req">*</span></label>
-          <input type="date" name="dataAtividade" required>
-        </div>
-        <div>
-          <label>Vendedor <span class="req">*</span></label>
-          <select name="vendedor" required>
-            <option value="">Selecione…</option>
-            <option>Yasmin Lazouwnik</option>
-            <option>Vanessa Maragno Osellame</option>
-            <option>Bruna Gabrielli Vidal</option>
-            <option>Erika Martins da Silva</option>
-            <option>Kelly Bento</option>
-            <option>Giovanna Julia Paulina da Silva</option>
-            <option>Outro</option>
-          </select>
-        </div>
+  <a class="back-hub" href="../">voltar aos formulários</a>
+
+  <header class="top">
+    <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
+    <h1><span class="tick"></span>Atividade Diária</h1>
+    <div class="sub">Registro rápido do dia: ligações, leads, reuniões e propostas. Leva 30 segundos.</div>
+  </header>
+
+  <form id="form" class="card" autocomplete="off">
+
+    <div class="sec-title">Vendedor e data</div>
+
+    <div class="grid">
+      <div class="field">
+        <label>Data <span class="req">*</span></label>
+        <input type="date" name="dataAtividade" id="dataAt" required>
       </div>
 
-      <div class="sec-title">Atividade do dia</div>
-      <div class="grid-4">
-        <div>
-          <label>Ligações</label>
-          <input type="number" name="ligacoes" min="0" step="1" placeholder="0">
-        </div>
-        <div>
-          <label>Leads novos</label>
-          <input type="number" name="leads" min="0" step="1" placeholder="0">
-        </div>
-        <div>
-          <label>Reuniões</label>
-          <input type="number" name="reunioes" min="0" step="1" placeholder="0">
-        </div>
-        <div>
-          <label>Propostas enviadas</label>
-          <input type="number" name="propostas" min="0" step="1" placeholder="0">
-        </div>
+      <div class="field">
+        <label>Vendedor <span class="req">*</span></label>
+        <select name="vendedor" required>
+          <option value="" disabled selected>Selecione…</option>
+          <option>Yasmin Lazouwnik</option>
+          <option>Vanessa Maragno Osellame</option>
+          <option>Bruna Gabrielli Vidal</option>
+          <option>Erika Martins da Silva</option>
+          <option>Kelly Bento</option>
+          <option>Giovanna Julia Paulina da Silva</option>
+          <option>Outro</option>
+        </select>
       </div>
-      <div class="hint" style="margin-top:6px">Deixe em branco o que não fez. Só preenche o que rolou.</div>
+    </div>
 
-      <div class="grp" style="margin-top:16px">
-        <label>Observações</label>
+    <div class="sec-title mt">Atividade do dia</div>
+
+    <div class="grid grid-4">
+      <div class="field">
+        <label>Ligações</label>
+        <input type="number" name="ligacoes" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Leads novos</label>
+        <input type="number" name="leads" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Reuniões</label>
+        <input type="number" name="reunioes" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Propostas</label>
+        <input type="number" name="propostas" min="0" step="1" placeholder="0">
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:14px">
+      <div class="field full">
+        <div class="hint">Deixe em branco o que não fez — só preenche o que rolou.</div>
+      </div>
+      <div class="field full">
+        <label>Observações <span class="opt">opcional</span></label>
         <textarea name="observacoes" placeholder="Destaques do dia, contatos importantes, obstáculos…"></textarea>
       </div>
+    </div>
 
-      <button type="submit" class="btn" id="btn">Registrar dia</button>
-      <div class="msg" id="msg"></div>
-    </form>
-  </div>
-  <footer>Painel Geral do Escritório · Controladoria</footer>
+    <div class="actions">
+      <button type="submit" class="submit">Registrar dia</button>
+    </div>
+  </form>
 </div>
 
+<script src="../form.js"></script>
 <script>
-const APPS_SCRIPT_URL = "";
-const frm = document.getElementById('frm');
-const btn = document.getElementById('btn');
-const msg = document.getElementById('msg');
-
-// preenche data com hoje
-document.querySelector('[name=dataAtividade]').value = new Date().toISOString().slice(0,10);
-
-function mostrar(t,x){msg.className='msg '+t;msg.textContent=x}
-function limpar(){msg.className='msg';msg.textContent=''}
-
-frm.addEventListener('submit', async (ev)=>{
-  ev.preventDefault(); limpar();
-  const fd = new FormData(frm);
-  const dados = {_form:'atividade'};
-  fd.forEach((v,k)=>dados[k]=v);
-  dados.dataHora = new Date().toLocaleString('pt-BR');
-  btn.disabled=true; btn.textContent='Enviando…';
-  if(!APPS_SCRIPT_URL){
-    mostrar('info','MODO TESTE — dados NÃO foram gravados (URL vazia).');
-    btn.disabled=false; btn.textContent='Registrar dia';
-    console.log('[TESTE]',dados); return;
-  }
-  try{
-    await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(dados)});
-    mostrar('ok','✓ Registro salvo. Bom trabalho!');
-    frm.reset();
-    document.querySelector('[name=dataAtividade]').value = new Date().toISOString().slice(0,10);
-  }catch(e){ mostrar('err','Erro: '+e.message) }
-  finally{ btn.disabled=false; btn.textContent='Registrar dia' }
+window.APPS_SCRIPT_URL = "";
+dataHoje(document.getElementById('dataAt'));
+formSetup({
+  form: document.getElementById('form'),
+  formId: 'atividade',
+  msgOk: 'Registro salvo. Bom trabalho!',
+  afterOk: ()=> dataHoje(document.getElementById('dataAt'))
 });
 </script>
 </body>
