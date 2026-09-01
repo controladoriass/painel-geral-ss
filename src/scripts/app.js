@@ -24,7 +24,11 @@
     receitas: 'dados/financeiro_receitas.json',
     despesas: 'dados/financeiro_despesas.json',
     comercial: 'dados/comercial_funil.json',
-    producao: 'dados/producao_processos.json'
+    producao: 'dados/producao_processos.json',
+    form_metas: 'dados/formularios_metas.json',
+    form_atividade: 'dados/formularios_atividade.json',
+    form_times: 'dados/formularios_times.json',
+    form_reajustes: 'dados/formularios_reajustes.json'
   };
 
   async function carregar(chave){
@@ -233,6 +237,72 @@
     }
   }
 
+  // ---------- FORMULÁRIOS (dados vindos da planilha via Apps Script) ----------
+  async function renderFormularios(){
+    // METAS (aba Comercial)
+    const metas = await carregar('form_metas');
+    if(metas && metas.metas && metas.metas.length && $('#com-metas-panel')){
+      const rows = metas.metas.map(m => `<div class="hbar-row">
+        <div class="hb-name" title="${m.vendedor}">${m.vendedor}</div>
+        <div class="hbar-track"><div class="hbar-fill gold" style="width:100%"></div></div>
+        <div class="hb-val">${fmtNum(m.meta_propostas_qtd||0)}<small>${m.referencia||m.periodo||''} · ${m.meta_propostas_valor?fmtBRLk(m.meta_propostas_valor):'—'}</small></div>
+      </div>`).join('');
+      $('#com-metas-panel').innerHTML = `<div class="panel-label">Metas cadastradas</div>
+        <div class="hbar-list">${rows}</div>
+        <div class="data-note">${metas.metas.length} metas registradas · <a href="formularios/metas/" style="color:var(--gold);text-decoration:none">cadastrar nova →</a></div>`;
+    }
+
+    // ATIVIDADE (aba Comercial)
+    const atv = await carregar('form_atividade');
+    if(atv && atv.por_vendedor && atv.por_vendedor.length && $('#com-atividade-panel')){
+      const top = atv.por_vendedor.slice().sort((a,b)=>(b.ligacoes||0)-(a.ligacoes||0)).slice(0,12);
+      const mx = Math.max(...top.map(v => (v.ligacoes||0)+(v.leads||0)+(v.reunioes||0)+(v.propostas||0))) || 1;
+      const rows = top.map(v => {
+        const tot = (v.ligacoes||0)+(v.leads||0)+(v.reunioes||0)+(v.propostas||0);
+        return `<div class="hbar-row">
+          <div class="hb-name" title="${v.vendedor}">${v.vendedor}</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:${Math.round(tot/mx*100)}%"></div></div>
+          <div class="hb-val">${fmtNum(tot)}<small>${v.ligacoes||0} lig · ${v.leads||0} leads · ${v.reunioes||0} reu · ${v.propostas||0} prop</small></div>
+        </div>`;
+      }).join('');
+      $('#com-atividade-panel').innerHTML = `<div class="panel-label">Atividade acumulada por vendedor</div>
+        <div class="hbar-list">${rows}</div>
+        <div class="data-note">${atv.qtd_registros} registros · <a href="formularios/atividade/" style="color:var(--gold);text-decoration:none">registrar dia →</a></div>`;
+    }
+
+    // TIMES (aba Produção)
+    const times = await carregar('form_times');
+    if(times && times.por_time && Object.keys(times.por_time).length && $('#prod-times-panel')){
+      const entradas = Object.entries(times.por_time);
+      const total = times.advogados ? times.advogados.filter(a=>a.situacao!=='inativo').length : 0;
+      const rows = entradas.map(([time, advs]) => `<div class="hbar-row">
+        <div class="hb-name" title="${time}">${time}</div>
+        <div class="hbar-track"><div class="hbar-fill gold" style="width:${Math.round(advs.length/Math.max(...entradas.map(e=>e[1].length))*100)}%"></div></div>
+        <div class="hb-val">${advs.length}<small>${advs.slice(0,3).join(', ')}${advs.length>3?'…':''}</small></div>
+      </div>`).join('');
+      $('#prod-times-panel').innerHTML = `<div class="panel-label">Advogados por time (${total} ativos)</div>
+        <div class="hbar-list">${rows}</div>
+        <div class="data-note">${times.qtd_registros} vínculos cadastrados · <a href="formularios/times/" style="color:var(--gold);text-decoration:none">cadastrar vínculo →</a></div>`;
+    }
+
+    // REAJUSTES (aba Financeiro)
+    const rea = await carregar('form_reajustes');
+    if(rea && rea.reajustes && rea.reajustes.length && $('#fin-reajustes-panel')){
+      const rows = rea.reajustes.slice(0,15).map(r => {
+        const cor = r.variacao_pct>0?'#2f7a44':(r.variacao_pct<0?'#a63d38':'var(--muted)');
+        const sinal = r.variacao_pct>0?'+':'';
+        return `<div class="hbar-row">
+          <div class="hb-name" title="${r.cliente}">${r.cliente}${r.numero_contrato?' <small style="color:var(--muted);font-weight:500">#'+r.numero_contrato+'</small>':''}</div>
+          <div class="hbar-track"><div class="hbar-fill gold" style="width:100%"></div></div>
+          <div class="hb-val" style="color:${cor}">${sinal}${(r.variacao_pct||0).toFixed(2)}%<small style="color:var(--muted)">${fmtBRLk(r.valor_anterior)} → ${fmtBRLk(r.valor_novo)} · ${r.data||''}</small></div>
+        </div>`;
+      }).join('');
+      $('#fin-reajustes-panel').innerHTML = `<div class="panel-label">Últimos reajustes registrados</div>
+        <div class="hbar-list">${rows}</div>
+        <div class="data-note">${rea.qtd_registros} reajustes no histórico · <a href="formularios/reajustes/" style="color:var(--gold);text-decoration:none">registrar reajuste →</a></div>`;
+    }
+  }
+
   // ---------- Navegação de abas ----------
   function initTabs(){
     $$('.tab-btn').forEach(btn=>{
@@ -269,7 +339,7 @@
     if($('#meta-data')) $('#meta-data').textContent = hoje;
     initTabs(); initTema();
     // renderiza tudo (cada um tolera dado ausente)
-    await Promise.allSettled([renderFinanceiro(), renderProducao(), renderComercial()]);
+    await Promise.allSettled([renderFinanceiro(), renderProducao(), renderComercial(), renderFormularios()]);
     setTimeout(fecharCortina, 500);
   }
 
