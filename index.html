@@ -1269,6 +1269,138 @@ section{margin-bottom:64px}
   margin-bottom:18px !important;display:flex !important;align-items:center !important;gap:12px !important}
 .panel-label::after{background:var(--ed-line) !important;height:1px !important}
 
+/* ============ CARDS KPI (Fase 2) — estilo balanço editorial ============ */
+.fin-cards, #prod-carteira-cards, #prod-alertas-cards, #com-funil-cards{
+  display:grid !important;grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) !important;
+  gap:0 !important;margin-bottom:32px !important;
+  border:1px solid var(--ed-line) !important;border-radius:2px !important;background:#fff !important;
+}
+.fin-card{
+  background:transparent !important;border:0 !important;border-radius:0 !important;padding:26px 28px !important;
+  box-shadow:none !important;position:relative !important;overflow:visible !important;
+  border-right:1px solid var(--ed-line) !important;
+}
+.fin-card:last-child{border-right:0 !important}
+@media(max-width:900px){
+  .fin-card{border-right:0 !important;border-bottom:1px solid var(--ed-line) !important}
+  .fin-card:last-child{border-bottom:0 !important}
+}
+.fin-card::before{display:none !important}
+.fin-card .fc-eyebrow{
+  font-family:'Inter',sans-serif !important;font-size:9.5px !important;font-weight:700 !important;
+  letter-spacing:.22em !important;text-transform:uppercase !important;
+  color:var(--ed-muted) !important;margin-bottom:12px !important;
+}
+.fin-card .fc-num{
+  font-family:'Fraunces','Cormorant Garamond',serif !important;
+  font-size:34px !important;font-weight:500 !important;line-height:1 !important;
+  color:var(--ed-ink) !important;letter-spacing:-.02em !important;font-variant-numeric:tabular-nums !important;
+  font-variation-settings:'opsz' 72 !important;
+}
+.fin-card .fc-num small{
+  font-family:'Fraunces',serif !important;font-size:19px !important;font-weight:500 !important;
+  color:var(--ed-muted) !important;margin-right:2px !important;
+}
+.fin-card .fc-desc{
+  font-family:'Inter',sans-serif !important;font-size:11.5px !important;color:var(--ed-muted) !important;
+  margin-top:12px !important;line-height:1.5 !important;font-weight:400 !important;
+  padding-top:10px !important;border-top:1px solid var(--ed-line) !important;
+}
+.fin-card .fc-desc b{color:var(--ed-ink) !important;font-weight:600 !important}
+/* card destaque: fundo cinza-claro discreto (não navy escuro pesado) */
+.fin-card.hl{background:var(--ed-paper2) !important}
+.fin-card.hl::before{display:none !important}
+.fin-card.hl .fc-eyebrow{color:var(--ed-gold-soft) !important}
+.fin-card.hl .fc-num{color:var(--ed-navy) !important}
+.fin-card.hl .fc-num small{color:var(--ed-gold) !important}
+.fin-card.hl .fc-desc{border-top-color:var(--ed-line2) !important}
+
+/* alerta strip antiga: se aparecer, tira */
+.alert-strip{display:none !important}
+
+/* ============ BARRAS / RANKINGS (Fase 3) — tipografia + rules em vez de barras coloridas ============ */
+.hbar-list, .bars{display:flex !important;flex-direction:column !important;gap:0 !important;margin-top:8px !important}
+.hbar-row, .bar-row{
+  display:grid !important;grid-template-columns:1fr 180px 120px !important;gap:22px !important;
+  align-items:baseline !important;padding:14px 0 !important;
+  border-bottom:1px solid var(--ed-line) !important;border-radius:0 !important;
+  transition:background .15s !important;animation:none !important;opacity:1 !important;transform:none !important;
+}
+.hbar-row:last-child, .bar-row:last-child{border-bottom:0 !important}
+.hbar-row:hover, .bar-row:hover{background:var(--ed-paper2) !important;padding-left:8px !important}
+@media(max-width:720px){
+  .hbar-row, .bar-row{grid-template-columns:1fr 90px !important;gap:12px !important}
+  .hbar-row .hbar-track, .bar-row .bar-track{display:none !important}
+}
+
+/* nome (esquerda, serif discreto) */
+.hbar-row .hb-name, .bar-row .name{
+  font-family:'Inter',sans-serif !important;font-size:13px !important;font-weight:500 !important;
+  color:var(--ed-ink) !important;text-align:left !important;
+  overflow:hidden !important;text-overflow:ellipsis !important;white-space:nowrap !important;
+  padding-right:8px !important;
+}
+/* track: hairline cinza, fill sólido navy sem gradient */
+.hbar-track, .bar-track{
+  height:2px !important;background:var(--ed-line2) !important;border-radius:0 !important;overflow:hidden !important;
+  position:relative !important;align-self:center !important;
+}
+.hbar-fill, .bar-fill{
+  height:100% !important;background:var(--ed-navy) !important;border-radius:0 !important;
+  transition:width .7s ease-out !important;
+}
+.hbar-fill.gold, .bar-fill.gold{background:var(--ed-gold) !important}
+.bar-fill.go::after{display:none !important}
+/* valor (direita, tabular) */
+.hbar-row .hb-val, .bar-row .val{
+  font-family:'Fraunces',serif !important;font-size:16px !important;font-weight:500 !important;
+  color:var(--ed-ink) !important;text-align:right !important;
+  font-variant-numeric:tabular-nums !important;letter-spacing:-.01em !important;
+  font-variation-settings:'opsz' 36 !important;
+}
+.hbar-row .hb-val small, .bar-row .val small{
+  font-family:'Inter',sans-serif !important;font-size:10.5px !important;color:var(--ed-muted) !important;
+  font-weight:400 !important;display:block !important;margin-top:2px !important;letter-spacing:.01em !important;
+}
+/* top-3: remover borda dourada lateral e destaque em cor navy escura */
+.bar-row.top1, .bar-row.top2, .bar-row.top3{
+  border-left:0 !important;padding-left:0 !important;background:transparent !important;
+}
+.bar-row.top1 .name{font-weight:600 !important;color:var(--ed-ink) !important}
+.bar-row.top1 .rk-badge, .bar-row.top2 .rk-badge, .bar-row.top3 .rk-badge{
+  background:transparent !important;color:var(--ed-gold) !important;box-shadow:none !important;
+}
+
+/* Stubs: menos emoji, mais editorial */
+.stub{background:transparent !important;border:1px dashed var(--ed-line2) !important;border-radius:2px !important;
+  padding:36px 26px !important;text-align:center !important;color:var(--ed-muted) !important;
+  font-family:'Inter',sans-serif !important;font-size:12.5px !important;line-height:1.6 !important}
+.stub .stub-ico{font-size:11px !important;letter-spacing:.22em !important;text-transform:uppercase !important;
+  color:var(--ed-gold) !important;font-weight:700 !important;font-family:'Inter',sans-serif !important;
+  margin-bottom:14px !important;display:block !important;opacity:1 !important}
+.stub b{color:var(--ed-ink) !important;font-weight:600 !important}
+.stub .stub-tag{background:transparent !important;color:var(--ed-muted) !important;
+  border:1px solid var(--ed-line2) !important;padding:5px 12px !important;
+  font-size:9.5px !important;letter-spacing:.16em !important;margin-top:14px !important;border-radius:2px !important}
+.stub .stub-tag.falta{color:var(--ed-navy) !important;border-color:var(--ed-navy2) !important;background:transparent !important}
+
+/* data-note: rodapé de fonte discreto */
+.data-note{font-family:'Inter',sans-serif !important;font-size:11px !important;color:var(--ed-muted) !important;
+  margin-top:22px !important;padding-top:14px !important;border-top:1px solid var(--ed-line) !important;
+  font-style:normal !important;line-height:1.55 !important;letter-spacing:.01em !important}
+.data-note.warn{color:var(--ed-navy) !important}
+
+/* rank-toolbar (filtro/tabs de ranking): mais discreto */
+.metric-tabs.pill{background:transparent !important;padding:0 !important;border:0 !important}
+.metric-tabs.pill button{background:transparent !important;color:var(--ed-muted) !important;padding:8px 14px !important}
+.metric-tabs.pill button.on{background:transparent !important;color:var(--ed-ink) !important;box-shadow:none !important;border-bottom:2px solid var(--ed-ink) !important;border-radius:0 !important}
+.metric-tabs.pill button.on::after{background:none !important}
+
+/* grid2 sem cantos */
+.grid2{gap:32px !important}
+
+
+
 </style>
 </head>
 <body class="loading">
