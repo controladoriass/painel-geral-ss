@@ -1096,11 +1096,11 @@ body.theme-dark .back-top:hover{background:linear-gradient(160deg,var(--gold) 0%
   box-shadow:0 4px 18px -14px rgba(30,34,63,.3);transition:background-color .5s ease,border-color .5s ease}
 .tabs-nav .wrap{display:flex;align-items:center;gap:4px;padding-top:0;padding-bottom:0;flex-wrap:wrap}
 .tab-btn{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
-  color:var(--navy2);background:transparent;border:0;padding:18px 22px;cursor:pointer;position:relative;
+  color:var(--navy2);background:transparent;border:0;padding:18px 16px;cursor:pointer;position:relative;
   transition:color .2s;white-space:nowrap}
 .tab-btn:hover{color:var(--gold)}
 .tab-btn.on{color:var(--navy)}
-.tab-btn.on::after{content:"";position:absolute;left:16px;right:16px;bottom:-1px;height:3px;
+.tab-btn.on::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;
   background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:2px}
 .tab-btn .tb-ico{margin-right:8px;opacity:.7}
 body.theme-dark .tabs-nav{background:#0a0d1e;border-bottom-color:#2B2F45}
@@ -1191,18 +1191,9 @@ body.theme-dark .hbar-row .hb-val small{color:#a9b0c6}
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="wrap">
-    <div class="hero-top">
-      <span class="eyebrow">Controladoria · Visão Executiva</span>
-      <div class="doc-meta">
-        <div>Atualizado em <b id="meta-data">—</b></div>
-        <div>Fonte: <b>EasyJur OS</b></div>
-      </div>
-    </div>
     <div class="hero-title">
       <div class="kicker">Silva &amp; Silva Advogados</div>
       <h1>Painel Geral <em>do Escritório</em></h1>
-      <p>Visão consolidada de projetos, financeiro, produção e comercial. Indicadores de gestão
-         extraídos do EasyJur e atualizados periodicamente pela Controladoria.</p>
     </div>
     <div class="hero-rule"></div>
   </div>
@@ -1210,11 +1201,17 @@ body.theme-dark .hbar-row .hb-val small{color:#a9b0c6}
 
 <!-- ============ Navegação de abas ============ -->
 <nav class="tabs-nav" id="tabs-nav">
-  <div class="wrap">
-    <button class="tab-btn on" data-tab="financeiro">Financeiro</button>
-    <button class="tab-btn" data-tab="producao">Produção</button>
-    <button class="tab-btn" data-tab="comercial">Comercial</button>
-    <button class="tab-btn" data-tab="projetos">Projetos</button>
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+    <div style="display:flex;flex-wrap:nowrap">
+      <button class="tab-btn on" data-tab="financeiro">Financeiro</button>
+      <button class="tab-btn" data-tab="producao">Produção</button>
+      <button class="tab-btn" data-tab="comercial">Comercial</button>
+      <button class="tab-btn" data-tab="projetos">Projetos</button>
+    </div>
+    <a href="formularios/" style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:.6px;
+      text-transform:uppercase;color:var(--gold);text-decoration:none;padding:18px 16px;white-space:nowrap;
+      flex:0 0 auto;transition:color .2s"
+      onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">Formulários ↗</a>
   </div>
 </nav>
 
@@ -1435,20 +1432,6 @@ body.theme-dark .hbar-row .hb-val small{color:#a9b0c6}
 
 </main>
 
-<footer style="border-top:1px solid var(--line);padding:26px 0;margin-top:40px">
-  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-    <span style="font-size:11px;color:var(--muted)">Silva &amp; Silva Advogados · Controladoria · Uso interno</span>
-    <div style="display:flex;gap:10px;align-items:center">
-      <a href="formularios/" style="font-size:11px;font-weight:700;color:var(--gold);text-decoration:none;
-        letter-spacing:.5px;padding:8px 16px;border:1px solid var(--gold);border-radius:2px;transition:.2s"
-        onmouseover="this.style.background='var(--gold)';this.style.color='#fff'"
-        onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">Formulários ↗</a>
-      <button class="back-top" id="theme-toggle" style="border:1px solid var(--line);background:var(--card);
-        padding:8px 16px;border-radius:2px;cursor:pointer;font-size:11px;font-weight:700;color:var(--navy);
-        letter-spacing:.5px">Alternar tema</button>
-    </div>
-  </div>
-</footer>
 
 <script id="dados-embed">window.DADOS_EMBED = {"form_atividade": {"por_vendedor": [{"vendedor": "TESTE - pode apagar", "ligacoes": 10, "leads": 2, "reunioes": 1, "propostas": 3, "dias": 1}], "por_dia": {"2026-09-01": {"ligacoes": 10, "leads": 2, "reunioes": 1, "propostas": 3}}, "qtd_registros": 1, "gerado_em": "2026-09-01T14:15:12.272Z"}, "form_times": {"advogados": [{"advogado": "TESTE - pode apagar", "time": "Cível / Contencioso", "lider": "", "situacao": "ativo"}], "por_time": {"Cível / Contencioso": ["TESTE - pode apagar"]}, "qtd_registros": 1, "gerado_em": "2026-09-01T14:15:12.272Z"}, "form_reajustes": {"reajustes": [{"cliente": "TESTE - pode apagar", "numero_contrato": "0", "data": "2026-09-01", "valor_anterior": 3000.0, "valor_novo": 3300.0, "variacao_pct": 10.0, "indice": "IPCA", "motivo": "teste"}], "qtd_registros": 1, "gerado_em": "2026-09-01T14:15:12.272Z"}};
 </script>

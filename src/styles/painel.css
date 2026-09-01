@@ -8,11 +8,11 @@
   box-shadow:0 4px 18px -14px rgba(30,34,63,.3);transition:background-color .5s ease,border-color .5s ease}
 .tabs-nav .wrap{display:flex;align-items:center;gap:4px;padding-top:0;padding-bottom:0;flex-wrap:wrap}
 .tab-btn{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
-  color:var(--navy2);background:transparent;border:0;padding:18px 22px;cursor:pointer;position:relative;
+  color:var(--navy2);background:transparent;border:0;padding:18px 16px;cursor:pointer;position:relative;
   transition:color .2s;white-space:nowrap}
 .tab-btn:hover{color:var(--gold)}
 .tab-btn.on{color:var(--navy)}
-.tab-btn.on::after{content:"";position:absolute;left:16px;right:16px;bottom:-1px;height:3px;
+.tab-btn.on::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;
   background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:2px}
 .tab-btn .tb-ico{margin-right:8px;opacity:.7}
 body.theme-dark .tabs-nav{background:#0a0d1e;border-bottom-color:#2B2F45}
