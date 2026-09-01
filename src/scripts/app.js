@@ -345,10 +345,10 @@
       projetos: 'Projetos'
     };
     const SUBS = {
-      financeiro: 'Visão executiva',
-      producao: 'Carteira e produtividade',
-      comercial: 'Funil e atividade',
-      projetos: 'Iniciativas em andamento'
+      financeiro: 'Saúde financeira do escritório',
+      producao: 'Volume e alertas da carteira',
+      comercial: 'Pipeline e desempenho comercial',
+      projetos: 'Iniciativas estratégicas'
     };
     function atualizarTitulo(tab){
       const t = $('#ss-page-title');
