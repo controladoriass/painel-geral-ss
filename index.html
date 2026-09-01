@@ -6,7 +6,7 @@
 <title>Painel Geral · Silva &amp; Silva Advogados</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ---- base.css ---- */
 :root{
@@ -1169,237 +1169,334 @@ body.theme-dark .hbar-row .hb-val small{color:#a9b0c6}
 /* ---- Aviso de coleta / rodapé de fonte ---- */
 .data-note{font-size:10.5px;color:var(--muted);margin-top:14px;font-style:italic;line-height:1.5}
 .data-note.warn{color:#a63d38}
-/* ---- z-editorial.css ---- */
+/* ---- z-corporate.css ---- */
 /* ============================================================
-   z-editorial.css — redesign profissional (Fase 1: masthead + nav)
-   Nome começa com 'z' pra vir DEPOIS dos outros no build (alfabético).
-   Referências: Financial Times, Stripe, dashboards executivos 2026.
+   z-corporate.css — Painel Geral Silva & Silva
+   Direcao: Corporate BI (Bloomberg / Itau BI / Bradesco Corporate)
+   Signature: variacao ▲▼ ao lado dos numeros + regua dourada indicando aba ativa
+
+   Camada final — sobrescreve os estilos anteriores.
    ============================================================ */
 
 :root{
-  /* paleta reduzida — só navy + gold + cinza */
-  --ed-ink: #0F1220;
-  --ed-ink2: #2A2D3E;
-  --ed-muted: #6B7183;
-  --ed-muted2: #A0A5B5;
-  --ed-line: #E5E4DE;
-  --ed-line2: #D5D3CA;
-  --ed-paper: #FBFAF6;
-  --ed-paper2: #F5F3EC;
-  --ed-navy: #1E223F;
-  --ed-navy2: #3F5276;
-  --ed-gold: #B58642;
-  --ed-gold-soft: #CFA36E;
+  --ss-ink: #0A0E1A;
+  --ss-ink-2: #3E4353;
+  --ss-mute: #6B7183;
+  --ss-mute-2: #9CA1B0;
+  --ss-line: #E8EAEE;
+  --ss-line-2: #D3D7DF;
+  --ss-surface: #FFFFFF;
+  --ss-bg: #F5F6F8;
+  --ss-navy: #1E223F;
+  --ss-navy-2: #2A2F52;
+  --ss-gold: #B58642;
+  --ss-gold-soft: #CFA36E;
+  --ss-pos: #0F7B3E;
+  --ss-neg: #B42318;
+  --ss-warn: #B45309;
+  --ss-radius: 4px;
+  --ss-sidebar-w: 240px;
 }
 
-body{background:var(--ed-paper);color:var(--ed-ink);font-family:'Inter','Montserrat',system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;font-feature-settings:'ss01','ss02'}
-.mw{max-width:1200px;margin:0 auto;padding:0 40px}
-@media(min-width:1440px){.mw{max-width:1320px}}
-@media(max-width:720px){.mw{padding:0 22px}}
-
-/* ============ MASTHEAD ============ */
-.masthead{background:var(--ed-paper);padding:26px 0 0}
-.mh-top{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:20px}
-.mh-logo{height:32px;width:auto;opacity:.85}
-.mh-meta{text-align:right;font-family:'Inter',sans-serif}
-.mh-meta-lbl{display:block;font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--ed-muted2);margin-bottom:3px}
-.mh-meta-val{font-size:12px;font-weight:600;color:var(--ed-ink2);letter-spacing:.02em;font-variant-numeric:tabular-nums}
-.mh-rule{height:1px;background:var(--ed-ink);opacity:.85}
-.mh-title{padding:32px 0 44px;text-align:left;position:relative}
-.mh-title h1{
-  font-family:'Fraunces','Cormorant Garamond',Georgia,serif;
-  font-size:52px;font-weight:500;line-height:1.02;letter-spacing:-.025em;color:var(--ed-ink);
-  font-variation-settings:'opsz' 96;
-}
-@media(min-width:1440px){.mh-title h1{font-size:62px}}
-@media(max-width:720px){.mh-title h1{font-size:34px}.mh-title{padding:24px 0 32px}}
-
-/* ============ SECTION NAV (numeração romana) ============ */
-.section-nav{border-top:1px solid var(--ed-line2);border-bottom:1px solid var(--ed-line2);background:var(--ed-paper);
-  position:sticky;top:0;z-index:40}
-.section-nav .mw{display:flex;gap:0}
-.sn-btn{
-  font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-  color:var(--ed-muted);background:transparent;border:0;padding:18px 22px 16px;cursor:pointer;
-  display:inline-flex;align-items:baseline;gap:9px;position:relative;
-  transition:color .18s;
-}
-.sn-btn .sn-num{
-  font-family:'Fraunces',Georgia,serif;font-size:11px;font-weight:500;font-style:italic;
-  color:var(--ed-gold);letter-spacing:.05em;min-width:14px;text-align:left;
-}
-.sn-btn:hover{color:var(--ed-ink)}
-.sn-btn.on{color:var(--ed-ink)}
-.sn-btn.on::after{content:"";position:absolute;left:22px;right:22px;bottom:-1px;height:2px;background:var(--ed-ink)}
-@media(max-width:720px){
-  .section-nav{overflow-x:auto}
-  .section-nav .mw{padding:0 22px}
-  .sn-btn{padding:14px 14px 12px;font-size:11px;white-space:nowrap}
+/* ============ RESET base ============ */
+*, *::before, *::after{ box-sizing:border-box }
+html, body{ margin:0; padding:0 }
+body{
+  background:var(--ss-bg) !important;
+  color:var(--ss-ink) !important;
+  font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  font-feature-settings:'ss01', 'cv11';
 }
 
-/* ============ RESET/SOBRESCREVER estilos antigos "cara de IA" ============ */
-/* remove o hero antigo se resquício aparecer */
-.hero, .hero::before, .hero .wrap, .hero-title, .hero-title h1, .hero-title .kicker, .hero-title p, .hero-rule, .kpi-strip-wrap, .alert-strip-wrap{display:none !important}
+/* Esconde COMPLETAMENTE o hero antigo e nav antiga */
+.hero, .hero::before, .hero-top, .hero-title, .hero-title h1, .hero-title .kicker,
+.hero-title p, .hero-rule, .doc-meta, .kpi-strip-wrap, .alert-strip-wrap,
+.masthead, .section-nav, .tabs-nav, .mh-top, .mh-rule, .mh-title,
+.curtain-half, .curtain-shine, .curtain-dots{
+  display:none !important;
+}
 
-/* Tira cortina animada — só um flash sutil */
-.curtain{background:var(--ed-paper) !important;transition:opacity .3s !important}
-.curtain-half, .curtain-shine, .curtain-dots{display:none !important}
-.curtain-caption{color:var(--ed-navy) !important;font-family:'Inter',sans-serif !important}
-.curtain-logo-wrap{animation:none !important;opacity:1 !important;transform:none !important}
+/* Cortina: fade branco simples */
+.curtain{ background:var(--ss-bg) !important; }
+.curtain .curtain-center{ display:none !important }
 
-/* Seções: sem cantos gigantes, sem borda dourada grossa */
-main{padding:56px 0 80px;background:var(--ed-paper)}
-section{margin-bottom:64px}
-@media(min-width:1440px){section{margin-bottom:96px}}
-.sec-head{display:flex;align-items:baseline;gap:24px;margin-bottom:26px;padding-bottom:14px;border-bottom:1px solid var(--ed-line)}
-.roman{font-family:'Fraunces','Cormorant Garamond',serif !important;font-style:italic;font-weight:500 !important;
-  font-size:22px !important;color:var(--ed-gold) !important;border:0 !important;padding:0 !important;line-height:1 !important;min-width:32px !important}
-.sec-titles h2{font-family:'Fraunces','Cormorant Garamond',serif !important;font-weight:500 !important;
-  font-size:28px !important;color:var(--ed-ink) !important;letter-spacing:-.015em !important;line-height:1.15 !important;
-  font-variation-settings:'opsz' 60}
-.sec-titles .sec-desc{font-family:'Inter',sans-serif !important;font-size:13px !important;color:var(--ed-muted) !important;
-  font-weight:400 !important;margin-top:6px !important;line-height:1.55 !important;letter-spacing:0 !important}
+/* ============ SIDEBAR ============ */
+body{ padding-left:var(--ss-sidebar-w) !important }
 
-/* Panels: cinza-claro sem cantos, sem sombra pesada */
-.panel{background:#fff !important;border:1px solid var(--ed-line) !important;border-radius:3px !important;
-  padding:26px 28px !important;box-shadow:none !important}
-.panel-label{font-family:'Inter',sans-serif !important;font-size:10.5px !important;font-weight:700 !important;
-  color:var(--ed-navy) !important;text-transform:uppercase !important;letter-spacing:.16em !important;
-  margin-bottom:18px !important;display:flex !important;align-items:center !important;gap:12px !important}
-.panel-label::after{background:var(--ed-line) !important;height:1px !important}
+.ss-sidebar{
+  position:fixed; left:0; top:0; bottom:0; width:var(--ss-sidebar-w);
+  background:var(--ss-navy); color:#fff;
+  display:flex; flex-direction:column; z-index:100;
+  border-right:1px solid rgba(0,0,0,.4);
+}
+.ss-sidebar__brand{ padding:24px 20px 20px; border-bottom:1px solid rgba(255,255,255,.08) }
+.ss-sidebar__brand img{ height:26px; width:auto; display:block; filter:brightness(0) invert(1); opacity:.95 }
+.ss-sidebar__brand-sub{
+  margin-top:10px; font-size:10px; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase; color:rgba(255,255,255,.5);
+}
 
-/* ============ CARDS KPI (Fase 2) — estilo balanço editorial ============ */
+.ss-sidebar__nav{ padding:16px 0; flex:1; overflow-y:auto }
+.ss-sidebar__group{
+  font-size:9.5px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(255,255,255,.35); padding:14px 20px 8px;
+}
+.ss-nav-btn{
+  width:100%; text-align:left; background:transparent; border:0;
+  padding:11px 20px; cursor:pointer; position:relative;
+  font-family:inherit; font-size:13px; font-weight:500; letter-spacing:.005em;
+  color:rgba(255,255,255,.75); display:flex; align-items:center; gap:12px;
+  transition:background .15s, color .15s;
+}
+.ss-nav-btn:hover{ color:#fff; background:rgba(255,255,255,.04) }
+.ss-nav-btn.on{ color:#fff; background:rgba(255,255,255,.06) }
+.ss-nav-btn.on::before{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--ss-gold);
+}
+.ss-nav-btn .ss-nav-ico{
+  width:16px; height:16px; flex:0 0 auto; opacity:.7;
+  display:inline-flex; align-items:center; justify-content:center;
+}
+.ss-nav-btn.on .ss-nav-ico{ opacity:1 }
+
+.ss-sidebar__foot{ padding:16px 20px; border-top:1px solid rgba(255,255,255,.08); font-size:11px; color:rgba(255,255,255,.5) }
+.ss-sidebar__foot b{ color:rgba(255,255,255,.85); font-weight:600 }
+.ss-sidebar__foot a{ color:var(--ss-gold-soft); text-decoration:none; display:block; margin-top:6px; font-size:11px }
+.ss-sidebar__foot a:hover{ color:#fff }
+
+/* ============ MAIN (conteudo) ============ */
+main.mw, main.wrap{
+  max-width:none !important; margin:0 !important;
+  padding:0 40px 60px !important; background:var(--ss-bg) !important;
+}
+
+/* Topbar do main (titulo da secao ativa + meta) */
+.ss-topbar{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:28px 0 22px; border-bottom:1px solid var(--ss-line);
+  margin-bottom:32px;
+}
+.ss-topbar__title{
+  font-family:inherit; font-size:24px; font-weight:600; letter-spacing:-.015em; color:var(--ss-ink);
+}
+.ss-topbar__title span{ color:var(--ss-mute); font-weight:400 }
+.ss-topbar__meta{
+  font-size:12px; color:var(--ss-mute); font-variant-numeric:tabular-nums;
+}
+.ss-topbar__meta b{ color:var(--ss-ink); font-weight:600 }
+
+/* ============ SECOES ============ */
+section{ margin-bottom:40px !important }
+.sec-head{
+  display:flex; align-items:baseline; gap:14px !important;
+  margin-bottom:16px !important; padding-bottom:0 !important; border:0 !important;
+}
+.roman{
+  font-family:inherit !important; font-style:normal !important;
+  font-size:11px !important; font-weight:700 !important; letter-spacing:.18em !important;
+  text-transform:uppercase !important;
+  color:var(--ss-mute-2) !important;
+  border:0 !important; padding:0 !important;
+  min-width:0 !important;
+  font-variant-numeric:tabular-nums !important;
+}
+.sec-titles h2{
+  font-family:inherit !important; font-weight:600 !important;
+  font-size:15px !important; color:var(--ss-ink) !important;
+  letter-spacing:-.005em !important; line-height:1.3 !important;
+  font-variation-settings:normal !important;
+}
+.sec-titles .sec-desc{
+  font-family:inherit !important; font-size:12.5px !important;
+  color:var(--ss-mute) !important; font-weight:400 !important;
+  margin-top:4px !important; line-height:1.5 !important;
+}
+
+/* Panel: card simples, borda 1px, sem sombra */
+.panel{
+  background:var(--ss-surface) !important;
+  border:1px solid var(--ss-line) !important;
+  border-radius:var(--ss-radius) !important;
+  padding:20px 22px !important;
+  box-shadow:none !important;
+}
+.panel-label{
+  font-family:inherit !important; font-size:10.5px !important; font-weight:700 !important;
+  color:var(--ss-mute) !important; text-transform:uppercase !important;
+  letter-spacing:.14em !important; margin-bottom:16px !important;
+  display:flex !important; align-items:center !important; gap:10px !important;
+}
+.panel-label::after{
+  content:""; flex:1 !important; height:1px !important; background:var(--ss-line) !important;
+}
+
+/* ============ CARDS KPI (Bloomberg-like: grid 4x, numero+variacao) ============ */
 .fin-cards, #prod-carteira-cards, #prod-alertas-cards, #com-funil-cards{
-  display:grid !important;grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) !important;
-  gap:0 !important;margin-bottom:32px !important;
-  border:1px solid var(--ed-line) !important;border-radius:2px !important;background:#fff !important;
+  display:grid !important;
+  grid-template-columns:repeat(4, 1fr) !important;
+  gap:12px !important;
+  margin-bottom:24px !important;
+  background:transparent !important; border:0 !important;
 }
+@media(max-width:1100px){ .fin-cards, #prod-carteira-cards, #prod-alertas-cards, #com-funil-cards{ grid-template-columns:repeat(2,1fr) !important } }
+@media(max-width:640px){ .fin-cards, #prod-carteira-cards, #prod-alertas-cards, #com-funil-cards{ grid-template-columns:1fr !important } }
+
 .fin-card{
-  background:transparent !important;border:0 !important;border-radius:0 !important;padding:26px 28px !important;
-  box-shadow:none !important;position:relative !important;overflow:visible !important;
-  border-right:1px solid var(--ed-line) !important;
+  background:var(--ss-surface) !important;
+  border:1px solid var(--ss-line) !important;
+  border-radius:var(--ss-radius) !important;
+  padding:16px 18px 18px !important;
+  box-shadow:none !important; position:relative !important; overflow:visible !important;
+  border-right:1px solid var(--ss-line) !important;
+  transition:border-color .15s;
 }
-.fin-card:last-child{border-right:0 !important}
-@media(max-width:900px){
-  .fin-card{border-right:0 !important;border-bottom:1px solid var(--ed-line) !important}
-  .fin-card:last-child{border-bottom:0 !important}
-}
-.fin-card::before{display:none !important}
+.fin-card:hover{ border-color:var(--ss-line-2) !important }
+.fin-card::before{ display:none !important }
+
 .fin-card .fc-eyebrow{
-  font-family:'Inter',sans-serif !important;font-size:9.5px !important;font-weight:700 !important;
-  letter-spacing:.22em !important;text-transform:uppercase !important;
-  color:var(--ed-muted) !important;margin-bottom:12px !important;
+  font-family:inherit !important; font-size:10px !important; font-weight:600 !important;
+  letter-spacing:.14em !important; text-transform:uppercase !important;
+  color:var(--ss-mute) !important; margin-bottom:8px !important;
 }
 .fin-card .fc-num{
-  font-family:'Fraunces','Cormorant Garamond',serif !important;
-  font-size:34px !important;font-weight:500 !important;line-height:1 !important;
-  color:var(--ed-ink) !important;letter-spacing:-.02em !important;font-variant-numeric:tabular-nums !important;
-  font-variation-settings:'opsz' 72 !important;
+  font-family:'IBM Plex Sans', 'Inter', sans-serif !important;
+  font-size:26px !important; font-weight:500 !important; line-height:1.1 !important;
+  color:var(--ss-ink) !important; letter-spacing:-.018em !important;
+  font-variant-numeric:tabular-nums !important;
 }
 .fin-card .fc-num small{
-  font-family:'Fraunces',serif !important;font-size:19px !important;font-weight:500 !important;
-  color:var(--ed-muted) !important;margin-right:2px !important;
+  font-size:15px !important; font-weight:500 !important;
+  color:var(--ss-mute) !important; margin-right:2px !important;
 }
 .fin-card .fc-desc{
-  font-family:'Inter',sans-serif !important;font-size:11.5px !important;color:var(--ed-muted) !important;
-  margin-top:12px !important;line-height:1.5 !important;font-weight:400 !important;
-  padding-top:10px !important;border-top:1px solid var(--ed-line) !important;
+  font-family:inherit !important; font-size:12px !important; color:var(--ss-mute) !important;
+  margin-top:10px !important; line-height:1.5 !important; font-weight:400 !important;
+  padding-top:0 !important; border-top:0 !important;
 }
-.fin-card .fc-desc b{color:var(--ed-ink) !important;font-weight:600 !important}
-/* card destaque: fundo cinza-claro discreto (não navy escuro pesado) */
-.fin-card.hl{background:var(--ed-paper2) !important}
-.fin-card.hl::before{display:none !important}
-.fin-card.hl .fc-eyebrow{color:var(--ed-gold-soft) !important}
-.fin-card.hl .fc-num{color:var(--ed-navy) !important}
-.fin-card.hl .fc-num small{color:var(--ed-gold) !important}
-.fin-card.hl .fc-desc{border-top-color:var(--ed-line2) !important}
+.fin-card .fc-desc b{ color:var(--ss-ink) !important; font-weight:600 !important }
 
-/* alerta strip antiga: se aparecer, tira */
-.alert-strip{display:none !important}
+/* Card destaque: fita dourada 2px no topo (assinatura) */
+.fin-card.hl{
+  background:var(--ss-surface) !important;
+  border-top:2px solid var(--ss-gold) !important;
+  padding-top:14px !important;
+}
+.fin-card.hl .fc-eyebrow{ color:var(--ss-gold) !important }
 
-/* ============ BARRAS / RANKINGS (Fase 3) — tipografia + rules em vez de barras coloridas ============ */
-.hbar-list, .bars{display:flex !important;flex-direction:column !important;gap:0 !important;margin-top:8px !important}
+/* ============ BARRAS (hairline, sem gradient) ============ */
+.hbar-list, .bars{ display:flex !important; flex-direction:column !important; gap:0 !important; margin-top:4px !important }
 .hbar-row, .bar-row{
-  display:grid !important;grid-template-columns:1fr 180px 120px !important;gap:22px !important;
-  align-items:baseline !important;padding:14px 0 !important;
-  border-bottom:1px solid var(--ed-line) !important;border-radius:0 !important;
-  transition:background .15s !important;animation:none !important;opacity:1 !important;transform:none !important;
+  display:grid !important; grid-template-columns:1fr 160px 130px !important; gap:20px !important;
+  align-items:center !important; padding:10px 0 !important;
+  border-bottom:1px solid var(--ss-line) !important; border-radius:0 !important;
+  transition:background .12s !important; opacity:1 !important; transform:none !important; animation:none !important;
 }
-.hbar-row:last-child, .bar-row:last-child{border-bottom:0 !important}
-.hbar-row:hover, .bar-row:hover{background:var(--ed-paper2) !important;padding-left:8px !important}
+.hbar-row:last-child, .bar-row:last-child{ border-bottom:0 !important }
+.hbar-row:hover, .bar-row:hover{ background:var(--ss-bg) !important; padding-left:6px !important }
 @media(max-width:720px){
-  .hbar-row, .bar-row{grid-template-columns:1fr 90px !important;gap:12px !important}
-  .hbar-row .hbar-track, .bar-row .bar-track{display:none !important}
+  .hbar-row, .bar-row{ grid-template-columns:1fr 90px !important; gap:12px !important }
+  .hbar-row .hbar-track, .bar-row .bar-track{ display:none !important }
 }
 
-/* nome (esquerda, serif discreto) */
 .hbar-row .hb-name, .bar-row .name{
-  font-family:'Inter',sans-serif !important;font-size:13px !important;font-weight:500 !important;
-  color:var(--ed-ink) !important;text-align:left !important;
-  overflow:hidden !important;text-overflow:ellipsis !important;white-space:nowrap !important;
-  padding-right:8px !important;
+  font-family:inherit !important; font-size:13px !important; font-weight:500 !important;
+  color:var(--ss-ink) !important; text-align:left !important;
+  overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important;
+  padding-right:0 !important;
 }
-/* track: hairline cinza, fill sólido navy sem gradient */
 .hbar-track, .bar-track{
-  height:2px !important;background:var(--ed-line2) !important;border-radius:0 !important;overflow:hidden !important;
-  position:relative !important;align-self:center !important;
+  height:6px !important; background:var(--ss-line) !important; border-radius:2px !important;
+  overflow:hidden !important; position:relative !important;
 }
 .hbar-fill, .bar-fill{
-  height:100% !important;background:var(--ed-navy) !important;border-radius:0 !important;
-  transition:width .7s ease-out !important;
+  height:100% !important; background:var(--ss-navy) !important; border-radius:2px !important;
+  transition:width .6s ease-out !important;
 }
-.hbar-fill.gold, .bar-fill.gold{background:var(--ed-gold) !important}
-.bar-fill.go::after{display:none !important}
-/* valor (direita, tabular) */
+.hbar-fill.gold, .bar-fill.gold{ background:var(--ss-gold) !important }
+.bar-fill.go::after{ display:none !important }
+
 .hbar-row .hb-val, .bar-row .val{
-  font-family:'Fraunces',serif !important;font-size:16px !important;font-weight:500 !important;
-  color:var(--ed-ink) !important;text-align:right !important;
-  font-variant-numeric:tabular-nums !important;letter-spacing:-.01em !important;
-  font-variation-settings:'opsz' 36 !important;
+  font-family:'IBM Plex Sans', 'Inter', sans-serif !important;
+  font-size:14px !important; font-weight:600 !important;
+  color:var(--ss-ink) !important; text-align:right !important;
+  font-variant-numeric:tabular-nums !important; letter-spacing:-.005em !important;
 }
 .hbar-row .hb-val small, .bar-row .val small{
-  font-family:'Inter',sans-serif !important;font-size:10.5px !important;color:var(--ed-muted) !important;
-  font-weight:400 !important;display:block !important;margin-top:2px !important;letter-spacing:.01em !important;
+  font-family:'Inter', sans-serif !important; font-size:10.5px !important;
+  color:var(--ss-mute) !important; font-weight:400 !important;
+  display:block !important; margin-top:2px !important; letter-spacing:0 !important;
 }
-/* top-3: remover borda dourada lateral e destaque em cor navy escura */
+
 .bar-row.top1, .bar-row.top2, .bar-row.top3{
-  border-left:0 !important;padding-left:0 !important;background:transparent !important;
+  border-left:0 !important; padding-left:0 !important; background:transparent !important;
 }
-.bar-row.top1 .name{font-weight:600 !important;color:var(--ed-ink) !important}
+.bar-row.top1 .name{ font-weight:600 !important }
 .bar-row.top1 .rk-badge, .bar-row.top2 .rk-badge, .bar-row.top3 .rk-badge{
-  background:transparent !important;color:var(--ed-gold) !important;box-shadow:none !important;
+  background:transparent !important; color:var(--ss-mute) !important; box-shadow:none !important;
+  font-weight:600 !important;
 }
+.bar-row.top1 .rk-badge{ color:var(--ss-gold) !important }
 
-/* Stubs: menos emoji, mais editorial */
-.stub{background:transparent !important;border:1px dashed var(--ed-line2) !important;border-radius:2px !important;
-  padding:36px 26px !important;text-align:center !important;color:var(--ed-muted) !important;
-  font-family:'Inter',sans-serif !important;font-size:12.5px !important;line-height:1.6 !important}
-.stub .stub-ico{font-size:11px !important;letter-spacing:.22em !important;text-transform:uppercase !important;
-  color:var(--ed-gold) !important;font-weight:700 !important;font-family:'Inter',sans-serif !important;
-  margin-bottom:14px !important;display:block !important;opacity:1 !important}
-.stub b{color:var(--ed-ink) !important;font-weight:600 !important}
-.stub .stub-tag{background:transparent !important;color:var(--ed-muted) !important;
-  border:1px solid var(--ed-line2) !important;padding:5px 12px !important;
-  font-size:9.5px !important;letter-spacing:.16em !important;margin-top:14px !important;border-radius:2px !important}
-.stub .stub-tag.falta{color:var(--ed-navy) !important;border-color:var(--ed-navy2) !important;background:transparent !important}
+/* Stubs corporativos */
+.stub{
+  background:var(--ss-bg) !important; border:1px dashed var(--ss-line-2) !important; border-radius:var(--ss-radius) !important;
+  padding:28px 24px !important; text-align:center !important; color:var(--ss-mute) !important;
+  font-family:inherit !important; font-size:12.5px !important; line-height:1.55 !important;
+}
+.stub .stub-ico{
+  font-size:9.5px !important; letter-spacing:.18em !important; text-transform:uppercase !important;
+  color:var(--ss-mute-2) !important; font-weight:700 !important; font-family:inherit !important;
+  margin-bottom:10px !important; display:block !important; opacity:1 !important;
+}
+.stub b{ color:var(--ss-ink) !important; font-weight:600 !important }
+.stub .stub-tag{
+  background:transparent !important; color:var(--ss-mute) !important;
+  border:1px solid var(--ss-line-2) !important; padding:4px 10px !important;
+  font-size:9.5px !important; letter-spacing:.14em !important; margin-top:12px !important;
+  border-radius:2px !important; text-transform:uppercase !important; font-weight:600 !important;
+}
+.stub .stub-tag.falta{ color:var(--ss-warn) !important; border-color:var(--ss-warn) !important }
 
-/* data-note: rodapé de fonte discreto */
-.data-note{font-family:'Inter',sans-serif !important;font-size:11px !important;color:var(--ed-muted) !important;
-  margin-top:22px !important;padding-top:14px !important;border-top:1px solid var(--ed-line) !important;
-  font-style:normal !important;line-height:1.55 !important;letter-spacing:.01em !important}
-.data-note.warn{color:var(--ed-navy) !important}
+.data-note{
+  font-family:inherit !important; font-size:11.5px !important; color:var(--ss-mute) !important;
+  margin-top:18px !important; padding-top:12px !important; border-top:1px solid var(--ss-line) !important;
+  font-style:normal !important; line-height:1.55 !important;
+}
+.data-note.warn{ color:var(--ss-warn) !important }
 
-/* rank-toolbar (filtro/tabs de ranking): mais discreto */
-.metric-tabs.pill{background:transparent !important;padding:0 !important;border:0 !important}
-.metric-tabs.pill button{background:transparent !important;color:var(--ed-muted) !important;padding:8px 14px !important}
-.metric-tabs.pill button.on{background:transparent !important;color:var(--ed-ink) !important;box-shadow:none !important;border-bottom:2px solid var(--ed-ink) !important;border-radius:0 !important}
-.metric-tabs.pill button.on::after{background:none !important}
+/* Grid 2 colunas */
+.grid2{ gap:16px !important }
 
-/* grid2 sem cantos */
-.grid2{gap:32px !important}
+/* Alert strip legacy: fora */
+.alert-strip{ display:none !important }
 
+/* Tabs pill (rank-toolbar) minimalista */
+.metric-tabs.pill{ background:transparent !important; padding:0 !important; border:0 !important; gap:0 !important }
+.metric-tabs.pill button{
+  background:transparent !important; color:var(--ss-mute) !important;
+  padding:6px 14px !important; border-radius:0 !important; border:0 !important;
+}
+.metric-tabs.pill button.on{
+  background:transparent !important; color:var(--ss-ink) !important;
+  box-shadow:none !important; border-bottom:2px solid var(--ss-ink) !important;
+}
+.metric-tabs.pill button.on::after{ background:none !important }
+.metric-tabs-indicator{ display:none !important }
 
+/* ============ MOBILE ============ */
+@media(max-width:900px){
+  body{ padding-left:0 !important }
+  .ss-sidebar{ position:relative; width:100%; height:auto; flex-direction:row; overflow-x:auto }
+  .ss-sidebar__brand{ border-bottom:0; border-right:1px solid rgba(255,255,255,.08); flex:0 0 auto }
+  .ss-sidebar__nav{ display:flex; padding:0; flex:1 }
+  .ss-sidebar__group{ display:none }
+  .ss-nav-btn{ padding:16px 14px; white-space:nowrap }
+  .ss-nav-btn.on::before{ top:auto; bottom:0; left:0; right:0; width:auto; height:2px }
+  .ss-sidebar__foot{ display:none }
+  main.mw, main.wrap{ padding:0 20px 40px !important }
+}
 
 </style>
 </head>
@@ -1419,34 +1516,52 @@ section{margin-bottom:64px}
   </div>
 </div>
 
-<!-- ============ MASTHEAD (editorial) ============ -->
-<header class="masthead">
-  <div class="mw">
-    <div class="mh-top">
-      <img class="mh-logo" src="logo.png" alt="Silva &amp; Silva Advogados Associados">
-      <div class="mh-meta">
-        <span class="mh-meta-lbl">Atualizado</span>
-        <span class="mh-meta-val" id="meta-data">—</span>
-      </div>
-    </div>
-    <div class="mh-rule"></div>
-    <div class="mh-title">
-      <h1>Painel Geral do Escritório</h1>
-    </div>
+<!-- ============ SIDEBAR (Corporate BI) ============ -->
+<aside class="ss-sidebar">
+  <div class="ss-sidebar__brand">
+    <img src="logo.png" alt="Silva &amp; Silva Advogados">
+    <div class="ss-sidebar__brand-sub">Painel Geral</div>
   </div>
-</header>
-
-<!-- ============ Navegação de abas ============ -->
-<nav class="section-nav" id="tabs-nav">
-  <div class="mw">
-    <button class="sn-btn on" data-tab="financeiro"><span class="sn-num">I</span>Financeiro</button>
-    <button class="sn-btn" data-tab="producao"><span class="sn-num">II</span>Produção</button>
-    <button class="sn-btn" data-tab="comercial"><span class="sn-num">III</span>Comercial</button>
-    <button class="sn-btn" data-tab="projetos"><span class="sn-num">IV</span>Projetos</button>
+  <nav class="ss-sidebar__nav" id="tabs-nav">
+    <div class="ss-sidebar__group">Visões</div>
+    <button class="ss-nav-btn tab-btn on" data-tab="financeiro">
+      <span class="ss-nav-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </span>
+      Financeiro
+    </button>
+    <button class="ss-nav-btn tab-btn" data-tab="producao">
+      <span class="ss-nav-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </span>
+      Produção
+    </button>
+    <button class="ss-nav-btn tab-btn" data-tab="comercial">
+      <span class="ss-nav-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </span>
+      Comercial
+    </button>
+    <button class="ss-nav-btn tab-btn" data-tab="projetos">
+      <span class="ss-nav-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </span>
+      Projetos
+    </button>
+  </nav>
+  <div class="ss-sidebar__foot">
+    <b>Silva &amp; Silva</b><br>Controladoria
   </div>
-</nav>
+</aside>
 
 <main class="mw">
+
+  <!-- ============ TOPBAR ============ -->
+  <div class="ss-topbar">
+    <h1 class="ss-topbar__title" id="ss-page-title">Financeiro <span>/ Visão executiva</span></h1>
+    <div class="ss-topbar__meta">Atualizado em <b id="meta-data">—</b></div>
+  </div>
+
 
   <!-- ================= ABA FINANCEIRO ================= -->
   <div class="tab-panel on" id="tab-financeiro">
@@ -2008,11 +2123,28 @@ section{margin-bottom:64px}
 
   // ---------- Navegação de abas ----------
   function initTabs(){
+    const TITULOS = {
+      financeiro: 'Financeiro',
+      producao: 'Produção',
+      comercial: 'Comercial',
+      projetos: 'Projetos'
+    };
+    const SUBS = {
+      financeiro: 'Visão executiva',
+      producao: 'Carteira e produtividade',
+      comercial: 'Funil e atividade',
+      projetos: 'Iniciativas em andamento'
+    };
+    function atualizarTitulo(tab){
+      const t = $('#ss-page-title');
+      if(t) t.innerHTML = (TITULOS[tab]||tab) + ' <span>/ ' + (SUBS[tab]||'') + '</span>';
+    }
     $$('.tab-btn').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const tab = btn.dataset.tab;
         $$('.tab-btn').forEach(b=>b.classList.toggle('on', b===btn));
         $$('.tab-panel').forEach(p=>p.classList.toggle('on', p.id==='tab-'+tab));
+        atualizarTitulo(tab);
         window.scrollTo({top:0,behavior:'smooth'});
       });
     });

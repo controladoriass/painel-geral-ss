@@ -338,11 +338,28 @@
 
   // ---------- Navegação de abas ----------
   function initTabs(){
+    const TITULOS = {
+      financeiro: 'Financeiro',
+      producao: 'Produção',
+      comercial: 'Comercial',
+      projetos: 'Projetos'
+    };
+    const SUBS = {
+      financeiro: 'Visão executiva',
+      producao: 'Carteira e produtividade',
+      comercial: 'Funil e atividade',
+      projetos: 'Iniciativas em andamento'
+    };
+    function atualizarTitulo(tab){
+      const t = $('#ss-page-title');
+      if(t) t.innerHTML = (TITULOS[tab]||tab) + ' <span>/ ' + (SUBS[tab]||'') + '</span>';
+    }
     $$('.tab-btn').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const tab = btn.dataset.tab;
         $$('.tab-btn').forEach(b=>b.classList.toggle('on', b===btn));
         $$('.tab-panel').forEach(p=>p.classList.toggle('on', p.id==='tab-'+tab));
+        atualizarTitulo(tab);
         window.scrollTo({top:0,behavior:'smooth'});
       });
     });
