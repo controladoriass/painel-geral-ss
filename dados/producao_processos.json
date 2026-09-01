@@ -1,0 +1,55 @@
+{
+  "gerado_em": "2026-08-31",
+  "fonte": "EasyJur list_processos",
+  "id_empresa": 110648,
+  "carteira": {
+    "ativos": 16761,
+    "baixados": 5703,
+    "suspensos": 63,
+    "arquivado_definitivo": 1046,
+    "substabelecido": 1049,
+    "total_geral": 24622
+  },
+  "por_area": [
+    { "id": 2, "area": "Cível", "ativos": 7087 },
+    { "id": 7, "area": "Tributário", "ativos": 2930 },
+    { "id": 6, "area": "Trabalhista", "ativos": 1440 },
+    { "id": 4, "area": "Penal-Criminal", "ativos": 957 },
+    { "id": 35, "area": "Bancário", "ativos": 795 },
+    { "id": 16, "area": "Imobiliário", "ativos": 96 },
+    { "id": 10, "area": "Família e Sucessões", "ativos": 54 },
+    { "id": 5, "area": "Previdenciário", "ativos": 27 },
+    { "id": 11, "area": "Empresarial", "ativos": 0 },
+    { "id": 31, "area": "Consultivo", "ativos": 0 },
+    { "id": null, "area": "Outras áreas", "ativos": 3375 }
+  ],
+  "por_area_obs": "Ativos = status 1. Soma das áreas medidas = 13386; 'Outras áreas' = 16761 - 13386 = 3375 (áreas não medidas individualmente, ex.: Administrativo, Consumidor, Recuperação Judicial, etc.).",
+  "novos_por_mes": {
+    "2025": {
+      "01": 152, "02": 285, "03": 335, "04": 413, "05": 371, "06": 343,
+      "07": 405, "08": 278, "09": 545, "10": 558, "11": 269, "12": 205,
+      "total": 4159
+    },
+    "2026": {
+      "01": 331, "02": 226, "03": 328, "04": 297, "05": 268, "06": 260,
+      "07": 346, "08": 438,
+      "total_ate_agosto": 2494
+    }
+  },
+  "novos_por_mes_obs": "Contagem por data de Cadastro (tipo_data=1), todos os status. 2026 parcial até 31/08.",
+  "novos_por_advogado_2026": [
+    { "id_advogado": 323344, "nome": "MAIKO ROBERTO MAIER", "novos_2026": 2001 },
+    { "id_advogado": 324279, "nome": "Kim Augusto Zanoni", "novos_2026": 471 }
+  ],
+  "novos_por_advogado_2026_obs": "O campo 'advogado' da capa do processo carrega apenas dois códigos de responsável para todo o escritório (323344 e 324279); 2001 + 471 = 2472 dos 2494 novos de 2026. Os advogados técnicos reais ficam no campo personalizado 'Advogado Responsável/Técnico' (id 2650), que não é filtrável por este endpoint — por isso não há quebra individual por advogado técnico via list_processos.",
+  "parados": {
+    "mais_30d": 7652,
+    "mais_90d": 5902
+  },
+  "parados_obs": "status=1, movimentacao=2 (sem movimentação há mais de X dias).",
+  "grandes": {
+    "acima_1mi": 1040,
+    "acima_500k": 1574
+  },
+  "grandes_obs": "status=1, filtro sobre valor_causa (filtro_valor='>=')."
+}

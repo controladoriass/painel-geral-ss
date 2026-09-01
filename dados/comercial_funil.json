@@ -1,0 +1,485 @@
+{
+  "gerado_em": "2026-08-31",
+  "fonte": "EasyJur list_oportunidades",
+  "total_processadas": 3085,
+  "total_reportado_api": 3085,
+  "funil_geral": {
+    "1": {
+      "label": "Briefing",
+      "qtd": 236,
+      "valor_total": 204280.03
+    },
+    "2": {
+      "label": "Proposta",
+      "qtd": 1165,
+      "valor_total": 19783169.19
+    },
+    "3": {
+      "label": "Negociação",
+      "qtd": 49,
+      "valor_total": 434684.09
+    },
+    "4": {
+      "label": "Fechado",
+      "qtd": 994,
+      "valor_total": 20499348.24
+    },
+    "5": {
+      "label": "Recusado",
+      "qtd": 639,
+      "valor_total": 11688271.39
+    },
+    "outros": {
+      "label": "(status fora 1-5)",
+      "qtd": 2,
+      "valor_total": 0.0
+    },
+    "_total_registros": 3085
+  },
+  "por_vendedor": [
+    {
+      "vendedor": "Yasmin Lazouwnik",
+      "enviadas": 1386,
+      "fechadas": 486,
+      "recusadas": 365,
+      "em_aberto": 609,
+      "valor_em_aberto": 8953084.98,
+      "valor_fechado": 9315695.65,
+      "total_oportunidades": 1460
+    },
+    {
+      "vendedor": "VANESSA MARAGNO OSELLAME",
+      "enviadas": 511,
+      "fechadas": 241,
+      "recusadas": 99,
+      "em_aberto": 181,
+      "valor_em_aberto": 3993939.44,
+      "valor_fechado": 6449886.49,
+      "total_oportunidades": 521
+    },
+    {
+      "vendedor": "Bruna Gabrielli Vidal",
+      "enviadas": 436,
+      "fechadas": 150,
+      "recusadas": 62,
+      "em_aberto": 252,
+      "valor_em_aberto": 3648282.8,
+      "valor_fechado": 2001814.12,
+      "total_oportunidades": 464
+    },
+    {
+      "vendedor": "Erika Martins da Silva",
+      "enviadas": 242,
+      "fechadas": 54,
+      "recusadas": 68,
+      "em_aberto": 130,
+      "valor_em_aberto": 2330871.0,
+      "valor_fechado": 1825149.0,
+      "total_oportunidades": 252
+    },
+    {
+      "vendedor": "Ana Bittencourt",
+      "enviadas": 37,
+      "fechadas": 20,
+      "recusadas": 0,
+      "em_aberto": 18,
+      "valor_em_aberto": 271000.0,
+      "valor_fechado": 487964.0,
+      "total_oportunidades": 38
+    },
+    {
+      "vendedor": "Kelly Bento",
+      "enviadas": 71,
+      "fechadas": 12,
+      "recusadas": 25,
+      "em_aberto": 54,
+      "valor_em_aberto": 0.09,
+      "valor_fechado": 3000.12,
+      "total_oportunidades": 91
+    },
+    {
+      "vendedor": "Kim Augusto Zanoni",
+      "enviadas": 16,
+      "fechadas": 8,
+      "recusadas": 5,
+      "em_aberto": 8,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 152600.0,
+      "total_oportunidades": 21
+    },
+    {
+      "vendedor": "Giovanna Julia Paulina da Silva",
+      "enviadas": 56,
+      "fechadas": 5,
+      "recusadas": 1,
+      "em_aberto": 51,
+      "valor_em_aberto": 694250.0,
+      "valor_fechado": 102161.01,
+      "total_oportunidades": 57
+    },
+    {
+      "vendedor": "Fernanda Xanteli Faissel",
+      "enviadas": 18,
+      "fechadas": 4,
+      "recusadas": 3,
+      "em_aberto": 11,
+      "valor_em_aberto": 308705.0,
+      "valor_fechado": 47536.5,
+      "total_oportunidades": 18
+    },
+    {
+      "vendedor": "Gisele Cristina Vailati Cunha",
+      "enviadas": 5,
+      "fechadas": 3,
+      "recusadas": 2,
+      "em_aberto": 0,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 0.03,
+      "total_oportunidades": 5
+    },
+    {
+      "vendedor": "Pedro Henrique Almeida da Silva",
+      "enviadas": 2,
+      "fechadas": 2,
+      "recusadas": 0,
+      "em_aberto": 1,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 25000.0,
+      "total_oportunidades": 3
+    },
+    {
+      "vendedor": "Fernanda Kreibich",
+      "enviadas": 9,
+      "fechadas": 2,
+      "recusadas": 3,
+      "em_aberto": 5,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 0.02,
+      "total_oportunidades": 10
+    },
+    {
+      "vendedor": "Mariana Cristina da Silva",
+      "enviadas": 2,
+      "fechadas": 2,
+      "recusadas": 0,
+      "em_aberto": 0,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 0.01,
+      "total_oportunidades": 2
+    },
+    {
+      "vendedor": "MAIKO ROBERTO MAIER",
+      "enviadas": 4,
+      "fechadas": 1,
+      "recusadas": 1,
+      "em_aberto": 2,
+      "valor_em_aberto": 30000.0,
+      "valor_fechado": 45000.0,
+      "total_oportunidades": 4
+    },
+    {
+      "vendedor": "Rafaela de Mattos Queiroz",
+      "enviadas": 1,
+      "fechadas": 1,
+      "recusadas": 0,
+      "em_aberto": 0,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 16968.0,
+      "total_oportunidades": 1
+    },
+    {
+      "vendedor": "GILBERTO LUIZ SUZIN",
+      "enviadas": 1,
+      "fechadas": 1,
+      "recusadas": 0,
+      "em_aberto": 0,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 13726.29,
+      "total_oportunidades": 1
+    },
+    {
+      "vendedor": "Lisandra Vieira Holzmann",
+      "enviadas": 20,
+      "fechadas": 1,
+      "recusadas": 0,
+      "em_aberto": 89,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 11347.0,
+      "total_oportunidades": 90
+    },
+    {
+      "vendedor": "Bruna Duarte Soares Martins",
+      "enviadas": 2,
+      "fechadas": 1,
+      "recusadas": 0,
+      "em_aberto": 1,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 1500.0,
+      "total_oportunidades": 2
+    },
+    {
+      "vendedor": "Christian de Lima Jagelski",
+      "enviadas": 15,
+      "fechadas": 0,
+      "recusadas": 0,
+      "em_aberto": 17,
+      "valor_em_aberto": 18000.0,
+      "valor_fechado": 0.0,
+      "total_oportunidades": 17
+    },
+    {
+      "vendedor": "Jéssica da Silva Titon",
+      "enviadas": 5,
+      "fechadas": 0,
+      "recusadas": 5,
+      "em_aberto": 5,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 0.0,
+      "total_oportunidades": 11
+    },
+    {
+      "vendedor": "BRUNA LAZZARI",
+      "enviadas": 6,
+      "fechadas": 0,
+      "recusadas": 0,
+      "em_aberto": 6,
+      "valor_em_aberto": 126000.0,
+      "valor_fechado": 0.0,
+      "total_oportunidades": 7
+    },
+    {
+      "vendedor": "Elton Vargas de Oliveira",
+      "enviadas": 1,
+      "fechadas": 0,
+      "recusadas": 0,
+      "em_aberto": 6,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 0.0,
+      "total_oportunidades": 6
+    },
+    {
+      "vendedor": "Kethlin de Machado",
+      "enviadas": 0,
+      "fechadas": 0,
+      "recusadas": 0,
+      "em_aberto": 2,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 0.0,
+      "total_oportunidades": 2
+    },
+    {
+      "vendedor": "Airton Ariel",
+      "enviadas": 1,
+      "fechadas": 0,
+      "recusadas": 0,
+      "em_aberto": 1,
+      "valor_em_aberto": 48000.0,
+      "valor_fechado": 0.0,
+      "total_oportunidades": 1
+    },
+    {
+      "vendedor": "Amelie",
+      "enviadas": 0,
+      "fechadas": 0,
+      "recusadas": 0,
+      "em_aberto": 1,
+      "valor_em_aberto": 0.0,
+      "valor_fechado": 0.0,
+      "total_oportunidades": 1
+    }
+  ],
+  "por_mes": {
+    "2025": {
+      "2025-01": {
+        "leads": 46,
+        "fechadas": 20
+      },
+      "2025-02": {
+        "leads": 69,
+        "fechadas": 25
+      },
+      "2025-03": {
+        "leads": 74,
+        "fechadas": 26
+      },
+      "2025-04": {
+        "leads": 87,
+        "fechadas": 43
+      },
+      "2025-05": {
+        "leads": 39,
+        "fechadas": 15
+      },
+      "2025-06": {
+        "leads": 53,
+        "fechadas": 24
+      },
+      "2025-07": {
+        "leads": 42,
+        "fechadas": 14
+      },
+      "2025-08": {
+        "leads": 35,
+        "fechadas": 20
+      },
+      "2025-09": {
+        "leads": 99,
+        "fechadas": 19
+      },
+      "2025-10": {
+        "leads": 51,
+        "fechadas": 29
+      },
+      "2025-11": {
+        "leads": 33,
+        "fechadas": 16
+      },
+      "2025-12": {
+        "leads": 16,
+        "fechadas": 4
+      }
+    },
+    "2026": {
+      "2026-01": {
+        "leads": 22,
+        "fechadas": 5
+      },
+      "2026-02": {
+        "leads": 50,
+        "fechadas": 15
+      },
+      "2026-03": {
+        "leads": 56,
+        "fechadas": 7
+      },
+      "2026-04": {
+        "leads": 68,
+        "fechadas": 2
+      },
+      "2026-05": {
+        "leads": 57,
+        "fechadas": 14
+      },
+      "2026-06": {
+        "leads": 58,
+        "fechadas": 11
+      },
+      "2026-07": {
+        "leads": 110,
+        "fechadas": 25
+      },
+      "2026-08": {
+        "leads": 74,
+        "fechadas": 13
+      }
+    }
+  },
+  "top_oportunidades_abertas": [
+    {
+      "nome": "ALCIONEI TRIDAPALLI - EDIFICIO ENZO GABRIEL",
+      "cliente": "ALCIONEI TRIDAPALLI",
+      "vendedor": "VANESSA MARAGNO OSELLAME",
+      "status_label": "Proposta",
+      "valor_total": 1000000.0
+    },
+    {
+      "nome": "DEFESA JUDICIAL",
+      "cliente": "ERNANDO MACEDO SILVA",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 300000.0
+    },
+    {
+      "nome": "DEFESA JUDICIAL",
+      "cliente": "BETATEX COMERCIAL IMPORTADORA E EXPORTADORA LTDA",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 250000.0
+    },
+    {
+      "nome": "SIMONE SELENT - CRIMINAL",
+      "cliente": "SIMONE SELENT CORREIA",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 250000.0
+    },
+    {
+      "nome": "CENTRO DE TRIAGEM ITA. - AÇÃO ",
+      "cliente": "CENTRO DE TRIAGEM ITAPEMA EIRELI",
+      "vendedor": "VANESSA MARAGNO OSELLAME",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "RUAN ARNO BROCKVELD - CRIMINAL",
+      "cliente": "",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "GABRIEL SETENT - CRIMINAL",
+      "cliente": "GABRIEL SELENT GARGANO",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "FRANCISCO MOSER - CRIMINAL",
+      "cliente": "FRANCISCO MOSER",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 200000.0
+    },
+    {
+      "nome": "CRIMINAL",
+      "cliente": "MÁRIO CÉSAR ANGELO",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 180000.0
+    },
+    {
+      "nome": "FAMÍLIA GALLI - INVENTÁRIO",
+      "cliente": "Marco Aurélio Costa Galli",
+      "vendedor": "Bruna Gabrielli Vidal",
+      "status_label": "Proposta",
+      "valor_total": 175000.0
+    },
+    {
+      "nome": "AÇÃO JUDICIAL",
+      "cliente": "GRUPO MASTER COMERCIO IMPORTACAO E EXPORTACAO LTDA",
+      "vendedor": "Ana Bittencourt",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "agravo de instrumento",
+      "cliente": "INDUSFLORA PRODUTOS FLORESTAIS S/A - INDUSFLORA",
+      "vendedor": "Yasmin Lazouwnik",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "DEMIAN CORREA - PROCESSO",
+      "cliente": "DEMIAN FRANCIS CORREA",
+      "vendedor": "VANESSA MARAGNO OSELLAME",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "LISSANDRA SELENT - CRIMINAL",
+      "cliente": "LISSANDRA SELENT GARGANO",
+      "vendedor": "Erika Martins da Silva",
+      "status_label": "Proposta",
+      "valor_total": 150000.0
+    },
+    {
+      "nome": "ZIMMERMANN - CANTO DA PRAIA",
+      "cliente": "CONSTRUTORA ZIMMERMANN LTDA - ZIMMERMANN",
+      "vendedor": "Bruna Gabrielli Vidal",
+      "status_label": "Briefing",
+      "valor_total": 150000.0
+    }
+  ],
+  "alerta_valor_zerado": 593
+}

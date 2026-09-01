@@ -1,0 +1,20 @@
+{
+  "gerado_em": "2026-08-31",
+  "fonte": "EasyJur list_contratos classificacao=mensal status=VIGENTE",
+  "total_contratos_vigentes": 52,
+  "contratos_com_valor": 51,
+  "contratos_zerados": 1,
+  "receita_mensal_recorrente_total": 280169.8,
+  "receita_anual_projetada": 3362037.6,
+  "ticket_medio_mensal": 5493.53,
+  "mediana_mensal": 4376.7,
+  "maior_contrato": 22000,
+  "menor_contrato": 1518,
+  "distribuicao_faixas": {
+    "acima_10k": 6,
+    "5k_10k": 12,
+    "3k_5k": 24,
+    "abaixo_3k": 9
+  },
+  "nota": "data_final de varios contratos ja passou mas status segue VIGENTE (EasyJur nao encerra automaticamente). Revisar vigencias com o financeiro."
+}

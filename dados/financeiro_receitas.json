@@ -1,0 +1,364 @@
+{
+  "gerado_em": "2026-08-31",
+  "fonte": "EasyJur list_receitas (escritorio id_empresa 110648)",
+  "metodo": "Paginacao completa 2022-2026; pago por data_pagamento (status=P); competencia por data_competencia (todos status). Dedup por id. Contagens conferem 100% com meta.total da API.",
+  "faturamento_por_ano": [
+    {
+      "ano": 2022,
+      "total_pago": 14429251.94,
+      "qtd_recebimentos": 2164,
+      "total_competencia": 18686288.73,
+      "qtd_lancamentos": 2447
+    },
+    {
+      "ano": 2023,
+      "total_pago": 35557815.49,
+      "qtd_recebimentos": 2528,
+      "total_competencia": 36065465.93,
+      "qtd_lancamentos": 2622
+    },
+    {
+      "ano": 2024,
+      "total_pago": 40310726.92,
+      "qtd_recebimentos": 3662,
+      "total_competencia": 42859740.96,
+      "qtd_lancamentos": 3751
+    },
+    {
+      "ano": 2025,
+      "total_pago": 38302689.78,
+      "qtd_recebimentos": 3741,
+      "total_competencia": 44767700.55,
+      "qtd_lancamentos": 4263
+    },
+    {
+      "ano": 2026,
+      "total_pago": 29889398.88,
+      "qtd_recebimentos": 2464,
+      "total_competencia": 55271114.88,
+      "qtd_lancamentos": 4070
+    }
+  ],
+  "faturamento_por_plano_de_contas": [
+    {
+      "id": 3,
+      "descricao": "1.1.01 - Êxito",
+      "total_pago": 46222325.69,
+      "qtd": 1919,
+      "por_ano": {
+        "2022": 4928735.14,
+        "2023": 15926243.01,
+        "2024": 7433360.85,
+        "2025": 10577779.72,
+        "2026": 7356206.97
+      }
+    },
+    {
+      "id": 282,
+      "descricao": "2.1.11 - Transferência Entrada",
+      "total_pago": 45743511.44,
+      "qtd": 926,
+      "por_ano": {
+        "2023": 6609744.76,
+        "2024": 19476428.66,
+        "2025": 10598825.62,
+        "2026": 9058512.4
+      }
+    },
+    {
+      "id": 5,
+      "descricao": "1.1.02 - Partido Mensal",
+      "total_pago": 31338137.63,
+      "qtd": 6440,
+      "por_ano": {
+        "2022": 4968774.01,
+        "2023": 5841115.73,
+        "2024": 6845736.41,
+        "2025": 7989157.08,
+        "2026": 5693354.4
+      }
+    },
+    {
+      "id": 286,
+      "descricao": "1.1.08 - Honorários Diversos",
+      "total_pago": 27626107.28,
+      "qtd": 3075,
+      "por_ano": {
+        "2022": 3068376.84,
+        "2023": 6206259.92,
+        "2024": 4438431.01,
+        "2025": 7861715.41,
+        "2026": 6051324.1
+      }
+    },
+    {
+      "id": 9,
+      "descricao": "1.1.06 - Sucumbências",
+      "total_pago": 5692371.33,
+      "qtd": 213,
+      "por_ano": {
+        "2022": 1351704.53,
+        "2023": 607545.51,
+        "2024": 1365772.44,
+        "2025": 822894.27,
+        "2026": 1544454.58
+      }
+    },
+    {
+      "id": 29,
+      "descricao": "2.1.09 - Outras Receitas",
+      "total_pago": 1002481.08,
+      "qtd": 184,
+      "por_ano": {
+        "2022": 12696.79,
+        "2023": 235978.56,
+        "2024": 401858.52,
+        "2025": 291534.3,
+        "2026": 60412.91
+      }
+    },
+    {
+      "id": 368,
+      "descricao": "1.1.13 - Transferência Entrada",
+      "total_pago": 260048.9,
+      "qtd": 4,
+      "por_ano": {
+        "2024": 200000.0,
+        "2026": 60048.9
+      }
+    },
+    {
+      "id": 28,
+      "descricao": "2.1.08 - Receita de Reembolso",
+      "total_pago": 194386.54,
+      "qtd": 1033,
+      "por_ano": {
+        "2022": 36972.32,
+        "2023": 29264.13,
+        "2024": 29797.92,
+        "2025": 70562.34,
+        "2026": 27789.83
+      }
+    },
+    {
+      "id": 6,
+      "descricao": "1.1.03 - Avulso",
+      "total_pago": 135507.19,
+      "qtd": 15,
+      "por_ano": {
+        "2022": 18426.52,
+        "2023": 5841.64,
+        "2024": 52308.59,
+        "2025": 50868.09,
+        "2026": 8062.35
+      }
+    },
+    {
+      "id": 285,
+      "descricao": "1.1.07 - Acordo",
+      "total_pago": 79999.92,
+      "qtd": 24,
+      "por_ano": {
+        "2023": 43333.29,
+        "2024": 36666.63
+      }
+    },
+    {
+      "id": 322,
+      "descricao": "1.2.10 - Honorários Diversos",
+      "total_pago": 62245.44,
+      "qtd": 7,
+      "por_ano": {
+        "2022": 22245.44,
+        "2023": 40000.0
+      }
+    },
+    {
+      "id": 22,
+      "descricao": "2.1.02 - Aluguéis",
+      "total_pago": 42617.8,
+      "qtd": 25,
+      "por_ano": {
+        "2025": 17090.0,
+        "2026": 25527.8
+      }
+    },
+    {
+      "id": 24,
+      "descricao": "2.1.04 - Rendimento de Aplicações",
+      "total_pago": 37471.01,
+      "qtd": 603,
+      "por_ano": {
+        "2023": 4078.65,
+        "2024": 23179.28,
+        "2025": 8591.11,
+        "2026": 1621.97
+      }
+    },
+    {
+      "id": 295,
+      "descricao": "1.1.09 - Por Ato",
+      "total_pago": 21728.61,
+      "qtd": 71,
+      "por_ano": {
+        "2024": 5974.1,
+        "2025": 13671.84,
+        "2026": 2082.67
+      }
+    },
+    {
+      "id": 8957,
+      "descricao": "1.0.01 Receitas Operacionais Honorarios (Geral)",
+      "total_pago": 16020.35,
+      "qtd": 9,
+      "por_ano": {
+        "2022": 16020.35
+      }
+    },
+    {
+      "id": 8,
+      "descricao": "1.1.05 - Diligência",
+      "total_pago": 8000.0,
+      "qtd": 2,
+      "por_ano": {
+        "2023": 8000.0
+      }
+    },
+    {
+      "id": 363,
+      "descricao": "1.1.12 Honorários Iniciais (Pró-Labore)",
+      "total_pago": 5000.0,
+      "qtd": 1,
+      "por_ano": {
+        "2022": 5000.0
+      }
+    },
+    {
+      "id": 11,
+      "descricao": "1.2.01 - Consultas",
+      "total_pago": 1210.3,
+      "qtd": 6,
+      "por_ano": {
+        "2022": 300.0,
+        "2023": 410.29,
+        "2024": 500.01
+      }
+    },
+    {
+      "id": 7,
+      "descricao": "1.1.04 - Hora Trabalhada",
+      "total_pago": 612.5,
+      "qtd": 1,
+      "por_ano": {
+        "2024": 612.5
+      }
+    },
+    {
+      "id": 296,
+      "descricao": "1.1.10 - Por Fase",
+      "total_pago": 100.0,
+      "qtd": 1,
+      "por_ano": {
+        "2024": 100.0
+      }
+    }
+  ],
+  "faturamento_mensal": {
+    "2025-01": {
+      "total_pago": 1572785.53,
+      "qtd": 295
+    },
+    "2025-02": {
+      "total_pago": 3716345.75,
+      "qtd": 328
+    },
+    "2025-03": {
+      "total_pago": 1751177.33,
+      "qtd": 291
+    },
+    "2025-04": {
+      "total_pago": 2242527.74,
+      "qtd": 289
+    },
+    "2025-05": {
+      "total_pago": 1912655.96,
+      "qtd": 270
+    },
+    "2025-06": {
+      "total_pago": 2590666.14,
+      "qtd": 274
+    },
+    "2025-07": {
+      "total_pago": 2551223.21,
+      "qtd": 316
+    },
+    "2025-08": {
+      "total_pago": 5467220.6,
+      "qtd": 334
+    },
+    "2025-09": {
+      "total_pago": 3400898.19,
+      "qtd": 320
+    },
+    "2025-10": {
+      "total_pago": 4417184.36,
+      "qtd": 363
+    },
+    "2025-11": {
+      "total_pago": 4739397.31,
+      "qtd": 300
+    },
+    "2025-12": {
+      "total_pago": 3940607.66,
+      "qtd": 361
+    },
+    "2026-01": {
+      "total_pago": 2093113.14,
+      "qtd": 273
+    },
+    "2026-02": {
+      "total_pago": 2973392.74,
+      "qtd": 288
+    },
+    "2026-03": {
+      "total_pago": 4599201.52,
+      "qtd": 336
+    },
+    "2026-04": {
+      "total_pago": 4082725.41,
+      "qtd": 334
+    },
+    "2026-05": {
+      "total_pago": 3745633.22,
+      "qtd": 291
+    },
+    "2026-06": {
+      "total_pago": 4529433.99,
+      "qtd": 343
+    },
+    "2026-07": {
+      "total_pago": 4845333.19,
+      "qtd": 299
+    },
+    "2026-08": {
+      "total_pago": 2811784.83,
+      "qtd": 282
+    },
+    "2026-09": {
+      "total_pago": 63970.84,
+      "qtd": 7
+    },
+    "2026-10": {
+      "total_pago": 17810.0,
+      "qtd": 4
+    },
+    "2026-11": {
+      "total_pago": 11000.0,
+      "qtd": 3
+    },
+    "2026-12": {
+      "total_pago": 116000.0,
+      "qtd": 4
+    }
+  }
+}

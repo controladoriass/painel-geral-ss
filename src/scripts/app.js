@@ -368,11 +368,21 @@
 
   // ---------- Boot ----------
   async function boot(){
-    const hoje = new Date().toLocaleDateString('pt-BR');
-    if($('#meta-data')) $('#meta-data').textContent = hoje;
     initTabs(); initTema();
     // renderiza tudo (cada um tolera dado ausente)
     await Promise.allSettled([renderFinanceiro(), renderProducao(), renderComercial(), renderFormularios()]);
+    // data da última atualização — pega a mais recente dos JSONs carregados
+    if($('#meta-data')){
+      const embed = window.DADOS_EMBED || {};
+      const datas = Object.values(embed).map(o => (o && (o.gerado_em || o.data))).filter(Boolean);
+      let maxDate = null;
+      datas.forEach(d => {
+        const t = new Date(d);
+        if(!isNaN(t) && (!maxDate || t > maxDate)) maxDate = t;
+      });
+      const alvo = maxDate || new Date();
+      $('#meta-data').textContent = alvo.toLocaleDateString('pt-BR');
+    }
     setTimeout(fecharCortina, 500);
   }
 

@@ -1,7 +1,6 @@
-# working files brutos do EasyJur (grandes, sensíveis, vão embutidos no index.html via data-embed.js)
-dados/*.json
-# EXCEÇÃO: JSONs de formulários são versionados (fluxo automático do GitHub Actions)
-!dados/formularios_*.json
+# TUDO em dados/ é versionado (agregados finais, não dados brutos sensíveis).
+# Isso permite que o GitHub Actions rode com os dados do EasyJur no repo.
+# Arquivos brutos temporários ficam em coleta/ (gitignored abaixo).
 
 coleta/
 scratchpad/
