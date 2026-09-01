@@ -54,45 +54,87 @@ body{ padding-left:var(--ss-sidebar-w) !important }
 
 .ss-sidebar{
   position:fixed; left:0; top:0; bottom:0; width:var(--ss-sidebar-w);
-  background:var(--ss-navy); color:#fff;
+  background:#161930; color:#fff;
   display:flex; flex-direction:column; z-index:100;
-  border-right:1px solid rgba(0,0,0,.4);
+  border-right:1px solid #0A0D1F;
 }
-.ss-sidebar__brand{ padding:24px 20px 20px; border-bottom:1px solid rgba(255,255,255,.08) }
-.ss-sidebar__brand img{ height:26px; width:auto; display:block; filter:brightness(0) invert(1); opacity:.95 }
-.ss-sidebar__brand-sub{
-  margin-top:10px; font-size:10px; font-weight:600; letter-spacing:.14em;
-  text-transform:uppercase; color:rgba(255,255,255,.5);
+/* Faixa dourada vertical fina na borda direita da sidebar (assinatura da casa) */
+.ss-sidebar::after{
+  content:""; position:absolute; right:0; top:24px; bottom:24px; width:1px;
+  background:linear-gradient(180deg, transparent, rgba(181,134,66,.35) 20%, rgba(181,134,66,.35) 80%, transparent);
 }
 
-.ss-sidebar__nav{ padding:16px 0; flex:1; overflow-y:auto }
+.ss-sidebar__brand{
+  padding:26px 22px 22px; border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex; flex-direction:column; gap:14px;
+}
+.ss-sidebar__brand img{
+  height:24px; width:auto; display:block; filter:brightness(0) invert(1); opacity:.92;
+}
+.ss-sidebar__brand-sub{
+  font-size:10.5px; font-weight:600; letter-spacing:.16em;
+  text-transform:uppercase; color:rgba(255,255,255,.45);
+  padding-top:4px; border-top:1px solid rgba(255,255,255,.05);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.ss-sidebar__brand-sub::after{
+  content:"v1.0"; font-size:9.5px; font-weight:500; letter-spacing:.05em;
+  color:rgba(255,255,255,.3); text-transform:none;
+  font-variant-numeric:tabular-nums;
+}
+
+.ss-sidebar__nav{ padding:20px 0; flex:1; overflow-y:auto }
 .ss-sidebar__group{
   font-size:9.5px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
-  color:rgba(255,255,255,.35); padding:14px 20px 8px;
+  color:rgba(255,255,255,.3); padding:0 22px 12px;
 }
 .ss-nav-btn{
   width:100%; text-align:left; background:transparent; border:0;
-  padding:11px 20px; cursor:pointer; position:relative;
-  font-family:inherit; font-size:13px; font-weight:500; letter-spacing:.005em;
-  color:rgba(255,255,255,.75); display:flex; align-items:center; gap:12px;
-  transition:background .15s, color .15s;
+  padding:13px 22px 13px 22px; cursor:pointer; position:relative;
+  font-family:inherit; font-size:13.5px; font-weight:500; letter-spacing:-.005em;
+  color:rgba(255,255,255,.72); display:flex; align-items:center; gap:13px;
+  transition:background .18s, color .18s, padding .18s;
 }
-.ss-nav-btn:hover{ color:#fff; background:rgba(255,255,255,.04) }
-.ss-nav-btn.on{ color:#fff; background:rgba(255,255,255,.06) }
+.ss-nav-btn:hover{
+  color:#fff; background:rgba(255,255,255,.03);
+}
+.ss-nav-btn.on{
+  color:#fff;
+  background:linear-gradient(90deg, rgba(181,134,66,.14) 0%, rgba(181,134,66,.02) 60%, transparent 100%);
+}
 .ss-nav-btn.on::before{
-  content:""; position:absolute; left:0; top:0; bottom:0; width:3px;
-  background:var(--ss-gold);
+  content:""; position:absolute; left:0; top:8px; bottom:8px; width:3px;
+  background:var(--ss-gold); border-radius:0 2px 2px 0;
 }
 .ss-nav-btn .ss-nav-ico{
-  width:16px; height:16px; flex:0 0 auto; opacity:.7;
+  width:15px; height:15px; flex:0 0 auto; opacity:.55;
   display:inline-flex; align-items:center; justify-content:center;
+  transition:opacity .18s, color .18s;
 }
-.ss-nav-btn.on .ss-nav-ico{ opacity:1 }
+.ss-nav-btn:hover .ss-nav-ico{ opacity:.85 }
+.ss-nav-btn.on .ss-nav-ico{ opacity:1; color:var(--ss-gold-soft) }
 
-.ss-sidebar__foot{ padding:16px 20px; border-top:1px solid rgba(255,255,255,.08); font-size:11px; color:rgba(255,255,255,.5) }
-.ss-sidebar__foot b{ color:rgba(255,255,255,.85); font-weight:600 }
-.ss-sidebar__foot a{ color:var(--ss-gold-soft); text-decoration:none; display:block; margin-top:6px; font-size:11px }
-.ss-sidebar__foot a:hover{ color:#fff }
+/* Meta dentro do foot: métricas discretas */
+.ss-sidebar__foot{
+  padding:18px 22px 20px; border-top:1px solid rgba(255,255,255,.06);
+  font-size:11px; color:rgba(255,255,255,.5); line-height:1.55;
+  display:flex; flex-direction:column; gap:10px;
+}
+.ss-sidebar__foot-row{ display:flex; justify-content:space-between; align-items:baseline }
+.ss-sidebar__foot-lbl{
+  font-size:9.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(255,255,255,.35);
+}
+.ss-sidebar__foot-val{
+  font-family:'IBM Plex Sans', 'Inter', sans-serif;
+  font-size:11.5px; color:rgba(255,255,255,.85); font-weight:500;
+  font-variant-numeric:tabular-nums;
+}
+.ss-sidebar__foot-brand{
+  padding-top:12px; margin-top:2px; border-top:1px solid rgba(255,255,255,.05);
+  font-size:11px; color:rgba(255,255,255,.55); font-weight:500;
+}
+.ss-sidebar__foot-brand b{ color:rgba(255,255,255,.85); font-weight:600 }
 
 /* ============ MAIN (conteudo) ============ */
 main.mw, main.wrap{
