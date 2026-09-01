@@ -1180,17 +1180,17 @@ body.theme-dark .hbar-row .hb-val small{color:#a9b0c6}
 
 :root{
   --ss-ink: #0A0E1A;
-  --ss-ink-2: #3E4353;
-  --ss-mute: #6B7183;
-  --ss-mute-2: #9CA1B0;
-  --ss-line: #E8EAEE;
-  --ss-line-2: #D3D7DF;
+  --ss-ink-2: #1E2233;
+  --ss-mute: #4A5060;   /* +escuro (era #6B7183) */
+  --ss-mute-2: #6B7183;  /* +escuro (era #9CA1B0) */
+  --ss-line: #E1E4EA;
+  --ss-line-2: #C6CBD5;
   --ss-surface: #FFFFFF;
-  --ss-bg: #F5F6F8;
+  --ss-bg: #F3F5F8;
   --ss-navy: #1E223F;
   --ss-navy-2: #2A2F52;
-  --ss-gold: #B58642;
-  --ss-gold-soft: #CFA36E;
+  --ss-gold: #A87A38;
+  --ss-gold-soft: #B58642;
   --ss-pos: #0F7B3E;
   --ss-neg: #B42318;
   --ss-warn: #B45309;
@@ -1281,9 +1281,9 @@ main.mw, main.wrap{
 .ss-topbar__title{
   font-family:inherit; font-size:24px; font-weight:600; letter-spacing:-.015em; color:var(--ss-ink);
 }
-.ss-topbar__title span{ color:var(--ss-mute); font-weight:400 }
+.ss-topbar__title span{ color:var(--ss-mute-2); font-weight:400 }
 .ss-topbar__meta{
-  font-size:12px; color:var(--ss-mute); font-variant-numeric:tabular-nums;
+  font-size:12.5px; color:var(--ss-ink-2); font-variant-numeric:tabular-nums; font-weight:500;
 }
 .ss-topbar__meta b{ color:var(--ss-ink); font-weight:600 }
 
@@ -1297,15 +1297,15 @@ section{ margin-bottom:40px !important }
   font-family:inherit !important; font-style:normal !important;
   font-size:11px !important; font-weight:700 !important; letter-spacing:.18em !important;
   text-transform:uppercase !important;
-  color:var(--ss-mute-2) !important;
+  color:var(--ss-mute) !important;
   border:0 !important; padding:0 !important;
   min-width:0 !important;
   font-variant-numeric:tabular-nums !important;
 }
 .sec-titles h2{
   font-family:inherit !important; font-weight:600 !important;
-  font-size:15px !important; color:var(--ss-ink) !important;
-  letter-spacing:-.005em !important; line-height:1.3 !important;
+  font-size:16px !important; color:var(--ss-ink) !important;
+  letter-spacing:-.008em !important; line-height:1.3 !important;
   font-variation-settings:normal !important;
 }
 .sec-titles .sec-desc{
@@ -1313,6 +1313,8 @@ section{ margin-bottom:40px !important }
   color:var(--ss-mute) !important; font-weight:400 !important;
   margin-top:4px !important; line-height:1.5 !important;
 }
+/* se sec-desc estiver vazio, nao pode ocupar espaco */
+.sec-titles .sec-desc:empty{ display:none !important }
 
 /* Panel: card simples, borda 1px, sem sombra */
 .panel{
@@ -1323,8 +1325,8 @@ section{ margin-bottom:40px !important }
   box-shadow:none !important;
 }
 .panel-label{
-  font-family:inherit !important; font-size:10.5px !important; font-weight:700 !important;
-  color:var(--ss-mute) !important; text-transform:uppercase !important;
+  font-family:inherit !important; font-size:11px !important; font-weight:700 !important;
+  color:var(--ss-ink-2) !important; text-transform:uppercase !important;
   letter-spacing:.14em !important; margin-bottom:16px !important;
   display:flex !important; align-items:center !important; gap:10px !important;
 }
@@ -1356,7 +1358,7 @@ section{ margin-bottom:40px !important }
 .fin-card::before{ display:none !important }
 
 .fin-card .fc-eyebrow{
-  font-family:inherit !important; font-size:10px !important; font-weight:600 !important;
+  font-family:inherit !important; font-size:10.5px !important; font-weight:700 !important;
   letter-spacing:.14em !important; text-transform:uppercase !important;
   color:var(--ss-mute) !important; margin-bottom:8px !important;
 }
@@ -1372,7 +1374,7 @@ section{ margin-bottom:40px !important }
 }
 .fin-card .fc-desc{
   font-family:inherit !important; font-size:12px !important; color:var(--ss-mute) !important;
-  margin-top:10px !important; line-height:1.5 !important; font-weight:400 !important;
+  margin-top:10px !important; line-height:1.5 !important; font-weight:500 !important;
   padding-top:0 !important; border-top:0 !important;
 }
 .fin-card .fc-desc b{ color:var(--ss-ink) !important; font-weight:600 !important }
@@ -1424,8 +1426,8 @@ section{ margin-bottom:40px !important }
   font-variant-numeric:tabular-nums !important; letter-spacing:-.005em !important;
 }
 .hbar-row .hb-val small, .bar-row .val small{
-  font-family:'Inter', sans-serif !important; font-size:10.5px !important;
-  color:var(--ss-mute) !important; font-weight:400 !important;
+  font-family:'Inter', sans-serif !important; font-size:11px !important;
+  color:var(--ss-mute) !important; font-weight:500 !important;
   display:block !important; margin-top:2px !important; letter-spacing:0 !important;
 }
 
@@ -1460,9 +1462,9 @@ section{ margin-bottom:40px !important }
 .stub .stub-tag.falta{ color:var(--ss-warn) !important; border-color:var(--ss-warn) !important }
 
 .data-note{
-  font-family:inherit !important; font-size:11.5px !important; color:var(--ss-mute) !important;
+  font-family:inherit !important; font-size:12px !important; color:var(--ss-mute) !important;
   margin-top:18px !important; padding-top:12px !important; border-top:1px solid var(--ss-line) !important;
-  font-style:normal !important; line-height:1.55 !important;
+  font-style:normal !important; line-height:1.55 !important; font-weight:500 !important;
 }
 .data-note.warn{ color:var(--ss-warn) !important }
 
@@ -1571,7 +1573,7 @@ section{ margin-bottom:40px !important }
         <div class="roman">01</div>
         <div class="sec-titles">
           <h2>Assessoria mensal recorrente</h2>
-          <div class="sec-desc">Receita fixa contratada dos clientes de assessoria mensal vigentes.</div>
+          <div class="sec-desc">Receita recorrente contratada em vigência.</div>
         </div>
       </div>
       <div class="fin-cards" id="fin-mrr-cards"><!-- app.js preenche --></div>
@@ -1587,10 +1589,10 @@ section{ margin-bottom:40px !important }
         <div class="roman">02</div>
         <div class="sec-titles">
           <h2>Histórico de faturamento por ano</h2>
-          <div class="sec-desc">Receitas efetivamente recebidas (pagas), por ano, e comparação com competência.</div>
+          <div class="sec-desc">Recebimentos por ano, honorários operacionais.</div>
         </div>
       </div>
-      <div class="panel" id="fin-fat-ano"><div class="stub"><span class="stub-ico">⏳</span>
+      <div class="panel" id="fin-fat-ano"><div class="stub"><span class="stub-ico">—</span>
         <b>Coletando</b> o histórico de faturamento do EasyJur…<div class="stub-tag">em coleta</div></div></div>
     </section>
 
@@ -1599,14 +1601,14 @@ section{ margin-bottom:40px !important }
         <div class="roman">03</div>
         <div class="sec-titles">
           <h2>Planos de contas (DRE)</h2>
-          <div class="sec-desc">Receitas e despesas por plano de contas — base para separar êxito de mensal.</div>
+          <div class="sec-desc">Composição por plano de contas.</div>
         </div>
       </div>
       <div class="grid2">
         <div class="panel"><div class="panel-label">Receitas por plano de contas</div>
-          <div class="hbar-list" id="fin-planos-rec"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+          <div class="hbar-list" id="fin-planos-rec"><div class="stub"><span class="stub-ico">—</span>em coleta</div></div></div>
         <div class="panel"><div class="panel-label">Despesas por plano de contas</div>
-          <div class="hbar-list" id="fin-planos-desp"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+          <div class="hbar-list" id="fin-planos-desp"><div class="stub"><span class="stub-ico">—</span>em coleta</div></div></div>
       </div>
     </section>
 
@@ -1615,11 +1617,11 @@ section{ margin-bottom:40px !important }
         <div class="roman">04</div>
         <div class="sec-titles">
           <h2>Receita fixa × Despesa fixa · Fluxo de caixa futuro</h2>
-          <div class="sec-desc">Comparativo e projeção dos próximos 6 meses (contas a receber − a pagar em aberto).</div>
+          <div class="sec-desc">Projeção dos próximos 6 meses.</div>
         </div>
       </div>
       <div class="panel">
-        <div class="stub"><span class="stub-ico">⚙️</span>Depende de definir com o financeiro <b>quais planos de conta são "fixos"</b>
+        <div class="stub"><span class="stub-ico">—</span>Depende de definir com o financeiro <b>quais planos de conta são "fixos"</b>
           (aluguel, salários, software). <div class="stub-tag falta">a definir</div></div>
       </div>
     </section>
@@ -1629,11 +1631,11 @@ section{ margin-bottom:40px !important }
         <div class="roman">05</div>
         <div class="sec-titles">
           <h2>Histórico de reajustes</h2>
-          <div class="sec-desc">Reajustes de assessoria mensal registrados pela Controladoria no <a href="formularios/reajustes/" style="color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold)">formulário de reajustes</a>.</div>
+          
         </div>
       </div>
       <div class="panel" id="fin-reajustes-panel">
-        <div class="stub"><span class="stub-ico">📈</span>Nenhum reajuste registrado ainda.
+        <div class="stub"><span class="stub-ico">—</span>Nenhum reajuste registrado ainda.
           <a href="formularios/reajustes/" style="color:var(--gold);text-decoration:none;font-weight:700">Registrar reajuste →</a>
           <div class="stub-tag">aguardando formulário</div></div>
       </div>
@@ -1646,24 +1648,24 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">01</div>
         <div class="sec-titles"><h2>Carteira de processos</h2>
-          <div class="sec-desc">Total em carteira por status e por área do direito.</div></div>
+          <div class="sec-desc">Distribuição por status e área.</div></div>
       </div>
       <div class="fin-cards" id="prod-carteira-cards"></div>
       <div class="panel"><div class="panel-label">Processos ativos por área</div>
-        <div class="hbar-list" id="prod-por-area"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+        <div class="hbar-list" id="prod-por-area"><div class="stub"><span class="stub-ico">—</span>em coleta</div></div></div>
     </section>
 
     <section>
       <div class="sec-head">
         <div class="roman">02</div>
         <div class="sec-titles"><h2>Processos novos</h2>
-          <div class="sec-desc">Entradas por mês e por advogado no ano corrente.</div></div>
+          <div class="sec-desc">Entradas por mês e por advogado.</div></div>
       </div>
       <div class="grid2">
         <div class="panel"><div class="panel-label">Novos por mês (2025–2026)</div>
-          <div id="prod-novos-mes"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+          <div id="prod-novos-mes"><div class="stub"><span class="stub-ico">—</span>em coleta</div></div></div>
         <div class="panel"><div class="panel-label">Novos por advogado (2026)</div>
-          <div class="hbar-list" id="prod-novos-adv"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+          <div class="hbar-list" id="prod-novos-adv"><div class="stub"><span class="stub-ico">—</span>em coleta</div></div></div>
       </div>
     </section>
 
@@ -1671,7 +1673,7 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">03</div>
         <div class="sec-titles"><h2>Alertas de carteira</h2>
-          <div class="sec-desc">Processos grandes e processos parados (sem movimentação).</div></div>
+          <div class="sec-desc">Processos grandes e sem movimentação.</div></div>
       </div>
       <div class="fin-cards" id="prod-alertas-cards"></div>
       <div class="data-note warn" id="prod-alertas-note"></div>
@@ -1681,10 +1683,10 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">04</div>
         <div class="sec-titles"><h2>Times e equipes</h2>
-          <div class="sec-desc">Mapa dos advogados por time. Cadastrado pela direção no <a href="formularios/times/" style="color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold)">formulário de times</a>.</div></div>
+          </div>
       </div>
       <div class="panel" id="prod-times-panel">
-        <div class="stub"><span class="stub-ico">👥</span>Nenhum vínculo cadastrado ainda.
+        <div class="stub"><span class="stub-ico">—</span>Nenhum vínculo cadastrado ainda.
           <a href="formularios/times/" style="color:var(--gold);text-decoration:none;font-weight:700">Cadastrar vínculo →</a>
           <div class="stub-tag">aguardando formulário</div></div>
       </div>
@@ -1694,10 +1696,10 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">05</div>
         <div class="sec-titles"><h2>Timesheet e petições</h2>
-          <div class="sec-desc">Horas registradas já existem no Painel de Produtividade. Contador de petições depende de critério a definir.</div></div>
+          <div class="sec-desc">Timesheet integrado ao Painel de Produtividade.</div></div>
       </div>
       <div class="panel">
-        <div class="stub"><span class="stub-ico">⚙️</span><b>"Petições produzidas"</b> precisa de critério definido (não há contador nativo no EasyJur).
+        <div class="stub"><span class="stub-ico">—</span><b>"Petições produzidas"</b> precisa de critério definido (não há contador nativo no EasyJur).
           <div class="stub-tag falta">a definir</div></div>
       </div>
     </section>
@@ -1709,7 +1711,7 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">01</div>
         <div class="sec-titles"><h2>Funil de oportunidades</h2>
-          <div class="sec-desc">Pipeline por etapa: briefing, proposta, negociação, fechado, recusado.</div></div>
+          <div class="sec-desc">Pipeline por etapa do funil.</div></div>
       </div>
       <div class="fin-cards" id="com-funil-cards"></div>
     </section>
@@ -1718,29 +1720,29 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">02</div>
         <div class="sec-titles"><h2>Desempenho por vendedor</h2>
-          <div class="sec-desc">Propostas enviadas, fechadas e valor em aberto por responsável.</div></div>
+          <div class="sec-desc">Enviadas, fechadas e valor em aberto por vendedor.</div></div>
       </div>
       <div class="panel"><div class="panel-label">Propostas por vendedor</div>
-        <div class="hbar-list" id="com-por-vendedor"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div></div>
+        <div class="hbar-list" id="com-por-vendedor"><div class="stub"><span class="stub-ico">—</span>em coleta</div></div></div>
     </section>
 
     <section>
       <div class="sec-head">
         <div class="roman">03</div>
         <div class="sec-titles"><h2>Maiores oportunidades em aberto</h2>
-          <div class="sec-desc">Top propostas por valor, ainda em negociação.</div></div>
+          <div class="sec-desc">Maiores propostas em negociação.</div></div>
       </div>
-      <div class="panel" id="com-top-oport"><div class="stub"><span class="stub-ico">⏳</span>em coleta</div></div>
+      <div class="panel" id="com-top-oport"><div class="stub"><span class="stub-ico">—</span>em coleta</div></div>
     </section>
 
     <section>
       <div class="sec-head">
         <div class="roman">04</div>
         <div class="sec-titles"><h2>Metas por vendedor</h2>
-          <div class="sec-desc">Metas de propostas, ligações e leads. Preenchidas pela gestão comercial no <a href="formularios/metas/" style="color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold)">formulário</a>.</div></div>
+          </div>
       </div>
       <div class="panel" id="com-metas-panel">
-        <div class="stub"><span class="stub-ico">📋</span>Nenhuma meta cadastrada ainda.
+        <div class="stub"><span class="stub-ico">—</span>Nenhuma meta cadastrada ainda.
           <a href="formularios/metas/" style="color:var(--gold);text-decoration:none;font-weight:700">Cadastrar meta →</a>
           <div class="stub-tag">aguardando formulário</div></div>
       </div>
@@ -1750,10 +1752,10 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">05</div>
         <div class="sec-titles"><h2>Atividade diária</h2>
-          <div class="sec-desc">Ligações, leads e reuniões registrados pelos vendedores no <a href="formularios/atividade/" style="color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold)">formulário diário</a>.</div></div>
+          </div>
       </div>
       <div class="panel" id="com-atividade-panel">
-        <div class="stub"><span class="stub-ico">📞</span>Nenhuma atividade registrada ainda.
+        <div class="stub"><span class="stub-ico">—</span>Nenhuma atividade registrada ainda.
           <a href="formularios/atividade/" style="color:var(--gold);text-decoration:none;font-weight:700">Registrar dia →</a>
           <div class="stub-tag">aguardando formulário</div></div>
       </div>
@@ -1766,10 +1768,10 @@ section{ margin-bottom:40px !important }
       <div class="sec-head">
         <div class="roman">01</div>
         <div class="sec-titles"><h2>Controladoria geral</h2>
-          <div class="sec-desc">Pipeline de projetos em andamento e reajustes de assessoria mensal.</div></div>
+          <div class="sec-desc">Iniciativas em andamento.</div></div>
       </div>
       <div class="panel">
-        <div class="stub"><span class="stub-ico">❓</span>A definir com o Dr. Kim: <b>"projetos"</b> = projetos consultivos
+        <div class="stub"><span class="stub-ico">—</span>A definir com o Dr. Kim: <b>"projetos"</b> = projetos consultivos
           do EasyJur ou projetos internos de gestão? Reajustes de assessoria precisam de controle de histórico
           (EasyJur guarda só o valor atual). <div class="stub-tag falta">a confirmar</div></div>
       </div>
