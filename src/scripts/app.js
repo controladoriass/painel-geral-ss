@@ -124,10 +124,22 @@
     const desp = await carregar('despesas');
     if(desp && desp.despesas_por_plano_de_contas){
       const top = desp.despesas_por_plano_de_contas
-        .slice().sort((a,b)=>(b.total_pago||b.total||0)-(a.total_pago||a.total||0)).slice(0,10);
+        .slice().sort((a,b)=>(b.total_pago||b.total||0)-(a.total_pago||a.total||0)).slice(0,12);
       barras($('#fin-planos-desp'), top.map(p=>({
-        nome:p.descricao||p.nome, valor:p.total_pago||p.total||0, label:fmtBRLk(p.total_pago||p.total||0)
+        nome:(p.descricao||p.nome||'').replace(/^3\.\d+\.\d+\s*-\s*/,''),
+        valor:p.total_pago||p.total||0, label:fmtBRLk(p.total_pago||p.total||0)
       })));
+      // nota: identifica transferências e plano "erro operacional"
+      const problematicos = (desp.despesas_por_plano_de_contas||[]).filter(p=>{
+        const d = (p.descricao||'').toLowerCase();
+        return d.includes('transfer') || d.includes('erro operacional') || d.includes('distribui') || d.includes('lucro');
+      });
+      const totProb = problematicos.reduce((s,p)=>s+(p.total_pago||0),0);
+      const contProblem = $('#fin-planos-desp').parentElement;
+      if(contProblem && totProb>0){
+        contProblem.insertAdjacentHTML('beforeend',
+          `<div class="data-note warn">⚠️ Auditar com o financeiro: R$ ${fmtBRLk(totProb).replace('R$ ','')} concentrado em transferências internas, distribuição de lucro e plano "3.12.29 - Erro operacional". Podem inflar o total de despesa se contados como operacional.</div>`);
+      }
     }
   }
 

@@ -48,6 +48,9 @@ no padrão do de Êxitos (pasta `Exitos/`), gravando em planilha Google.
 | C4 | **Comercial preencher `valor_total`** das oportunidades | 593 zeradas → some do ranking de maiores propostas. | ⬜ |
 | C5 | **Definir o que conta como "petição produzida"** | EasyJur não tem contador de petição. Opções: tag/tipo de tarefa no timesheet, ou etapa de workflow. | ⬜ |
 | C6 | **Baixa automática de processos** (ele pediu) | Automação no EasyJur quando processo é baixado — item de TI/EasyJur, não do painel. | ⬜ |
+| C7 | **Auditar o plano "3.12.29 - Erro operacional" (R$ 41,7 mi)** | 🚨 O maior plano de despesa (2022-2026) tem esse nome. Parece plano-lixo (lançamento errado). Financeiro precisa reclassificar para o plano correto. | ⬜ |
+| C8 | **Definir tratamento de transferências e distribuição de lucro nas despesas** | "3.11.14 Transferência Saída" R$ 35,7 mi + "3.3.35 Adiantamento de Distr. Lucro" R$ 14,1 mi + "3.3.22 Distribuição de Lucro" R$ 7,6 mi. Não são despesas operacionais puras — decidir se entram/como no comparativo receita×despesa. | ⬜ |
+| C9 | **Bug do EasyJur — filtro data_pagamento das despesas** | `list_despesas` não respeita `data_pagamento_inicio/fim` (traz anos misturados). Já contornado no coletor (filtro em Python), mas reportar ao EasyJur. | ⬜ |
 
 ---
 
