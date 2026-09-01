@@ -20,6 +20,11 @@ MAPA = {
     "despesas": "financeiro_despesas.json",
     "comercial": "comercial_funil.json",
     "producao": "producao_processos.json",
+    # dados vindos dos formulários web (planilha Google → coletar_formularios.py)
+    "form_metas":     "formularios_metas.json",
+    "form_atividade": "formularios_atividade.json",
+    "form_times":     "formularios_times.json",
+    "form_reajustes": "formularios_reajustes.json",
 }
 
 def main():

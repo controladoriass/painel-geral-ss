@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reajustes de Assessoria · Silva & Silva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E223F;--navy2:#3F5276;--navy-deep:#161A31;--gold:#B58642;--gold-soft:#CFA36E;--paper:#F5F1E8;--paper2:#EAE4D3;--line:#DDD5C0;--ink:#20233B;--muted:#7a7f96}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',system-ui,sans-serif}
+body{background:linear-gradient(180deg,#161A31 0%,#0d1024 100%);color:var(--ink);min-height:100vh;padding:32px 16px}
+.wrap{max-width:600px;margin:0 auto}
+.card{background:var(--paper);border-radius:6px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.hero{background:linear-gradient(160deg,var(--navy-deep) 0%,#191d38 100%);color:#fff;padding:34px 32px 30px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-30%;right:-25%;width:70%;height:80%;background:radial-gradient(circle,rgba(181,134,66,.18),transparent 60%);pointer-events:none}
+.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;position:relative}
+h1{font-size:26px;font-weight:800;letter-spacing:-.5px;color:#fff;line-height:1.1;position:relative}
+h1 em{font-style:normal;color:var(--gold-soft);font-weight:600}
+.hero p{margin-top:12px;font-size:13px;color:#c2c6d6;line-height:1.55;position:relative}
+.gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:18px;position:relative}
+form{padding:28px 32px 32px}
+.grp{margin-bottom:18px}
+.grp.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font-size:10.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
+label .req{color:var(--gold)}
+input,select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:3px;padding:11px 12px;outline:0;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(181,134,66,.15)}
+textarea{resize:vertical;min-height:70px;font-size:13px}
+.hint{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
+.calc-box{background:linear-gradient(160deg,#161A31 0%,#0d1024 100%);color:#fff;padding:20px 22px;border-radius:4px;margin:8px 0 4px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.calc-box .cb-lbl{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold-soft)}
+.calc-box .cb-val{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.calc-box .cb-val.pos{color:#7fce9a} .calc-box .cb-val.neg{color:#e59993} .calc-box .cb-val.zero{color:#a9b0c6}
+.sec-title{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold);margin:22px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.btn{width:100%;margin-top:24px;background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;border:0;border-radius:3px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px -10px rgba(30,34,63,.5)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn::after{content:"";position:absolute;left:14px;right:14px;bottom:6px;height:2px;background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:1px}
+.msg{margin-top:16px;padding:14px 16px;border-radius:3px;font-size:13px;font-weight:600;text-align:center;display:none}
+.msg.ok{background:rgba(47,122,68,.10);color:#2f7a44;border:1px solid rgba(47,122,68,.25);display:block}
+.msg.err{background:rgba(166,61,56,.10);color:#a63d38;border:1px solid rgba(166,61,56,.25);display:block}
+.msg.info{background:var(--paper2);color:var(--navy);border:1px solid var(--line);display:block}
+footer{text-align:center;padding:16px 0 0;font-size:10.5px;color:rgba(255,255,255,.45);letter-spacing:1px}
+@media(max-width:520px){.grp.two{grid-template-columns:1fr}form,.hero{padding:24px 22px}h1{font-size:22px}.calc-box{flex-direction:column;align-items:flex-start;gap:6px}.calc-box .cb-val{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <header class="hero">
+      <div class="eyebrow">Silva &amp; Silva · Controladoria</div>
+      <h1>Reajustes <em>de Assessoria</em></h1>
+      <p>Histórico de reajustes dos contratos de assessoria mensal. O EasyJur guarda só o valor atual — aqui você preserva a linha do tempo.</p>
+      <div class="gold-rule"></div>
+    </header>
+
+    <form id="frm">
+      <div class="sec-title">Contrato</div>
+      <div class="grp two">
+        <div>
+          <label>Cliente <span class="req">*</span></label>
+          <input type="text" name="cliente" placeholder="Nome do cliente" required>
+        </div>
+        <div>
+          <label>Nº do contrato</label>
+          <input type="text" name="numeroContrato" placeholder="Ex: 2360">
+        </div>
+      </div>
+
+      <div class="sec-title">Reajuste</div>
+      <div class="grp two">
+        <div>
+          <label>Data do reajuste <span class="req">*</span></label>
+          <input type="date" name="dataReajuste" required>
+        </div>
+        <div>
+          <label>Índice usado</label>
+          <select name="indice">
+            <option value="">Selecione…</option>
+            <option>IPCA</option>
+            <option>IGP-M</option>
+            <option>INPC</option>
+            <option>Livre / Negociado</option>
+            <option>Não se aplica</option>
+          </select>
+        </div>
+      </div>
+      <div class="grp two">
+        <div>
+          <label>Valor anterior (R$) <span class="req">*</span></label>
+          <input type="text" name="valorAnterior" id="vAnt" required inputmode="decimal" placeholder="Ex: 3242">
+        </div>
+        <div>
+          <label>Valor novo (R$) <span class="req">*</span></label>
+          <input type="text" name="valorNovo" id="vNov" required inputmode="decimal" placeholder="Ex: 3500">
+        </div>
+      </div>
+
+      <div class="calc-box">
+        <span class="cb-lbl">Variação</span>
+        <span class="cb-val zero" id="calc">—</span>
+      </div>
+
+      <div class="grp" style="margin-top:14px">
+        <label>Motivo</label>
+        <input type="text" name="motivo" placeholder="Ex: reajuste anual IPCA · aumento de escopo · renegociação">
+      </div>
+
+      <div class="grp">
+        <label>Observações</label>
+        <textarea name="observacoes" placeholder="Detalhes da negociação, aprovação, etc."></textarea>
+      </div>
+
+      <button type="submit" class="btn" id="btn">Salvar reajuste</button>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+  <footer>Painel Geral do Escritório · Controladoria</footer>
+</div>
+
+<script>
+const APPS_SCRIPT_URL = "";
+const frm=document.getElementById('frm'),btn=document.getElementById('btn'),msg=document.getElementById('msg');
+const vAnt=document.getElementById('vAnt'),vNov=document.getElementById('vNov'),calc=document.getElementById('calc');
+
+function num(v){ if(!v) return 0; const n=parseFloat(String(v).replace(/\./g,'').replace(',','.')); return isNaN(n)?0:n; }
+function atualizarCalc(){
+  const a=num(vAnt.value), n=num(vNov.value);
+  if(a<=0){ calc.textContent='—'; calc.className='cb-val zero'; return; }
+  const pct = (n-a)/a*100;
+  const sinal = pct>0?'+':(pct<0?'':'');
+  calc.textContent = sinal + pct.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+  calc.className = 'cb-val ' + (pct>0?'pos':(pct<0?'neg':'zero'));
+}
+vAnt.addEventListener('input', atualizarCalc);
+vNov.addEventListener('input', atualizarCalc);
+
+function mostrar(t,x){msg.className='msg '+t;msg.textContent=x}
+function limpar(){msg.className='msg';msg.textContent=''}
+
+frm.addEventListener('submit', async (ev)=>{
+  ev.preventDefault(); limpar();
+  const fd=new FormData(frm), dados={_form:'reajustes'};
+  fd.forEach((v,k)=>dados[k]=v);
+  dados.dataHora=new Date().toLocaleString('pt-BR');
+  btn.disabled=true; btn.textContent='Enviando…';
+  if(!APPS_SCRIPT_URL){
+    mostrar('info','MODO TESTE — dados NÃO foram gravados (URL vazia).');
+    btn.disabled=false; btn.textContent='Salvar reajuste';
+    console.log('[TESTE]',dados); return;
+  }
+  try{
+    await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(dados)});
+    mostrar('ok','✓ Reajuste registrado.');
+    frm.reset(); atualizarCalc();
+  }catch(e){ mostrar('err','Erro: '+e.message) }
+  finally{ btn.disabled=false; btn.textContent='Salvar reajuste' }
+});
+</script>
+</body>
+</html>

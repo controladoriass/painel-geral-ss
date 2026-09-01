@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Formulários · Painel Geral · Silva & Silva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E223F;--navy-deep:#161A31;--gold:#B58642;--gold-soft:#CFA36E;--paper:#F5F1E8;--paper2:#EAE4D3;--line:#DDD5C0;--ink:#20233B;--muted:#7a7f96}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',system-ui,sans-serif}
+body{background:linear-gradient(180deg,#161A31 0%,#0d1024 100%);color:var(--ink);min-height:100vh;padding:40px 16px}
+.wrap{max-width:720px;margin:0 auto}
+.hero{color:#fff;text-align:center;margin-bottom:36px}
+.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+h1{font-size:34px;font-weight:800;letter-spacing:-.8px;line-height:1.05}
+h1 em{font-style:normal;color:var(--gold-soft);font-weight:600}
+.hero p{margin-top:14px;font-size:13.5px;color:#c2c6d6;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto}
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.grade{grid-template-columns:1fr}h1{font-size:26px}}
+.tile{display:block;text-decoration:none;color:inherit;background:var(--paper);border-radius:6px;padding:26px 24px;transition:.25s;border:1px solid rgba(255,255,255,.05);box-shadow:0 20px 40px -20px rgba(0,0,0,.4);position:relative;overflow:hidden}
+.tile:hover{transform:translateY(-4px);box-shadow:0 30px 50px -20px rgba(0,0,0,.55)}
+.tile::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-soft),var(--gold))}
+.tile .t-eyebrow{font-size:9.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.tile h3{font-size:19px;font-weight:800;color:var(--navy);letter-spacing:-.3px;margin-bottom:8px}
+.tile p{font-size:12.5px;color:var(--muted);line-height:1.55}
+.tile .t-tag{display:inline-block;margin-top:12px;font-size:9.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;background:var(--paper2);color:var(--navy)}
+footer{text-align:center;padding:28px 0 0;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+footer a{color:var(--gold-soft);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Silva &amp; Silva Advogados</div>
+    <h1>Formulários do <em>Painel Geral</em></h1>
+    <p>Escolha o cadastro que você precisa fazer. Dados vão direto para o painel gerencial da Controladoria.</p>
+  </header>
+
+  <div class="grade">
+    <a class="tile" href="atividade/">
+      <div class="t-eyebrow">Comercial · Diário</div>
+      <h3>Atividade do dia</h3>
+      <p>Registro rápido de ligações, leads, reuniões e propostas do dia. 30 segundos.</p>
+      <span class="t-tag">Vendedores</span>
+    </a>
+    <a class="tile" href="metas/">
+      <div class="t-eyebrow">Comercial · Meta</div>
+      <h3>Metas comerciais</h3>
+      <p>Cadastro da meta de propostas, valor, assessorias, ligações e leads por vendedor/período.</p>
+      <span class="t-tag">Gestão comercial</span>
+    </a>
+    <a class="tile" href="times/">
+      <div class="t-eyebrow">Produção · Estrutura</div>
+      <h3>Times &amp; equipes</h3>
+      <p>Vínculo advogado → time. Só quando muda (novo advogado, troca de área).</p>
+      <span class="t-tag">RH / Direção</span>
+    </a>
+    <a class="tile" href="reajustes/">
+      <div class="t-eyebrow">Financeiro · Assessoria</div>
+      <h3>Reajuste de contrato</h3>
+      <p>Histórico de reajustes dos contratos de assessoria mensal. Cálculo automático da variação %.</p>
+      <span class="t-tag">Controladoria</span>
+    </a>
+  </div>
+
+  <footer>
+    Painel Geral do Escritório · <a href="../">voltar ao painel</a>
+  </footer>
+</div>
+</body>
+</html>
