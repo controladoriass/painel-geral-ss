@@ -1,0 +1,57 @@
+name: Atualizar formulários (diário 8h)
+
+# Roda todo dia às 08:00 (Brasília = UTC-3 → 11:00 UTC)
+# Também pode ser disparado manualmente pela aba Actions
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "atualizar-formularios"
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Coletar dados dos formulários (via Apps Script)
+        run: python scripts/coletar_formularios.py
+
+      - name: Gerar embed
+        run: python scripts/gerar_embed.py
+
+      - name: Buildar index.html
+        run: python scripts/build.py
+
+      - name: Verificar se houve mudança
+        id: diff
+        run: |
+          if git diff --quiet dados/ src/data-embed.js index.html; then
+            echo "mudou=nao" >> $GITHUB_OUTPUT
+            echo "Nada mudou. Encerrando sem commit."
+          else
+            echo "mudou=sim" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit e push (só se mudou)
+        if: steps.diff.outputs.mudou == 'sim'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dados/ src/data-embed.js index.html
+          git commit -m "coleta diária de formulários — $(date -u +%Y-%m-%d)"
+          git push

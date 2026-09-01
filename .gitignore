@@ -1,5 +1,8 @@
-# working files — não publicar (dados já vão embutidos no index.html via data-embed.js)
-dados/
+# working files brutos do EasyJur (grandes, sensíveis, vão embutidos no index.html via data-embed.js)
+dados/*.json
+# EXCEÇÃO: JSONs de formulários são versionados (fluxo automático do GitHub Actions)
+!dados/formularios_*.json
+
 coleta/
 scratchpad/
 *.tmp

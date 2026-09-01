@@ -1,0 +1,17 @@
+{
+  "advogados": [
+    {
+      "advogado": "TESTE - pode apagar",
+      "time": "Cível / Contencioso",
+      "lider": "",
+      "situacao": "ativo"
+    }
+  ],
+  "por_time": {
+    "Cível / Contencioso": [
+      "TESTE - pode apagar"
+    ]
+  },
+  "qtd_registros": 1,
+  "gerado_em": "2026-09-01T14:15:12.272Z"
+}

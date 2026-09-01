@@ -1550,29 +1550,62 @@ body.theme-dark .hbar-row .hb-val small{color:#a9b0c6}
     const rec = await carregar('receitas');
     if(rec && rec.faturamento_por_plano_de_contas){
       const planos = rec.faturamento_por_plano_de_contas;
-      // OPERACIONAL = planos que começam com "1." (honorários, êxito, sucumbência...)
-      // NÃO-OPERACIONAL = "2." (transferências internas, reembolsos) → excluir do faturamento
       const isOp = p => (String(p.descricao||'').trim()).startsWith('1.');
       const opPlanos = planos.filter(isOp);
-      // recompõe faturamento operacional por ano a partir do por_ano de cada plano
-      const anosSet = {};
-      opPlanos.forEach(p=>{ Object.entries(p.por_ano||{}).forEach(([ano,v])=>{ anosSet[ano]=(anosSet[ano]||0)+(v||0); }); });
-      const anos = Object.keys(anosSet).sort().map(a=>({ano:a, total:anosSet[a]})).filter(a=>a.total>0);
-      const mx = Math.max(...anos.map(a=>a.total));
-      const totalOp = opPlanos.reduce((s,p)=>s+(p.total_pago||p.total||0),0);
+      // 3 categorias
+      const MENSAL_IDS = ['1.1.02']; // Partido Mensal
+      const EXITO_IDS = ['1.1.01','1.1.06','1.1.07']; // Êxito, Sucumbência, Acordo
+      const catDe = p => {
+        const d = (p.descricao||'').trim();
+        if(MENSAL_IDS.some(id => d.startsWith(id))) return 'mensal';
+        if(EXITO_IDS.some(id => d.startsWith(id))) return 'exito';
+        return 'outros';
+      };
+      const somaPorCat = {mensal:0, exito:0, outros:0};
+      const anosPorCat = {mensal:{}, exito:{}, outros:{}};
+      opPlanos.forEach(p => {
+        const c = catDe(p);
+        somaPorCat[c] += p.total_pago||p.total||0;
+        Object.entries(p.por_ano||{}).forEach(([ano,v]) => {
+          anosPorCat[c][ano] = (anosPorCat[c][ano]||0) + (v||0);
+        });
+      });
+      const totalOp = somaPorCat.mensal + somaPorCat.exito + somaPorCat.outros;
+      const anosTodos = new Set();
+      Object.values(anosPorCat).forEach(m => Object.keys(m).forEach(a => anosTodos.add(a)));
+      const anos = Array.from(anosTodos).sort();
       const totalGeral = planos.reduce((s,p)=>s+(p.total_pago||p.total||0),0);
+      // stacked bars por ano (Mensal + Êxito + Outros)
+      const mxAno = Math.max(...anos.map(a => (anosPorCat.mensal[a]||0)+(anosPorCat.exito[a]||0)+(anosPorCat.outros[a]||0))) || 1;
+      const stackedBars = anos.map(a => {
+        const m = anosPorCat.mensal[a]||0, e = anosPorCat.exito[a]||0, o = anosPorCat.outros[a]||0;
+        const tot = m+e+o;
+        const pm = tot? (m/tot*100).toFixed(1):0, pe = tot? (e/tot*100).toFixed(1):0, po = tot? (o/tot*100).toFixed(1):0;
+        const largTot = Math.round(tot/mxAno*100);
+        return `<div class="hbar-row">
+          <div class="hb-name">${a}</div>
+          <div class="hbar-track" style="display:flex;width:${largTot}%;min-width:${largTot}%">
+            <div style="height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--gold));width:${pm}%" title="Mensal: ${fmtBRLk(m)} (${pm}%)"></div>
+            <div style="height:100%;background:linear-gradient(90deg,#3F5276,#1E223F);width:${pe}%" title="Êxito: ${fmtBRLk(e)} (${pe}%)"></div>
+            <div style="height:100%;background:linear-gradient(90deg,#8a92ab,#5b607a);width:${po}%" title="Outros: ${fmtBRLk(o)} (${po}%)"></div>
+          </div>
+          <div class="hb-val">${fmtBRLk(tot)}<small>M ${pm}% · Ê ${pe}% · O ${po}%</small></div>
+        </div>`;
+      }).join('');
       $('#fin-fat-ano').innerHTML =
         `<div class="fin-cards" style="margin-bottom:22px">
-           ${card('Faturamento operacional (total)', fmtBRLk(totalOp),
-             `Honorários pagos 2022–2026 · exclui transferências internas`, true)}
-           ${card('2026 parcial', fmtBRLk(anosSet['2026']||0), 'Até a data da coleta')}
+           ${card('Mensal recorrente', fmtBRLk(somaPorCat.mensal),
+             `Partido mensal · assessoria fixa · <b>${((somaPorCat.mensal/totalOp)*100).toFixed(0)}%</b> do faturamento`, true)}
+           ${card('Êxito', fmtBRLk(somaPorCat.exito),
+             `Êxito judicial + sucumbência + acordo · <b>${((somaPorCat.exito/totalOp)*100).toFixed(0)}%</b>`)}
+           ${card('Outros honorários', fmtBRLk(somaPorCat.outros),
+             `Avulsos · consultas · diligências · iniciais · <b>${((somaPorCat.outros/totalOp)*100).toFixed(0)}%</b>`)}
+           ${card('Total operacional', fmtBRLk(totalOp),
+             `Soma dos 3 · 2026 parcial: ${fmtBRLk((anosPorCat.mensal['2026']||0)+(anosPorCat.exito['2026']||0)+(anosPorCat.outros['2026']||0))}`)}
          </div>
-         <div class="panel-label">Faturamento operacional recebido por ano</div>
-         <div class="hbar-list" id="fin-fat-bars"></div>
-         <div class="data-note">Operacional (planos 1.x) = ${fmtBRLk(totalOp)}. Excluídos R$ ${fmtNum(Math.round((totalGeral-totalOp)))} de não-operacionais (transferências internas, reembolsos — planos 2.x), que inflariam o faturamento.</div>`;
-      barras($('#fin-fat-bars'), anos.map(a=>({
-        nome:String(a.ano), valor:a.total, label:fmtBRLk(a.total)
-      })), {gold:true, max:mx});
+         <div class="panel-label">Faturamento por ano · <span style="color:var(--gold);font-weight:700">Mensal</span> · <span style="color:var(--navy);font-weight:700">Êxito</span> · <span style="color:var(--muted);font-weight:700">Outros</span></div>
+         <div class="hbar-list">${stackedBars}</div>
+         <div class="data-note">Operacional (planos 1.x) = ${fmtBRLk(totalOp)}. Excluídos R$ ${fmtNum(Math.round((totalGeral-totalOp)))} de não-operacionais (transferências, reembolsos — planos 2.x).</div>`;
       // ranking planos operacionais
       const top = opPlanos.slice().sort((a,b)=>(b.total_pago||b.total||0)-(a.total_pago||a.total||0)).slice(0,10);
       barras($('#fin-planos-rec'), top.map(p=>({

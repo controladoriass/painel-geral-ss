@@ -1,0 +1,16 @@
+{
+  "reajustes": [
+    {
+      "cliente": "TESTE - pode apagar",
+      "numero_contrato": "0",
+      "data": "2026-09-01",
+      "valor_anterior": 3000.0,
+      "valor_novo": 3300.0,
+      "variacao_pct": 10.0,
+      "indice": "IPCA",
+      "motivo": "teste"
+    }
+  ],
+  "qtd_registros": 1,
+  "gerado_em": "2026-09-01T14:15:12.272Z"
+}

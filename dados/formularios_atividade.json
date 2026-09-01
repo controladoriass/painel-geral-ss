@@ -1,0 +1,22 @@
+{
+  "por_vendedor": [
+    {
+      "vendedor": "TESTE - pode apagar",
+      "ligacoes": 10,
+      "leads": 2,
+      "reunioes": 1,
+      "propostas": 3,
+      "dias": 1
+    }
+  ],
+  "por_dia": {
+    "2026-09-01": {
+      "ligacoes": 10,
+      "leads": 2,
+      "reunioes": 1,
+      "propostas": 3
+    }
+  },
+  "qtd_registros": 1,
+  "gerado_em": "2026-09-01T14:15:12.272Z"
+}
