@@ -2092,7 +2092,11 @@ section{ margin-bottom:40px !important }
            ${card('Total operacional', fmtBRLk(totalOp),
              `Soma dos 3 · 2026 parcial: ${fmtBRLk((anosPorCat.mensal['2026']||0)+(anosPorCat.exito['2026']||0)+(anosPorCat.outros['2026']||0))}`)}
          </div>
-         <div class="panel-label">Faturamento por ano · <span style="color:var(--gold);font-weight:700">Mensal</span> · <span style="color:var(--navy);font-weight:700">Êxito</span> · <span style="color:var(--muted);font-weight:700">Outros</span></div>
+         <div class="panel-label">Faturamento por ano
+           <span style="display:inline-flex;align-items:center;gap:6px;margin-left:14px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-gold);border-radius:2px"></span>Mensal</span>
+           <span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-navy);border-radius:2px"></span>Êxito</span>
+           <span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:#8a92ab;border-radius:2px"></span>Outros</span>
+         </div>
          <div class="hbar-list">${stackedBars}</div>
          <div class="data-note">Operacional (planos 1.x) = ${fmtBRLk(totalOp)}. Excluídos R$ ${fmtNum(Math.round((totalGeral-totalOp)))} de não-operacionais (transferências, reembolsos — planos 2.x).</div>`;
       // ranking planos operacionais
