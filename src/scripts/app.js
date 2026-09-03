@@ -24,6 +24,13 @@
     const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     return m ? `${m[3]}/${m[2]}/${m[1]}` : s;
   };
+  // Formata "YYYY-MM" para "MMM/AAAA" (ex.: "2026-08" → "Ago/2026")
+  const MESES_ABREV = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const fmtMesAno = v => {
+    const s = String(v||'');
+    const m = s.match(/^(\d{4})-(\d{2})$/);
+    return m ? `${MESES_ABREV[parseInt(m[2],10)-1]}/${m[1]}` : s;
+  };
 
   // fontes de dados: cada arquivo JSON de dados/
   const ARQUIVOS = {
@@ -225,7 +232,7 @@
             // ignora chaves que não são mês (ex: "total", "qtd")
             if(!/^\d{1,2}$|^\d{4}-\d{2}$/.test(m)) return;
             const rot = m.includes('-')? m : (ano+'-'+String(m).padStart(2,'0'));
-            linhas.push({nome:rot, valor:meses[m]||0, label:fmtNum(meses[m]||0)});
+            linhas.push({nome:fmtMesAno(rot), valor:meses[m]||0, label:fmtNum(meses[m]||0)});
           });
         }
       });
