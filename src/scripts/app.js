@@ -17,6 +17,13 @@
     return fmtBRL(v);
   };
   const fmtNum = v => (v||0).toLocaleString('pt-BR');
+  // Formata data ISO (2026-08-31 ou 2026-08-31T...) para DD/MM/AAAA
+  const fmtData = v => {
+    if(!v) return '—';
+    const s = String(v).slice(0,10);
+    const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : s;
+  };
 
   // fontes de dados: cada arquivo JSON de dados/
   const ARQUIVOS = {
@@ -331,7 +338,7 @@
         return `<div class="hbar-row">
           <div class="hb-name" title="${r.cliente}">${r.cliente}${r.numero_contrato?' <small style="color:var(--muted);font-weight:500">#'+r.numero_contrato+'</small>':''}</div>
           <div class="hbar-track"><div class="hbar-fill gold" style="width:100%"></div></div>
-          <div class="hb-val" style="color:${cor}">${sinal}${(r.variacao_pct||0).toFixed(2)}%<small style="color:var(--muted)">${fmtBRLk(r.valor_anterior)} → ${fmtBRLk(r.valor_novo)} · ${r.data||''}</small></div>
+          <div class="hb-val" style="color:${cor}">${sinal}${(r.variacao_pct||0).toFixed(2)}%<small style="color:var(--muted)">${fmtBRLk(r.valor_anterior)} → ${fmtBRLk(r.valor_novo)} · ${fmtData(r.data)}</small></div>
         </div>`;
       }).join('');
       $('#fin-reajustes-panel').innerHTML = `<div class="panel-label">Últimos reajustes registrados</div>
@@ -611,22 +618,39 @@
     const custom = document.getElementById('ss-drawer-periodo-custom');
     if(custom) custom.style.display = 'none';
   }
+  function slugify(s){
+    return String(s||'')
+      .normalize('NFD').replace(/[̀-ͯ]/g,'')  // remove acentos
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'')
+      .slice(0,60);
+  }
   function exportarCSVDrawer(){
     const tbl = document.querySelector('#ss-drawer-body table');
     if(!tbl) return;
+    // Usa ; como separador (Excel BR reconhece direto) e BOM UTF-8 pra acentos
+    const SEP = ';';
     const linhas = [];
-    const heads = Array.from(tbl.querySelectorAll('thead th')).map(th=>'"'+th.textContent.trim().replace(/"/g,'""')+'"');
-    linhas.push(heads.join(','));
+    const heads = Array.from(tbl.querySelectorAll('thead th'))
+      .map(th=>'"'+th.textContent.trim().replace(/"/g,'""')+'"');
+    linhas.push(heads.join(SEP));
     tbl.querySelectorAll('tbody tr').forEach(tr=>{
       if(tr.style.display==='none') return;
-      const cels = Array.from(tr.querySelectorAll('td')).map(td=>'"'+td.textContent.trim().replace(/"/g,'""')+'"');
-      linhas.push(cels.join(','));
+      const cels = Array.from(tr.querySelectorAll('td'))
+        .map(td=>'"'+td.textContent.trim().replace(/\s+/g,' ').replace(/"/g,'""')+'"');
+      linhas.push(cels.join(SEP));
     });
-    const csv = linhas.join('\n');
+    // BOM garante que Excel/LibreOffice abram como UTF-8
+    const csv = '﻿' + linhas.join('\r\n');
     const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'painel-detalhe-'+Date.now()+'.csv';
+    // Nome descritivo: titulo do drawer + data
+    const titulo = document.getElementById('ss-drawer-title')?.textContent || 'detalhe';
+    const dataHoje = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = 'painel-' + slugify(titulo) + '-' + dataHoje + '.csv';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
@@ -665,12 +689,12 @@
   const COLS_CONTRATO = [
     {h:'Nº', render:c=>c.numero||'—'},
     {h:'Cliente', render:c=>c.cliente_hint || '<span style="color:var(--ss-mute)">'+c.titulo.slice(0,40)+'</span>'},
-    {h:'Início', render:c=>c.data_inicio || '—', mute:true},
+    {h:'Início', render:c=>fmtData(c.data_inicio), mute:true},
     {h:'Vigência até', render:c=>{
       if(!c.data_final) return '<span style="color:var(--ss-mute)">indeterminada</span>';
       return c.vigencia_vencida
-        ? `<span class="ss-tag warn">${c.data_final} · vencida</span>`
-        : c.data_final;
+        ? `<span class="ss-tag warn">${fmtData(c.data_final)} · vencida</span>`
+        : fmtData(c.data_final);
     }},
     {h:'Valor mensal', num:true, render:c=>{
       if(!c.valor) return '<span class="ss-tag warn">R$ 0</span>';
@@ -889,7 +913,7 @@
       document.getElementById('ss-drawer-sub').innerHTML =
         `<b>${fmtNum(plano.qtd)}</b> recebimentos · total <b>${fmtBRL(plano.total_valor)}</b>`;
       drawerTabela([
-        {h:'Data', render:l=>String(l.data_pagamento||'').slice(0,10), mute:true},
+        {h:'Data', render:l=>fmtData(l.data_pagamento), mute:true},
         {h:'Descrição', render:l=>l.descricao || '<span style="color:var(--ss-mute)">—</span>'},
         {h:'Cliente ID', render:l=>l.id_cliente || '—', mute:true},
         {h:'Valor', num:true, render:l=>fmtBRL(l.valor||0)},
@@ -911,7 +935,7 @@
       document.getElementById('ss-drawer-sub').innerHTML =
         `<b>${fmtNum(plano.qtd)}</b> despesas · total <b>${fmtBRL(plano.total_valor)}</b>`;
       drawerTabela([
-        {h:'Data', render:l=>String(l.data_pagamento||'').slice(0,10), mute:true},
+        {h:'Data', render:l=>fmtData(l.data_pagamento), mute:true},
         {h:'Descrição', render:l=>l.descricao || '<span style="color:var(--ss-mute)">—</span>'},
         {h:'Fornecedor ID', render:l=>l.id_fornecedor || l.id_cliente || '—', mute:true},
         {h:'Valor', num:true, render:l=>fmtBRL(l.valor||0)},
