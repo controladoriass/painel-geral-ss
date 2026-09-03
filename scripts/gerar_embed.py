@@ -32,6 +32,11 @@ MAPA = {
     "detalhe_planos_receita":       "detalhe_planos_receita.json",
     "detalhe_planos_despesa":       "detalhe_planos_despesa.json",
     "detalhe_processos_por_area":   "detalhe_processos_por_area.json",
+    # Indices pequenos (metadata dos planos) - embutidos para o drill saber qual arquivo baixar.
+    # Os lancamentos individuais ficam em dados/lancamentos_{tipo}_planos/{hash}.json e
+    # sao carregados sob demanda via fetch quando o usuario clica num plano especifico.
+    "lancamentos_receitas_indice":  "lancamentos_receitas_indice.json",
+    "lancamentos_despesas_indice":  "lancamentos_despesas_indice.json",
 }
 
 def main():

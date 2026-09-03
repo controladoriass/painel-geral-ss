@@ -648,7 +648,10 @@
         const warn = l._warn ? ' class="warn"' : '';
         const dt = opts.dateKey ? (l[opts.dateKey]||'') : '';
         const dateAttr = dt ? ` data-date="${String(dt).slice(0,10)}"` : '';
-        return `<tr${warn} data-searchable="${searchable.replace(/"/g,'&quot;')}"${dateAttr}>${
+        // linha clicável (cascata pra outro drill)
+        const drillAttr = l._drill ? ` data-drill="${l._drill}" data-drill-ctx="${(l._drill_ctx||'').replace(/"/g,'&quot;')}" style="cursor:pointer"` : '';
+        const drillCls = l._drill ? ' ss-row-drill' : '';
+        return `<tr${warn ? warn : (drillCls ? ` class="${drillCls.trim()}"` : '')} data-searchable="${searchable.replace(/"/g,'&quot;')}"${dateAttr}${drillAttr}>${
           colunas.map(c=>`<td class="${c.num?'num':''} ${c.mute?'mute':''}">${c.render(l)}</td>`).join('')
         }</tr>`;
       }).join('')}</tbody>
@@ -824,12 +827,14 @@
       if(!d || !d.planos){ drawerTabela([],[]); return; }
       const totalOp = d.planos.filter(p=>(p.descricao||'').startsWith('1.')).reduce((s,p)=>s+(p.total_pago||0),0);
       document.getElementById('ss-drawer-sub').innerHTML =
-        `<b>${fmtNum(d.total)}</b> planos · operacional (1.x) <b>${fmtBRLk(totalOp)}</b>`;
+        `<b>${fmtNum(d.total)}</b> planos · operacional (1.x) <b>${fmtBRLk(totalOp)}</b> · <i style="color:var(--ss-mute)">clique num plano pra ver lançamentos</i>`;
+      // Drill em cada linha: passar o descricao no atributo data-drill-ctx
+      const linhas = d.planos.slice().sort((a,b)=>(b.total_pago||0)-(a.total_pago||0));
       drawerTabela([
-        {h:'Plano', render:p=>p.descricao||'—'},
+        {h:'Plano', render:p=>`<span style="color:var(--ss-navy);font-weight:600">${p.descricao||'—'}</span> <span style="color:var(--ss-mute-2);font-size:10px">↗</span>`},
         {h:'Recebimentos', num:true, render:p=>fmtNum(p.qtd||0)},
         {h:'Total pago', num:true, render:p=>fmtBRL(p.total_pago||p.total||0)},
-      ], d.planos.slice().sort((a,b)=>(b.total_pago||0)-(a.total_pago||0)));
+      ], linhas.map(p => ({...p, _drill:'lancamentos-receita', _drill_ctx:p.descricao})));
     }
   });
 
@@ -839,11 +844,78 @@
     carregar: ()=> carregar('detalhe_planos_despesa'),
     renderizar: (d)=>{
       if(!d || !d.planos){ drawerTabela([],[]); return; }
-      document.getElementById('ss-drawer-sub').innerHTML = `<b>${fmtNum(d.total)}</b> planos`;
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(d.total)}</b> planos · <i style="color:var(--ss-mute)">clique num plano pra ver lançamentos</i>`;
+      const linhas = d.planos.slice().sort((a,b)=>(b.total_pago||0)-(a.total_pago||0));
       drawerTabela([
-        {h:'Plano', render:p=>p.descricao||'—'},
+        {h:'Plano', render:p=>`<span style="color:var(--ss-navy);font-weight:600">${p.descricao||'—'}</span> <span style="color:var(--ss-mute-2);font-size:10px">↗</span>`},
         {h:'Total pago', num:true, render:p=>fmtBRL(p.total_pago||p.total||0)},
-      ], d.planos.slice().sort((a,b)=>(b.total_pago||0)-(a.total_pago||0)));
+      ], linhas.map(p => ({...p, _drill:'lancamentos-despesa', _drill_ctx:p.descricao})));
+    }
+  });
+
+  // Helper: busca um plano no índice pelo desc, retorna { pasta, hash, qtd, total_valor }
+  async function acharPlano(tipoIndice, desc){
+    const idx = await carregar(tipoIndice);
+    if(!idx || !idx.planos) return null;
+    const p = idx.planos.find(pp => pp.descricao === desc);
+    return p ? {...p, pasta: idx.pasta} : null;
+  }
+  async function baixarLancamentosPlano(tipoIndice, desc){
+    const meta = await acharPlano(tipoIndice, desc);
+    if(!meta) return null;
+    const url = meta.pasta + '/' + meta.hash + '.json';
+    try{
+      const r = await fetch(url, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return await r.json();
+    }catch(e){
+      console.warn('[drill] falhou baixar lancamentos:', e);
+      return null;
+    }
+  }
+
+  // Drill: lançamentos individuais de um plano específico (Receita)
+  registrarDrill('lancamentos-receita', {
+    eyebrow: 'Financeiro · Lançamentos',
+    titulo: (ctx)=> ctx ? `Recebimentos · ${ctx}` : 'Recebimentos',
+    carregar: (ctx)=> baixarLancamentosPlano('lancamentos_receitas_indice', ctx),
+    renderizar: (plano, ctx)=>{
+      if(!plano){
+        document.getElementById('ss-drawer-body').innerHTML =
+          `<div class="ss-drawer__empty"><b>Plano não encontrado ou sem lançamentos</b>${ctx||''}</div>`;
+        return;
+      }
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(plano.qtd)}</b> recebimentos · total <b>${fmtBRL(plano.total_valor)}</b>`;
+      drawerTabela([
+        {h:'Data', render:l=>String(l.data_pagamento||'').slice(0,10), mute:true},
+        {h:'Descrição', render:l=>l.descricao || '<span style="color:var(--ss-mute)">—</span>'},
+        {h:'Cliente ID', render:l=>l.id_cliente || '—', mute:true},
+        {h:'Valor', num:true, render:l=>fmtBRL(l.valor||0)},
+      ], plano.lancamentos, {dateKey:'data_pagamento'});
+    }
+  });
+
+  // Drill: lançamentos individuais de um plano específico (Despesa)
+  registrarDrill('lancamentos-despesa', {
+    eyebrow: 'Financeiro · Lançamentos',
+    titulo: (ctx)=> ctx ? `Despesas · ${ctx}` : 'Despesas',
+    carregar: (ctx)=> baixarLancamentosPlano('lancamentos_despesas_indice', ctx),
+    renderizar: (plano, ctx)=>{
+      if(!plano){
+        document.getElementById('ss-drawer-body').innerHTML =
+          `<div class="ss-drawer__empty"><b>Plano não encontrado ou sem lançamentos</b>${ctx||''}</div>`;
+        return;
+      }
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(plano.qtd)}</b> despesas · total <b>${fmtBRL(plano.total_valor)}</b>`;
+      drawerTabela([
+        {h:'Data', render:l=>String(l.data_pagamento||'').slice(0,10), mute:true},
+        {h:'Descrição', render:l=>l.descricao || '<span style="color:var(--ss-mute)">—</span>'},
+        {h:'Fornecedor ID', render:l=>l.id_fornecedor || l.id_cliente || '—', mute:true},
+        {h:'Valor', num:true, render:l=>fmtBRL(l.valor||0)},
+      ], plano.lancamentos, {dateKey:'data_pagamento'});
     }
   });
 
@@ -882,6 +954,8 @@
     detalhe_planos_receita: 'dados/detalhe_planos_receita.json',
     detalhe_planos_despesa: 'dados/detalhe_planos_despesa.json',
     detalhe_processos_por_area: 'dados/detalhe_processos_por_area.json',
+    lancamentos_receitas_indice: 'dados/lancamentos_receitas_indice.json',
+    lancamentos_despesas_indice: 'dados/lancamentos_despesas_indice.json',
   });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);

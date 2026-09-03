@@ -1,6 +1,6 @@
 # TUDO em dados/ é versionado (agregados finais, não dados brutos sensíveis).
-# Isso permite que o GitHub Actions rode com os dados do EasyJur no repo.
-# Arquivos brutos temporários ficam em coleta/ (gitignored abaixo).
+# Exceção: pasta blocos/ é intermediária (lancamentos por ano, junta via script).
+dados/blocos/
 
 coleta/
 scratchpad/

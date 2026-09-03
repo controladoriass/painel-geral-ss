@@ -1,0 +1,131 @@
+{
+  "gerado_em": "2026-09-03",
+  "fonte": "EasyJur list_receitas (status=P) - lancamentos individuais por plano",
+  "tipo": "receitas",
+  "qtd_total": 13395,
+  "total_valor": 137791849.55,
+  "anos_cobertos": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "pasta": "dados/lancamentos_receitas_planos",
+  "planos": [
+    {
+      "descricao": "1.1.01 - Êxito",
+      "hash": "bb93af8f91c5",
+      "qtd": 1697,
+      "total_valor": 41355031.43
+    },
+    {
+      "descricao": "2.1.11 - Transferência Entrada",
+      "hash": "991b9988ff76",
+      "qtd": 714,
+      "total_valor": 34319655.65
+    },
+    {
+      "descricao": "1.1.02 - Partido Mensal",
+      "hash": "6cc36d9249a7",
+      "qtd": 6254,
+      "total_valor": 30655145.82
+    },
+    {
+      "descricao": "1.1.08 - Honorários Diversos",
+      "hash": "7b13e4d4fbbf",
+      "qtd": 2793,
+      "total_valor": 25705062.57
+    },
+    {
+      "descricao": "1.1.06 - Sucumbências",
+      "hash": "07e5313e213c",
+      "qtd": 198,
+      "total_valor": 4063033.86
+    },
+    {
+      "descricao": "2.1.09 - Outras Receitas",
+      "hash": "d120829018ca",
+      "qtd": 138,
+      "total_valor": 877384.95
+    },
+    {
+      "descricao": "1.1.13 - Transferência Entrada",
+      "hash": "52fad22bb56a",
+      "qtd": 4,
+      "total_valor": 260048.9
+    },
+    {
+      "descricao": "2.1.08 - Receita de Reembolso",
+      "hash": "a67b2196d7ff",
+      "qtd": 946,
+      "total_valor": 188742.18
+    },
+    {
+      "descricao": "1.1.03 - Avulso",
+      "hash": "c7e05ca81ccf",
+      "qtd": 11,
+      "total_valor": 108891.83
+    },
+    {
+      "descricao": "1.1.07 - Acordo",
+      "hash": "6bc1d5c02849",
+      "qtd": 24,
+      "total_valor": 79999.92
+    },
+    {
+      "descricao": "1.2.10 - Honorários Diversos",
+      "hash": "c46a449068ed",
+      "qtd": 7,
+      "total_valor": 62245.44
+    },
+    {
+      "descricao": "2.1.02 - Aluguéis",
+      "hash": "a693418b0c30",
+      "qtd": 25,
+      "total_valor": 42617.8
+    },
+    {
+      "descricao": "2.1.04 - Rendimento de Aplicações",
+      "hash": "dbc27da7a2f9",
+      "qtd": 521,
+      "total_valor": 27232.7
+    },
+    {
+      "descricao": "1.0.01 Receitas Operacionais Honorarios (Geral)",
+      "hash": "9e2c49312b46",
+      "qtd": 9,
+      "total_valor": 16020.35
+    },
+    {
+      "descricao": "1.1.09 - Por Ato",
+      "hash": "93183d163324",
+      "qtd": 45,
+      "total_valor": 16013.35
+    },
+    {
+      "descricao": "1.1.05 - Diligência",
+      "hash": "dc9e368d23a4",
+      "qtd": 2,
+      "total_valor": 8000
+    },
+    {
+      "descricao": "1.1.12 Honorários Iniciais (Pró-Labore)",
+      "hash": "e0a66580cb0f",
+      "qtd": 1,
+      "total_valor": 5000
+    },
+    {
+      "descricao": "1.2.01 - Consultas",
+      "hash": "87046cc85f57",
+      "qtd": 5,
+      "total_valor": 1110.3
+    },
+    {
+      "descricao": "1.1.04 - Hora Trabalhada",
+      "hash": "ceeaa769f26c",
+      "qtd": 1,
+      "total_valor": 612.5
+    }
+  ]
+}

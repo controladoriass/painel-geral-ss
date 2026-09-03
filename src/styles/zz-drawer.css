@@ -138,6 +138,9 @@
 .ss-table tbody td.mute{ color:var(--ss-mute); font-weight:500 }
 .ss-table tbody td b{ color:var(--ss-ink); font-weight:600 }
 .ss-table tbody tr:hover td{ background:var(--ss-bg) }
+.ss-table tbody tr.ss-row-drill{ cursor:pointer }
+.ss-table tbody tr.ss-row-drill:hover td{ background:rgba(168,122,56,.06) }
+.ss-table tbody tr.ss-row-drill:hover td:first-child{ box-shadow:inset 2px 0 0 var(--ss-gold) }
 .ss-table tbody tr.warn td{ background:rgba(180,83,9,.04) }
 .ss-tag{
   display:inline-block; padding:2px 8px; border-radius:2px; font-size:10px; font-weight:700;
