@@ -395,6 +395,59 @@
       }
     }
 
+    // ===== 5A Assessoria mensal × Despesa fixa =====
+    const compFixa = await carregar('comparativo_fixa');
+    if(mrr && compFixa && Array.isArray(compFixa.serie_anual) && $('#fin-mrr-vs-fixa-cards')){
+      // MRR (assessoria mensal) já disponível em mrr.receita_mensal_recorrente_total
+      const mrrMensal = mrr.receita_mensal_recorrente_total || 0;
+      // Despesa fixa mensal aproximada = ultimo ano completo / 12
+      const s = compFixa.serie_anual.slice().sort((a,b)=>a.ano-b.ano);
+      const ultCompleto = s.filter(x => x.ano < 2026).pop() || s[s.length-1];
+      const despFixaMensalAprox = ultCompleto ? (ultCompleto.despesa_fixa/12) : 0;
+      const saldoMensal = mrrMensal - despFixaMensalAprox;
+      const cobertura = despFixaMensalAprox > 0 ? (mrrMensal/despFixaMensalAprox*100) : 0;
+      const sinal = saldoMensal >= 0 ? '+' : '';
+      const corSaldo = saldoMensal >= 0 ? 'var(--ss-pos)' : 'var(--ss-neg)';
+
+      $('#fin-mrr-vs-fixa-cards').innerHTML =
+        card('Saldo mensal', `<span style="color:${corSaldo}">${sinal}${fmtBRLk(saldoMensal)}</span>`,
+          'MRR menos despesa fixa mensal', true) +
+        card('Assessoria mensal (MRR)', fmtBRLk(mrrMensal),
+          `<b>${mrr.total_contratos_vigentes||0}</b> contratos vigentes`) +
+        card('Despesa fixa mensal', fmtBRLk(despFixaMensalAprox),
+          `Média baseada em <b>${ultCompleto?ultCompleto.ano:'—'}</b>`) +
+        card('Cobertura', despFixaMensalAprox > 0 ? `${cobertura.toFixed(0)}%` : '—',
+          'MRR / Despesa fixa');
+
+      // Barra comparativa
+      const cont = $('#fin-mrr-vs-fixa-barras');
+      if(cont){
+        const maxAbs = Math.max(mrrMensal, despFixaMensalAprox) || 1;
+        const barRec = Math.round(mrrMensal/maxAbs*50);
+        const barDesp = Math.round(despFixaMensalAprox/maxAbs*50);
+        cont.innerHTML = `<div class="hbar-list">
+          <div class="hbar-row">
+            <div class="hb-name">Mensal médio</div>
+            <div style="position:relative;height:14px;background:transparent">
+              <div style="position:absolute;left:0;top:0;width:50%;height:100%;display:flex;justify-content:flex-end;align-items:center">
+                <div style="height:8px;width:${barDesp}%;background:#e59993;border-radius:2px 0 0 2px" title="Despesa fixa"></div>
+              </div>
+              <div style="position:absolute;left:50%;top:50%;width:1px;height:100%;background:var(--ss-line-2);transform:translate(-50%,-50%)"></div>
+              <div style="position:absolute;left:50%;top:0;width:50%;height:100%;display:flex;align-items:center">
+                <div style="height:8px;width:${barRec}%;background:#7fce9a;border-radius:0 2px 2px 0" title="MRR"></div>
+              </div>
+            </div>
+            <div class="hb-val" style="color:${corSaldo}">${sinal}${fmtBRLk(saldoMensal)}<small style="color:var(--ss-mute)">E ${fmtBRLk(mrrMensal)} · S ${fmtBRLk(despFixaMensalAprox)}</small></div>
+          </div>
+        </div>
+        <div class="data-note" style="margin-top:14px">
+          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--ss-ink);font-size:11.5px"><span style="width:10px;height:10px;background:#7fce9a;border-radius:2px;display:inline-block"></span>MRR (entrada)</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;margin-left:14px;color:var(--ss-ink);font-size:11.5px"><span style="width:10px;height:10px;background:#e59993;border-radius:2px;display:inline-block"></span>Despesa fixa (saída)</span>
+          <span style="margin-left:14px;color:var(--ss-mute);font-size:11.5px">· Aproximação a partir de planos recorrentes (aluguel, salários, tributos, etc.)</span>
+        </div>`;
+      }
+    }
+
     // ===== 5B Rateio da assessoria mensal =====
     const rat = await carregar('rateio_assessoria');
     if(rat && $('#fin-rateio-cards')){
