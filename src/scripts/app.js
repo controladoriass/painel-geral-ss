@@ -413,23 +413,44 @@
 
   // ---------- Marca elementos clicáveis (drill-down) ----------
   function marcarDrills(){
-    // Card MRR (assessoria mensal) → detalhe dos 53 contratos
+    // Cards MRR: 1º=MRR (53 contratos), 4º=Maior contrato
     const mrrCards = $$('#fin-mrr-cards .fin-card');
-    if(mrrCards[0]){ // 1º card = Receita Mensal Recorrente
+    if(mrrCards[0]){
       mrrCards[0].classList.add('ss-drill');
       mrrCards[0].setAttribute('data-drill','contratos-mensais');
     }
+    if(mrrCards[3]){ // MAIOR CONTRATO (4º card na ordem)
+      mrrCards[3].classList.add('ss-drill');
+      mrrCards[3].setAttribute('data-drill','maior-contrato');
+    }
+    // Faixas de valor: cada linha vira clicável
+    const faixasCtx = {
+      'Acima de R$ 10 mil': 'acima_10k',
+      'R$ 5 mil – 10 mil':  '5k_10k',
+      'R$ 3 mil – 5 mil':   '3k_5k',
+      'Abaixo de R$ 3 mil': 'abaixo_3k',
+    };
+    $$('#fin-mrr-faixas .hbar-row').forEach(row=>{
+      const nome = row.querySelector('.hb-name')?.textContent?.trim();
+      const ctx = faixasCtx[nome];
+      if(ctx){
+        row.classList.add('ss-drill');
+        row.setAttribute('data-drill','contratos-por-faixa');
+        row.setAttribute('data-drill-ctx', ctx);
+      }
+    });
     // Cards do funil comercial → detalhe vendedores
-    const funilCards = $$('#com-funil-cards .fin-card');
-    funilCards.forEach(c=>{
+    $$('#com-funil-cards .fin-card').forEach(c=>{
       c.classList.add('ss-drill');
       c.setAttribute('data-drill','vendedores');
     });
-    // Cards de faturamento (mensal, êxito, outros, total) → planos de receita
+    // Cards de faturamento: cada um abre com seu recorte
     const fatCards = $$('#fin-fat-ano .fin-card');
-    fatCards.forEach(c=>{
+    const fatCtx = ['mensal','exito','outros','total']; // ordem dos cards
+    fatCards.forEach((c,i)=>{
       c.classList.add('ss-drill');
-      c.setAttribute('data-drill','planos-receita');
+      c.setAttribute('data-drill','faturamento-categoria');
+      c.setAttribute('data-drill-ctx', fatCtx[i]||'total');
     });
     // Panel de planos de receita e despesa → detalhes
     const panelRec = $('#fin-planos-rec');
@@ -510,6 +531,22 @@
       </div>
       <div class="ss-drawer__toolbar">
         <div class="ss-drawer__search"><input type="text" id="ss-drawer-search" placeholder="Buscar…"></div>
+        <div class="ss-drawer__periodo" id="ss-drawer-periodo" style="display:none">
+          <select id="ss-drawer-periodo-sel">
+            <option value="">Todo o período</option>
+            <option value="15">Últimos 15 dias</option>
+            <option value="30">Últimos 30 dias</option>
+            <option value="60">Últimos 60 dias</option>
+            <option value="90">Últimos 90 dias</option>
+            <option value="ytd">Ano corrente</option>
+            <option value="custom">Personalizado…</option>
+          </select>
+          <div id="ss-drawer-periodo-custom" style="display:none">
+            <input type="date" id="ss-drawer-periodo-de">
+            <span>até</span>
+            <input type="date" id="ss-drawer-periodo-ate">
+          </div>
+        </div>
         <div class="ss-drawer__count" id="ss-drawer-count">—</div>
         <button class="ss-drawer__export" id="ss-drawer-export">Exportar CSV</button>
       </div>
@@ -519,23 +556,60 @@
     document.body.appendChild(drawer);
     document.getElementById('ss-drawer-close').addEventListener('click', fecharDrawer);
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') fecharDrawer(); });
-    document.getElementById('ss-drawer-search').addEventListener('input', e=>{
-      const q = e.target.value.trim().toLowerCase();
-      const rows = document.querySelectorAll('#ss-drawer-body tbody tr[data-searchable]');
-      rows.forEach(r=>{
-        const txt = r.getAttribute('data-searchable').toLowerCase();
-        r.style.display = q && !txt.includes(q) ? 'none' : '';
-      });
-      atualizarContagemDrawer();
+    document.getElementById('ss-drawer-search').addEventListener('input', aplicarFiltroDrawer);
+    document.getElementById('ss-drawer-periodo-sel').addEventListener('change', e=>{
+      const custom = document.getElementById('ss-drawer-periodo-custom');
+      custom.style.display = e.target.value === 'custom' ? 'inline-flex' : 'none';
+      aplicarFiltroDrawer();
     });
+    document.getElementById('ss-drawer-periodo-de').addEventListener('change', aplicarFiltroDrawer);
+    document.getElementById('ss-drawer-periodo-ate').addEventListener('change', aplicarFiltroDrawer);
     document.getElementById('ss-drawer-export').addEventListener('click', exportarCSVDrawer);
     return overlay;
+  }
+  // Aplica busca de texto + filtro de período nas linhas
+  function aplicarFiltroDrawer(){
+    const q = (document.getElementById('ss-drawer-search')?.value || '').trim().toLowerCase();
+    const perSel = document.getElementById('ss-drawer-periodo-sel')?.value || '';
+    let dtDe = null, dtAte = null;
+    if(perSel === 'custom'){
+      const de = document.getElementById('ss-drawer-periodo-de')?.value;
+      const ate = document.getElementById('ss-drawer-periodo-ate')?.value;
+      if(de) dtDe = de;
+      if(ate) dtAte = ate;
+    } else if(perSel === 'ytd'){
+      dtDe = '2026-01-01';
+    } else if(/^\d+$/.test(perSel)){
+      const dias = parseInt(perSel,10);
+      const d = new Date(); d.setDate(d.getDate() - dias);
+      dtDe = d.toISOString().slice(0,10);
+    }
+    const rows = document.querySelectorAll('#ss-drawer-body tbody tr[data-searchable]');
+    rows.forEach(r=>{
+      const txt = r.getAttribute('data-searchable').toLowerCase();
+      const dt = r.getAttribute('data-date') || '';
+      let mostra = true;
+      if(q && !txt.includes(q)) mostra = false;
+      if(mostra && dtDe && dt && dt < dtDe) mostra = false;
+      if(mostra && dtAte && dt && dt > dtAte) mostra = false;
+      r.style.display = mostra ? '' : 'none';
+    });
+    atualizarContagemDrawer();
   }
   function atualizarContagemDrawer(){
     const rows = document.querySelectorAll('#ss-drawer-body tbody tr[data-searchable]');
     const visiveis = Array.from(rows).filter(r=>r.style.display !== 'none').length;
     const el = document.getElementById('ss-drawer-count');
     if(el) el.innerHTML = '<b>'+fmtNum(visiveis)+'</b> de '+fmtNum(rows.length);
+  }
+  // Mostra/esconde filtro de período conforme o drill declarar
+  function configurarFiltroPeriodo(mostrar){
+    const el = document.getElementById('ss-drawer-periodo');
+    if(el) el.style.display = mostrar ? 'inline-flex' : 'none';
+    const sel = document.getElementById('ss-drawer-periodo-sel');
+    if(sel) sel.value = '';
+    const custom = document.getElementById('ss-drawer-periodo-custom');
+    if(custom) custom.style.display = 'none';
   }
   function exportarCSVDrawer(){
     const tbl = document.querySelector('#ss-drawer-body table');
@@ -558,10 +632,13 @@
   }
 
   // Helper: render tabela dentro do drawer
-  function drawerTabela(colunas, linhas){
+  // opts.dateKey — nome da propriedade da linha que tem a data (para filtro periodo)
+  function drawerTabela(colunas, linhas, opts){
+    opts = opts||{};
     if(!linhas || !linhas.length){
       document.getElementById('ss-drawer-body').innerHTML =
         '<div class="ss-drawer__empty"><b>Sem itens para exibir</b>Nenhum registro encontrado.</div>';
+      configurarFiltroPeriodo(false);
       return;
     }
     const html = `<table class="ss-table">
@@ -569,42 +646,135 @@
       <tbody>${linhas.map(l=>{
         const searchable = colunas.map(c=>c.render(l)).join(' ').replace(/<[^>]+>/g,'');
         const warn = l._warn ? ' class="warn"' : '';
-        return `<tr${warn} data-searchable="${searchable.replace(/"/g,'&quot;')}">${
+        const dt = opts.dateKey ? (l[opts.dateKey]||'') : '';
+        const dateAttr = dt ? ` data-date="${String(dt).slice(0,10)}"` : '';
+        return `<tr${warn} data-searchable="${searchable.replace(/"/g,'&quot;')}"${dateAttr}>${
           colunas.map(c=>`<td class="${c.num?'num':''} ${c.mute?'mute':''}">${c.render(l)}</td>`).join('')
         }</tr>`;
       }).join('')}</tbody>
     </table>`;
     document.getElementById('ss-drawer-body').innerHTML = html;
+    configurarFiltroPeriodo(!!opts.dateKey);
   }
 
   // ---------- Registrar drills disponíveis ----------
+  // Colunas padrão da tabela de contratos (reutilizado nos drills abaixo)
+  const COLS_CONTRATO = [
+    {h:'Nº', render:c=>c.numero||'—'},
+    {h:'Cliente', render:c=>c.cliente_hint || '<span style="color:var(--ss-mute)">'+c.titulo.slice(0,40)+'</span>'},
+    {h:'Início', render:c=>c.data_inicio || '—', mute:true},
+    {h:'Vigência até', render:c=>{
+      if(!c.data_final) return '<span style="color:var(--ss-mute)">indeterminada</span>';
+      return c.vigencia_vencida
+        ? `<span class="ss-tag warn">${c.data_final} · vencida</span>`
+        : c.data_final;
+    }},
+    {h:'Valor mensal', num:true, render:c=>{
+      if(!c.valor) return '<span class="ss-tag warn">R$ 0</span>';
+      return fmtBRL(c.valor);
+    }},
+  ];
+
   registrarDrill('contratos-mensais', {
     eyebrow: 'Financeiro · Assessoria mensal',
     titulo: 'Contratos de assessoria mensal',
     carregar: ()=> carregar('detalhe_contratos') ,
     renderizar: (d)=>{
       if(!d || !d.contratos){ drawerTabela([],[]); return; }
-      const sub = document.getElementById('ss-drawer-sub');
-      sub.innerHTML = `<b>${fmtNum(d.total)}</b> contratos · MRR total <b>${fmtBRLk(d.total_valor_mensal)}</b>` +
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(d.total)}</b> contratos · MRR total <b>${fmtBRLk(d.total_valor_mensal)}</b>` +
         (d.vigencia_vencida ? ` · <span style="color:var(--ss-warn)"><b>${d.vigencia_vencida}</b> com vigência vencida</span>` : '');
       const linhas = d.contratos.slice().sort((a,b)=>b.valor-a.valor).map(c=>({
         ...c, _warn: c.vigencia_vencida
       }));
-      drawerTabela([
-        {h:'Nº', render:c=>c.numero||'—'},
-        {h:'Cliente', render:c=>c.cliente_hint || '<span style="color:var(--ss-mute)">'+c.titulo.slice(0,40)+'</span>'},
-        {h:'Início', render:c=>c.data_inicio || '—', mute:true},
-        {h:'Vigência até', render:c=>{
-          if(!c.data_final) return '<span style="color:var(--ss-mute)">indeterminada</span>';
-          return c.vigencia_vencida
-            ? `<span class="ss-tag warn">${c.data_final} · vencida</span>`
-            : c.data_final;
-        }},
-        {h:'Valor mensal', num:true, render:c=>{
-          if(!c.valor) return '<span class="ss-tag warn">R$ 0</span>';
-          return fmtBRL(c.valor);
-        }},
-      ], linhas);
+      drawerTabela(COLS_CONTRATO, linhas, {dateKey:'data_inicio'});
+    }
+  });
+
+  registrarDrill('maior-contrato', {
+    eyebrow: 'Financeiro · Assessoria mensal',
+    titulo: 'Maior contrato de assessoria',
+    carregar: ()=> carregar('detalhe_contratos'),
+    renderizar: (d)=>{
+      if(!d || !d.contratos){ drawerTabela([],[]); return; }
+      const ord = d.contratos.slice().sort((a,b)=>b.valor-a.valor);
+      const top1 = ord[0];
+      const sub = document.getElementById('ss-drawer-sub');
+      const nomeTop = (top1?.cliente_hint && top1.cliente_hint !== '—') ? top1.cliente_hint : `Contrato nº ${top1?.numero}`;
+      sub.innerHTML = top1
+        ? `Maior: <b>${nomeTop}</b> · <b>${fmtBRL(top1.valor)}</b>/mês · ranking dos 10 maiores`
+        : '';
+      drawerTabela(COLS_CONTRATO, ord.slice(0,10).map(c=>({...c, _warn: c.vigencia_vencida})), {dateKey:'data_inicio'});
+    }
+  });
+
+  registrarDrill('contratos-por-faixa', {
+    eyebrow: 'Financeiro · Assessoria mensal',
+    titulo: (ctx)=>{
+      if(ctx==='acima_10k') return 'Contratos acima de R$ 10 mil';
+      if(ctx==='5k_10k') return 'Contratos entre R$ 5 mil e R$ 10 mil';
+      if(ctx==='3k_5k') return 'Contratos entre R$ 3 mil e R$ 5 mil';
+      if(ctx==='abaixo_3k') return 'Contratos abaixo de R$ 3 mil';
+      return 'Contratos por faixa';
+    },
+    carregar: ()=> carregar('detalhe_contratos'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.contratos){ drawerTabela([],[]); return; }
+      const filtros = {
+        acima_10k: c => c.valor >= 10000,
+        '5k_10k':   c => c.valor >= 5000 && c.valor < 10000,
+        '3k_5k':    c => c.valor >= 3000 && c.valor < 5000,
+        abaixo_3k:  c => c.valor > 0 && c.valor < 3000,
+      };
+      const fn = filtros[ctx] || (()=>true);
+      const linhas = d.contratos.filter(fn).sort((a,b)=>b.valor-a.valor)
+        .map(c=>({...c, _warn: c.vigencia_vencida}));
+      const total = linhas.reduce((s,c)=>s+c.valor,0);
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${linhas.length}</b> contratos nesta faixa · soma <b>${fmtBRLk(total)}</b>/mês`;
+      drawerTabela(COLS_CONTRATO, linhas, {dateKey:'data_inicio'});
+    }
+  });
+
+  registrarDrill('faturamento-categoria', {
+    eyebrow: 'Financeiro · Faturamento',
+    titulo: (ctx)=>{
+      if(ctx==='mensal') return 'Faturamento · Mensal recorrente';
+      if(ctx==='exito') return 'Faturamento · Êxito';
+      if(ctx==='outros') return 'Faturamento · Outros honorários';
+      if(ctx==='total') return 'Faturamento · Total operacional';
+      return 'Faturamento';
+    },
+    carregar: ()=> carregar('detalhe_planos_receita'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.planos){ drawerTabela([],[]); return; }
+      const MENSAL_IDS = ['1.1.02'];
+      const EXITO_IDS = ['1.1.01','1.1.06','1.1.07'];
+      const isMensal = p => MENSAL_IDS.some(id => (p.descricao||'').trim().startsWith(id));
+      const isExito = p => EXITO_IDS.some(id => (p.descricao||'').trim().startsWith(id));
+      const isOp = p => (p.descricao||'').trim().startsWith('1.');
+      let planos = d.planos.filter(isOp);
+      if(ctx==='mensal') planos = planos.filter(isMensal);
+      else if(ctx==='exito') planos = planos.filter(isExito);
+      else if(ctx==='outros') planos = planos.filter(p=>!isMensal(p) && !isExito(p));
+      // se ctx==='total', mantém todos operacionais
+      planos = planos.sort((a,b)=>(b.total_pago||0)-(a.total_pago||0));
+      const total = planos.reduce((s,p)=>s+(p.total_pago||0),0);
+      const totQtd = planos.reduce((s,p)=>s+(p.qtd||0),0);
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(planos.length)}</b> planos · <b>${fmtNum(totQtd)}</b> recebimentos · total <b>${fmtBRLk(total)}</b>`;
+      // linhas com "por ano" expandido em colunas
+      const cols = [
+        {h:'Plano de contas', render:p=>p.descricao||'—'},
+        {h:'Recebimentos', num:true, render:p=>fmtNum(p.qtd||0)},
+        {h:'2022', num:true, render:p=>p.por_ano && p.por_ano['2022'] ? fmtBRLk(p.por_ano['2022']) : '—', mute:true},
+        {h:'2023', num:true, render:p=>p.por_ano && p.por_ano['2023'] ? fmtBRLk(p.por_ano['2023']) : '—', mute:true},
+        {h:'2024', num:true, render:p=>p.por_ano && p.por_ano['2024'] ? fmtBRLk(p.por_ano['2024']) : '—', mute:true},
+        {h:'2025', num:true, render:p=>p.por_ano && p.por_ano['2025'] ? fmtBRLk(p.por_ano['2025']) : '—', mute:true},
+        {h:'2026', num:true, render:p=>p.por_ano && p.por_ano['2026'] ? fmtBRLk(p.por_ano['2026']) : '—', mute:true},
+        {h:'Total', num:true, render:p=>fmtBRL(p.total_pago||0)},
+      ];
+      drawerTabela(cols, planos);
     }
   });
 
