@@ -197,83 +197,143 @@
       }
     }
 
-    // ===== FLUXO DE CAIXA FUTURO (receitas em aberto por vencimento) =====
-    const fluxo = await carregar('fluxo_futuro_receitas');
-    if(fluxo && Array.isArray(fluxo.receitas) && fluxo.receitas.length){
-      // 3 categorias: Mensal recorrente, Honorarios diversos (com contratos parcelados), Exitos (parcelados)
-      const catDe = (desc)=>{
+    // ===== FLUXO DE CAIXA FUTURO (entradas + saídas + saldo por mês) =====
+    const fluxoRec = await carregar('fluxo_futuro_receitas');
+    const fluxoDesp = await carregar('fluxo_futuro_despesas');
+    if(fluxoRec && Array.isArray(fluxoRec.receitas) && fluxoRec.receitas.length){
+      // Próximos 6 meses
+      const hoje = new Date();
+      const meses = [];
+      for(let i=0; i<6; i++){
+        const d = new Date(hoje.getFullYear(), hoje.getMonth()+i, 1);
+        meses.push(d.toISOString().slice(0,7));
+      }
+      // Acumula receitas e despesas por mês
+      const rec = {};
+      const desp = {};
+      meses.forEach(m => { rec[m] = 0; desp[m] = 0; });
+      fluxoRec.receitas.forEach(r => {
+        const mes = String(r.data_vencimento||'').slice(0,7);
+        if(mes in rec) rec[mes] += (r.valor||0);
+      });
+      const despesasArr = (fluxoDesp && Array.isArray(fluxoDesp.despesas)) ? fluxoDesp.despesas : [];
+      despesasArr.forEach(d => {
+        const mes = String(d.data_vencimento||'').slice(0,7);
+        if(mes in desp) desp[mes] += (d.valor||0);
+      });
+      const totalRec = meses.reduce((s,m)=>s+rec[m],0);
+      const totalDesp = meses.reduce((s,m)=>s+desp[m],0);
+      const totalSaldo = totalRec - totalDesp;
+
+      // ---- 4 cards de resumo ----
+      if($('#fin-fluxo-cards')){
+        const sinal = totalSaldo >= 0 ? '+' : '';
+        const corSaldo = totalSaldo >= 0 ? 'var(--ss-pos)' : 'var(--ss-neg)';
+        $('#fin-fluxo-cards').innerHTML =
+          card('Saldo 6 meses', `<span style="color:${corSaldo}">${sinal}${fmtBRLk(totalSaldo).replace('R$ ','R$ ')}</span>`,
+            'Recebimentos − pagamentos previstos', true) +
+          card('Entradas previstas', fmtBRLk(totalRec),
+            `<b>${fmtNum(fluxoRec.qtd||0)}</b> contas a receber lançadas`) +
+          card('Saídas previstas', fmtBRLk(totalDesp),
+            despesasArr.length ? `<b>${fmtNum(fluxoDesp.qtd||despesasArr.length)}</b> contas a pagar lançadas`
+              : '<span style="color:var(--ss-warn)">aguardando coleta</span>') +
+          card('Cobertura', totalRec > 0 ? `${((totalRec/(totalDesp||1))*100).toFixed(0)}%` : '—',
+            totalDesp ? 'Entradas / Saídas' : 'Saídas não disponíveis');
+      }
+
+      // ---- Gráfico principal: saldo mensal (entradas verde vs saídas vermelho) ----
+      const cont = $('#fin-fluxo-barras');
+      if(cont){
+        const maxAbs = Math.max(...meses.map(m => Math.max(rec[m], desp[m]))) || 1;
+        const rows = meses.map(m => {
+          const r = rec[m], d = desp[m], saldo = r - d;
+          const barRec = Math.round(r/maxAbs*50);
+          const barDesp = Math.round(d/maxAbs*50);
+          const sinal = saldo >= 0 ? '+' : '';
+          const corSaldo = saldo >= 0 ? 'var(--ss-pos)' : 'var(--ss-neg)';
+          return `<div class="hbar-row ss-drill" data-drill="fluxo-mes" data-drill-ctx="${m}">
+            <div class="hb-name">${fmtMesAno(m)}</div>
+            <div style="position:relative;height:14px;background:transparent">
+              <div style="position:absolute;left:0;top:0;width:50%;height:100%;display:flex;justify-content:flex-end;align-items:center">
+                <div style="height:8px;width:${barDesp}%;background:#e59993;border-radius:2px 0 0 2px" title="Saídas: ${fmtBRLk(d)}"></div>
+              </div>
+              <div style="position:absolute;left:50%;top:50%;width:1px;height:100%;background:var(--ss-line-2);transform:translate(-50%,-50%)"></div>
+              <div style="position:absolute;left:50%;top:0;width:50%;height:100%;display:flex;align-items:center">
+                <div style="height:8px;width:${barRec}%;background:#7fce9a;border-radius:0 2px 2px 0" title="Entradas: ${fmtBRLk(r)}"></div>
+              </div>
+            </div>
+            <div class="hb-val" style="color:${corSaldo}">${sinal}${fmtBRLk(saldo)}<small style="color:var(--ss-mute)">E ${fmtBRLk(r)} · S ${fmtBRLk(d)}</small></div>
+          </div>`;
+        }).join('');
+        cont.innerHTML = `<div class="hbar-list">${rows}</div>
+          <div class="data-note" style="margin-top:14px">
+            <span style="display:inline-flex;align-items:center;gap:6px;color:var(--ss-ink);font-size:11.5px"><span style="width:10px;height:10px;background:#7fce9a;border-radius:2px;display:inline-block"></span>Entradas</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;margin-left:14px;color:var(--ss-ink);font-size:11.5px"><span style="width:10px;height:10px;background:#e59993;border-radius:2px;display:inline-block"></span>Saídas</span>
+            <span style="margin-left:14px;color:var(--ss-mute);font-size:11.5px">· clique num mês para detalhar</span>
+          </div>`;
+      }
+
+      // ---- Painel esquerdo: entradas por categoria ----
+      const catRec = (desc)=>{
         const d = String(desc||'').trim();
         if(d.startsWith('1.1.02')) return 'mensal';
         if(d.startsWith('1.1.08') || d.startsWith('1.2.10')) return 'honorarios';
         if(d.startsWith('1.1.01') || d.startsWith('1.1.06') || d.startsWith('1.1.07')) return 'exito';
         return 'outros';
       };
-      const hoje = new Date();
-      // define os proximos 6 meses (YYYY-MM)
-      const meses = [];
-      for(let i=0; i<6; i++){
-        const d = new Date(hoje.getFullYear(), hoje.getMonth()+i, 1);
-        meses.push(d.toISOString().slice(0,7));
-      }
-      // acumula por mes e por categoria
-      const acc = {};
-      meses.forEach(m => { acc[m] = {mensal:0, honorarios:0, exito:0, outros:0}; });
-      fluxo.receitas.forEach(r => {
-        const v = r.data_vencimento || '';
-        const mes = String(v).slice(0,7);
-        if(!acc[mes]) return; // fora dos 6 proximos
-        const c = catDe(r.plano_desc);
-        acc[mes][c] += (r.valor||0);
+      const accRec = {};
+      meses.forEach(m => { accRec[m] = {mensal:0, honorarios:0, exito:0, outros:0}; });
+      fluxoRec.receitas.forEach(r => {
+        const mes = String(r.data_vencimento||'').slice(0,7);
+        if(!accRec[mes]) return;
+        accRec[mes][catRec(r.plano_desc)] += (r.valor||0);
       });
-      const totalCat = {mensal:0, honorarios:0, exito:0, outros:0};
-      Object.values(acc).forEach(m => Object.keys(m).forEach(k => totalCat[k] += m[k]));
-      const totalGeral = totalCat.mensal + totalCat.honorarios + totalCat.exito + totalCat.outros;
-
-      // cards de resumo
-      if($('#fin-fluxo-cards')){
-        $('#fin-fluxo-cards').innerHTML =
-          card('Total 6 meses', fmtBRLk(totalGeral), 'Recebimentos previstos com vencimento agendado', true) +
-          card('Mensal recorrente', fmtBRLk(totalCat.mensal), `${((totalCat.mensal/totalGeral)*100||0).toFixed(0)}% do fluxo`) +
-          card('Honorários diversos', fmtBRLk(totalCat.honorarios), `${((totalCat.honorarios/totalGeral)*100||0).toFixed(0)}% · inclui contratos parcelados`) +
-          card('Êxitos', fmtBRLk(totalCat.exito), `${((totalCat.exito/totalGeral)*100||0).toFixed(0)}% · êxitos parcelados`);
-      }
-
-      // gráfico stacked por mês
-      const cont = $('#fin-fluxo-barras');
-      if(cont){
-        const mxAno = Math.max(...meses.map(m => acc[m].mensal + acc[m].honorarios + acc[m].exito + acc[m].outros)) || 1;
-        const legenda =
-          `<span style="display:inline-flex;align-items:center;gap:6px;margin-left:14px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-gold);border-radius:2px"></span>Mensal</span>` +
-          `<span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-navy);border-radius:2px"></span>Honorários</span>` +
-          `<span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:#8a92ab;border-radius:2px"></span>Êxito</span>`;
-        const rows = meses.map(m => {
-          const c = acc[m];
-          const tot = c.mensal + c.honorarios + c.exito + c.outros;
-          if(tot === 0){
-            return `<div class="hbar-row ss-drill" data-drill="fluxo-mes" data-drill-ctx="${m}">
-              <div class="hb-name">${fmtMesAno(m)}</div>
-              <div class="hbar-track"></div>
-              <div class="hb-val"><span style="color:var(--ss-mute)">—</span></div>
-            </div>`;
-          }
-          const pm = (c.mensal/tot*100).toFixed(1);
-          const ph = (c.honorarios/tot*100).toFixed(1);
-          const pe = (c.exito/tot*100).toFixed(1);
-          const po = (c.outros/tot*100).toFixed(1);
-          const largTot = Math.round(tot/mxAno*100);
+      if($('#fin-fluxo-receitas')){
+        const maxRec = Math.max(...meses.map(m => rec[m])) || 1;
+        const rowsR = meses.map(m => {
+          const c = accRec[m];
+          const tot = rec[m];
+          if(tot === 0) return `<div class="hbar-row"><div class="hb-name">${fmtMesAno(m)}</div><div class="hbar-track"></div><div class="hb-val"><span style="color:var(--ss-mute)">—</span></div></div>`;
+          const pm=(c.mensal/tot*100).toFixed(0), ph=(c.honorarios/tot*100).toFixed(0), pe=(c.exito/tot*100).toFixed(0);
+          const larg = Math.round(tot/maxRec*100);
           return `<div class="hbar-row ss-drill" data-drill="fluxo-mes" data-drill-ctx="${m}">
             <div class="hb-name">${fmtMesAno(m)}</div>
-            <div class="hbar-track" style="display:flex;width:${largTot}%;min-width:${largTot}%">
-              <div style="height:100%;background:var(--ss-gold);width:${pm}%" title="Mensal: ${fmtBRLk(c.mensal)} (${pm}%)"></div>
-              <div style="height:100%;background:var(--ss-navy);width:${ph}%" title="Honorários: ${fmtBRLk(c.honorarios)} (${ph}%)"></div>
-              <div style="height:100%;background:#8a92ab;width:${pe}%" title="Êxito: ${fmtBRLk(c.exito)} (${pe}%)"></div>
-              <div style="height:100%;background:#c9cdd6;width:${po}%" title="Outros: ${fmtBRLk(c.outros)} (${po}%)"></div>
+            <div class="hbar-track" style="display:flex;width:${larg}%;min-width:${larg}%">
+              <div style="height:100%;background:var(--ss-gold);width:${c.mensal/tot*100}%" title="Mensal: ${fmtBRLk(c.mensal)}"></div>
+              <div style="height:100%;background:var(--ss-navy);width:${c.honorarios/tot*100}%" title="Honorários: ${fmtBRLk(c.honorarios)}"></div>
+              <div style="height:100%;background:#8a92ab;width:${c.exito/tot*100}%" title="Êxito: ${fmtBRLk(c.exito)}"></div>
+              <div style="height:100%;background:#c9cdd6;width:${c.outros/tot*100}%"></div>
             </div>
             <div class="hb-val">${fmtBRLk(tot)}<small>M ${pm}% · H ${ph}% · Ê ${pe}%</small></div>
           </div>`;
         }).join('');
-        cont.innerHTML = `<div class="hbar-list">${rows}</div>
-          <div class="data-note" style="margin-top:14px"><b>${fmtNum(fluxo.qtd||0)}</b> contas a receber com vencimento futuro · ${legenda}</div>`;
+        $('#fin-fluxo-receitas').innerHTML = `<div class="hbar-list">${rowsR}</div>
+          <div class="data-note" style="margin-top:14px">
+            <span style="display:inline-flex;align-items:center;gap:5px;color:var(--ss-ink);font-size:11px"><span style="width:9px;height:9px;background:var(--ss-gold);border-radius:2px;display:inline-block"></span>Mensal</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;margin-left:10px;color:var(--ss-ink);font-size:11px"><span style="width:9px;height:9px;background:var(--ss-navy);border-radius:2px;display:inline-block"></span>Honorários</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;margin-left:10px;color:var(--ss-ink);font-size:11px"><span style="width:9px;height:9px;background:#8a92ab;border-radius:2px;display:inline-block"></span>Êxito</span>
+          </div>`;
+      }
+
+      // ---- Painel direito: pagamentos por mês (barras simples) ----
+      if($('#fin-fluxo-despesas')){
+        if(!despesasArr.length){
+          $('#fin-fluxo-despesas').innerHTML = `<div class="stub"><span class="stub-ico">—</span><b>Contas a pagar</b>Aguardando coleta finalizar.<div class="stub-tag">em coleta</div></div>`;
+        } else {
+          const maxD = Math.max(...meses.map(m => desp[m])) || 1;
+          const rowsD = meses.map(m => {
+            const v = desp[m];
+            if(v === 0) return `<div class="hbar-row"><div class="hb-name">${fmtMesAno(m)}</div><div class="hbar-track"></div><div class="hb-val"><span style="color:var(--ss-mute)">—</span></div></div>`;
+            const larg = Math.round(v/maxD*100);
+            return `<div class="hbar-row ss-drill" data-drill="fluxo-despesas-mes" data-drill-ctx="${m}">
+              <div class="hb-name">${fmtMesAno(m)}</div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:${larg}%;background:#e59993"></div></div>
+              <div class="hb-val">${fmtBRLk(v)}</div>
+            </div>`;
+          }).join('');
+          $('#fin-fluxo-despesas').innerHTML = `<div class="hbar-list">${rowsD}</div>
+            <div class="data-note" style="margin-top:14px"><b>${fmtNum(fluxoDesp.qtd||despesasArr.length)}</b> contas a pagar em aberto · clique num mês para detalhar</div>`;
+        }
       }
     }
   }
@@ -1252,6 +1312,29 @@
   });
 
 
+  // Drill: despesas em aberto de um mês específico (contas a pagar)
+  registrarDrill('fluxo-despesas-mes', {
+    eyebrow: 'Financeiro · Contas a pagar',
+    titulo: (ctx)=> ctx ? `Pagamentos previstos · ${fmtMesAno(ctx)}` : 'Pagamentos previstos',
+    carregar: ()=> carregar('fluxo_futuro_despesas'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.despesas){ drawerTabela([],[]); return; }
+      const filtradas = d.despesas.filter(r => String(r.data_vencimento||'').slice(0,7) === ctx)
+        .sort((a,b)=>String(a.data_vencimento).localeCompare(String(b.data_vencimento)));
+      const soma = filtradas.reduce((s,r)=>s+(r.valor||0),0);
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(filtradas.length)}</b> pagamentos previstos · total <b>${fmtBRL(soma)}</b>`;
+      drawerTabela([
+        {h:'Vencimento', render:r=>fmtData(r.data_vencimento), mute:true},
+        {h:'Plano', render:r=>r.plano_desc||'—', mute:true},
+        {h:'Descrição', render:r=>r.descricao||'<span style="color:var(--ss-mute)">—</span>'},
+        {h:'Fornecedor ID', render:r=>r.id_fornecedor||'—', mute:true},
+        {h:'Forma', render:r=>r.forma_pagamento||'—', mute:true},
+        {h:'Valor', num:true, render:r=>fmtBRL(r.valor||0)},
+      ], filtradas, {dateKey:'data_vencimento'});
+    }
+  });
+
   // Drill: receitas em aberto de um mês específico (fluxo de caixa)
   registrarDrill('fluxo-mes', {
     eyebrow: 'Financeiro · Fluxo de caixa',
@@ -1302,6 +1385,7 @@
     processos_parados: 'dados/processos_parados.json',
     processos_grandes: 'dados/processos_grandes.json',
     fluxo_futuro_receitas: 'dados/fluxo_futuro_receitas.json',
+    fluxo_futuro_despesas: 'dados/fluxo_futuro_despesas.json',
   });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);

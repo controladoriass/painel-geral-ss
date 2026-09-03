@@ -43,8 +43,9 @@ MAPA = {
     #   processos_parados / processos_grandes
     # Só os índices leves são embutidos:
     "processos_por_area_indice":      "processos_por_area_indice.json",
-    # fluxo de caixa futuro (receitas em aberto - só 6 meses de venc, arquivo pequeno)
+    # fluxo de caixa futuro (receitas + despesas em aberto - só 6 meses de venc, arquivos pequenos)
     "fluxo_futuro_receitas":          "fluxo_futuro_receitas.json",
+    "fluxo_futuro_despesas":          "fluxo_futuro_despesas.json",
 }
 
 def main():
