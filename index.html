@@ -1994,12 +1994,42 @@ section{ margin-bottom:40px !important }
     <section>
       <div class="sec-head">
         <div class="roman">05</div>
-        <div class="sec-titles"><h2>Timesheet e petições</h2>
-          <div class="sec-desc">Aguardando coleta do timesheet e definição do critério de petição.</div></div>
+        <div class="sec-titles"><h2>Timesheet por advogado</h2>
+          <div class="sec-desc">Total de horas registradas por profissional no período.</div></div>
       </div>
-      <div class="panel">
-        <div class="stub"><span class="stub-ico">—</span>Timesheet e contador de petições ficam <b>a definir</b> — depende de coleta específica e de critério do escritório.
-          <div class="stub-tag falta">a coletar / a definir</div></div>
+      <div class="fin-cards" id="prod-ts-adv-cards"></div>
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-label">Horas por advogado (top 15)</div>
+        <div class="hbar-list" id="prod-ts-adv"><div class="stub"><span class="stub-ico">—</span>aguardando coleta do timesheet
+          <div class="stub-tag falta">a coletar</div></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">06</div>
+        <div class="sec-titles"><h2>Timesheet por cliente</h2>
+          <div class="sec-desc">Horas por cliente + alerta quando o consumo do mês ultrapassa a média histórica.</div></div>
+      </div>
+      <div class="fin-cards" id="prod-ts-cli-cards"></div>
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-label">Horas por cliente (top 15) + alertas</div>
+        <div class="hbar-list" id="prod-ts-cli"><div class="stub"><span class="stub-ico">—</span>aguardando coleta do timesheet
+          <div class="stub-tag falta">a coletar</div></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="roman">07</div>
+        <div class="sec-titles"><h2>Petições produzidas</h2>
+          <div class="sec-desc">Petições por advogado e por time — precisa de critério definido.</div></div>
+      </div>
+      <div class="fin-cards" id="prod-peticoes-cards"></div>
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-label">Petições produzidas por advogado</div>
+        <div class="hbar-list" id="prod-peticoes-por-adv"><div class="stub"><span class="stub-ico">—</span><b>Petições produzidas</b> não tem contador nativo no EasyJur. Precisa de critério (tag de andamento, tipo de tarefa no timesheet, ou workflow).
+          <div class="stub-tag falta">a definir</div></div></div>
       </div>
     </section>
   </div>
