@@ -196,6 +196,86 @@
           `<div class="data-note warn">⚠️ Auditar com o financeiro: R$ ${fmtBRLk(totProb).replace('R$ ','')} concentrado em transferências internas, distribuição de lucro e plano "3.12.29 - Erro operacional". Podem inflar o total de despesa se contados como operacional.</div>`);
       }
     }
+
+    // ===== FLUXO DE CAIXA FUTURO (receitas em aberto por vencimento) =====
+    const fluxo = await carregar('fluxo_futuro_receitas');
+    if(fluxo && Array.isArray(fluxo.receitas) && fluxo.receitas.length){
+      // 3 categorias: Mensal recorrente, Honorarios diversos (com contratos parcelados), Exitos (parcelados)
+      const catDe = (desc)=>{
+        const d = String(desc||'').trim();
+        if(d.startsWith('1.1.02')) return 'mensal';
+        if(d.startsWith('1.1.08') || d.startsWith('1.2.10')) return 'honorarios';
+        if(d.startsWith('1.1.01') || d.startsWith('1.1.06') || d.startsWith('1.1.07')) return 'exito';
+        return 'outros';
+      };
+      const hoje = new Date();
+      // define os proximos 6 meses (YYYY-MM)
+      const meses = [];
+      for(let i=0; i<6; i++){
+        const d = new Date(hoje.getFullYear(), hoje.getMonth()+i, 1);
+        meses.push(d.toISOString().slice(0,7));
+      }
+      // acumula por mes e por categoria
+      const acc = {};
+      meses.forEach(m => { acc[m] = {mensal:0, honorarios:0, exito:0, outros:0}; });
+      fluxo.receitas.forEach(r => {
+        const v = r.data_vencimento || '';
+        const mes = String(v).slice(0,7);
+        if(!acc[mes]) return; // fora dos 6 proximos
+        const c = catDe(r.plano_desc);
+        acc[mes][c] += (r.valor||0);
+      });
+      const totalCat = {mensal:0, honorarios:0, exito:0, outros:0};
+      Object.values(acc).forEach(m => Object.keys(m).forEach(k => totalCat[k] += m[k]));
+      const totalGeral = totalCat.mensal + totalCat.honorarios + totalCat.exito + totalCat.outros;
+
+      // cards de resumo
+      if($('#fin-fluxo-cards')){
+        $('#fin-fluxo-cards').innerHTML =
+          card('Total 6 meses', fmtBRLk(totalGeral), 'Recebimentos previstos com vencimento agendado', true) +
+          card('Mensal recorrente', fmtBRLk(totalCat.mensal), `${((totalCat.mensal/totalGeral)*100||0).toFixed(0)}% do fluxo`) +
+          card('Honorários diversos', fmtBRLk(totalCat.honorarios), `${((totalCat.honorarios/totalGeral)*100||0).toFixed(0)}% · inclui contratos parcelados`) +
+          card('Êxitos', fmtBRLk(totalCat.exito), `${((totalCat.exito/totalGeral)*100||0).toFixed(0)}% · êxitos parcelados`);
+      }
+
+      // gráfico stacked por mês
+      const cont = $('#fin-fluxo-barras');
+      if(cont){
+        const mxAno = Math.max(...meses.map(m => acc[m].mensal + acc[m].honorarios + acc[m].exito + acc[m].outros)) || 1;
+        const legenda =
+          `<span style="display:inline-flex;align-items:center;gap:6px;margin-left:14px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-gold);border-radius:2px"></span>Mensal</span>` +
+          `<span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-navy);border-radius:2px"></span>Honorários</span>` +
+          `<span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:#8a92ab;border-radius:2px"></span>Êxito</span>`;
+        const rows = meses.map(m => {
+          const c = acc[m];
+          const tot = c.mensal + c.honorarios + c.exito + c.outros;
+          if(tot === 0){
+            return `<div class="hbar-row ss-drill" data-drill="fluxo-mes" data-drill-ctx="${m}">
+              <div class="hb-name">${fmtMesAno(m)}</div>
+              <div class="hbar-track"></div>
+              <div class="hb-val"><span style="color:var(--ss-mute)">—</span></div>
+            </div>`;
+          }
+          const pm = (c.mensal/tot*100).toFixed(1);
+          const ph = (c.honorarios/tot*100).toFixed(1);
+          const pe = (c.exito/tot*100).toFixed(1);
+          const po = (c.outros/tot*100).toFixed(1);
+          const largTot = Math.round(tot/mxAno*100);
+          return `<div class="hbar-row ss-drill" data-drill="fluxo-mes" data-drill-ctx="${m}">
+            <div class="hb-name">${fmtMesAno(m)}</div>
+            <div class="hbar-track" style="display:flex;width:${largTot}%;min-width:${largTot}%">
+              <div style="height:100%;background:var(--ss-gold);width:${pm}%" title="Mensal: ${fmtBRLk(c.mensal)} (${pm}%)"></div>
+              <div style="height:100%;background:var(--ss-navy);width:${ph}%" title="Honorários: ${fmtBRLk(c.honorarios)} (${ph}%)"></div>
+              <div style="height:100%;background:#8a92ab;width:${pe}%" title="Êxito: ${fmtBRLk(c.exito)} (${pe}%)"></div>
+              <div style="height:100%;background:#c9cdd6;width:${po}%" title="Outros: ${fmtBRLk(c.outros)} (${po}%)"></div>
+            </div>
+            <div class="hb-val">${fmtBRLk(tot)}<small>M ${pm}% · H ${ph}% · Ê ${pe}%</small></div>
+          </div>`;
+        }).join('');
+        cont.innerHTML = `<div class="hbar-list">${rows}</div>
+          <div class="data-note" style="margin-top:14px"><b>${fmtNum(fluxo.qtd||0)}</b> contas a receber com vencimento futuro · ${legenda}</div>`;
+      }
+    }
   }
 
   // ---------- ABA PRODUÇÃO ----------
@@ -1171,6 +1251,30 @@
     }
   });
 
+
+  // Drill: receitas em aberto de um mês específico (fluxo de caixa)
+  registrarDrill('fluxo-mes', {
+    eyebrow: 'Financeiro · Fluxo de caixa',
+    titulo: (ctx)=> ctx ? `Recebimentos previstos · ${fmtMesAno(ctx)}` : 'Recebimentos previstos',
+    carregar: ()=> carregar('fluxo_futuro_receitas'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.receitas){ drawerTabela([],[]); return; }
+      const filtradas = d.receitas.filter(r => String(r.data_vencimento||'').slice(0,7) === ctx)
+        .sort((a,b)=>String(a.data_vencimento).localeCompare(String(b.data_vencimento)));
+      const soma = filtradas.reduce((s,r)=>s+(r.valor||0),0);
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(filtradas.length)}</b> recebimentos previstos · total <b>${fmtBRL(soma)}</b>`;
+      drawerTabela([
+        {h:'Vencimento', render:r=>fmtData(r.data_vencimento), mute:true},
+        {h:'Plano', render:r=>r.plano_desc||'—', mute:true},
+        {h:'Descrição', render:r=>r.descricao||'<span style="color:var(--ss-mute)">—</span>'},
+        {h:'Parcela', render:r=>r.parcela && r.parcelas ? `${r.parcela}/${r.parcelas}` : '—', mute:true},
+        {h:'Cliente ID', render:r=>r.id_cliente||'—', mute:true},
+        {h:'Valor', num:true, render:r=>fmtBRL(r.valor||0)},
+      ], filtradas, {dateKey:'data_vencimento'});
+    }
+  });
+
   // Expor globalmente pra os handlers onclick usarem
   window.ssDrill = abrirDrawer;
 
@@ -1197,6 +1301,7 @@
     processos_por_area_indice: 'dados/processos_por_area_indice.json',
     processos_parados: 'dados/processos_parados.json',
     processos_grandes: 'dados/processos_grandes.json',
+    fluxo_futuro_receitas: 'dados/fluxo_futuro_receitas.json',
   });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
