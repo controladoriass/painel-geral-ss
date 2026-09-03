@@ -54,6 +54,8 @@ MAPA = {
     "visoes_extras":                  "financeiro_visoes_extras.json",
     "clientes_top_nomes":             "clientes_top_nomes.json",
     "rateio_assessoria":              "rateio_assessoria.json",
+    # comercial: assessorias mensais em prospeccao + recorte por periodo (mes/semana)
+    "comercial_extras":               "comercial_extras.json",
 }
 
 def main():

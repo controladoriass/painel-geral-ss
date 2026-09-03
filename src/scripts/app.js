@@ -696,6 +696,57 @@
           — o comercial precisa preencher o valor no cadastro.<div class="stub-tag falta">cadastro pendente</div></div>`;
       }
     }
+
+    // 04 Assessorias mensais em prospecção + 05 Recorte por período (comercial_extras)
+    const cx = await carregar('comercial_extras');
+    if(cx){
+      // === 04 Assessorias mensais ===
+      const a = cx.assessorias_mensais || {};
+      if($('#com-assessorias-cards')){
+        $('#com-assessorias-cards').innerHTML = [
+          card('Total mensais no funil', fmtNum(a.total_mensais||0), 'todas classificadas como mensal', false),
+          card('Em prospecção', fmtNum(a.em_prospeccao||0), 'briefing, proposta ou negociação', true),
+          card('Fechadas',      fmtNum(a.fechadas||0),      'contrato assinado (histórico)', false),
+          card('Recusadas',     fmtNum(a.recusadas||0),     'não contratadas (histórico)', false),
+        ].join('');
+      }
+      if($('#com-assessorias-por-vend')){
+        const arr = a.por_vendedor_prospeccao || [];
+        if(arr.length){
+          const mx = Math.max(...arr.map(x=>x.n||0))||1;
+          $('#com-assessorias-por-vend').innerHTML = arr.map(v=>`<div class="hbar-row" data-drill="assessorias-mensais-vendedor" data-drill-ctx='${JSON.stringify({vendedor:v.vendedor}).replace(/'/g,"&apos;")}'>
+            <div class="hb-name" title="${v.vendedor}">${v.vendedor}</div>
+            <div class="hbar-track"><div class="hbar-fill gold" style="width:${Math.round((v.n||0)/mx*100)}%"></div></div>
+            <div class="hb-val">${fmtNum(v.n||0)}<small>oportunidades em aberto</small></div>
+          </div>`).join('');
+        }
+      }
+
+      // === 05 Recorte por período ===
+      const p = cx.periodo || {};
+      const M = (p.mes||{}).todas || {};
+      const S = (p.semana||{}).todas || {};
+      if($('#com-periodo-cards')){
+        $('#com-periodo-cards').innerHTML = [
+          card('Criadas no mês',    fmtNum(M.criadas||0),   (p.mes?.rotulo)||'', true),
+          card('Fechadas no mês',   fmtNum(M.fechadas||0),  M.valor_fechadas? fmtBRLk(M.valor_fechadas):'—', false),
+          card('Criadas na semana', fmtNum(S.criadas||0),   (p.semana?.rotulo)||'', false),
+          card('Fechadas na semana',fmtNum(S.fechadas||0),  S.valor_fechadas? fmtBRLk(S.valor_fechadas):'—', false),
+        ].join('');
+      }
+      const renderPeriodoVend = (elId, arr) => {
+        const el = $(elId); if(!el) return;
+        if(!arr || !arr.length){ el.innerHTML = '<div class="stub"><span class="stub-ico">—</span>Nenhuma oportunidade no período.</div>'; return; }
+        const mx = Math.max(...arr.map(v => (v.criadas||0)+(v.fechadas||0)))||1;
+        el.innerHTML = arr.map(v=>`<div class="hbar-row">
+          <div class="hb-name" title="${v.vendedor}">${v.vendedor}</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:${Math.round(((v.criadas||0)+(v.fechadas||0))/mx*100)}%"></div></div>
+          <div class="hb-val">${fmtNum((v.criadas||0)+(v.fechadas||0))}<small>${v.criadas||0} criadas · ${v.fechadas||0} fech · ${v.recusadas||0} rec</small></div>
+        </div>`).join('');
+      };
+      renderPeriodoVend('#com-mes-por-vend',    (p.mes||{}).todas?.por_vendedor);
+      renderPeriodoVend('#com-semana-por-vend', (p.semana||{}).todas?.por_vendedor);
+    }
   }
 
   // ---------- FORMULÁRIOS (dados vindos da planilha via Apps Script) ----------

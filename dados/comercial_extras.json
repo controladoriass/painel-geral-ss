@@ -1,0 +1,827 @@
+{
+  "assessorias_mensais": {
+    "total_mensais": 176,
+    "em_prospeccao": 67,
+    "fechadas": 73,
+    "recusadas": 36,
+    "por_status": [
+      {
+        "label": "Fechado",
+        "n": 73
+      },
+      {
+        "label": "Proposta",
+        "n": 56
+      },
+      {
+        "label": "Recusado",
+        "n": 36
+      },
+      {
+        "label": "Negociação",
+        "n": 8
+      },
+      {
+        "label": "Briefing",
+        "n": 3
+      }
+    ],
+    "por_vendedor_prospeccao": [
+      {
+        "vendedor": "Yasmin Lazouwnik",
+        "n": 28
+      },
+      {
+        "vendedor": "Bruna Gabrielli Vidal ",
+        "n": 17
+      },
+      {
+        "vendedor": "VANESSA MARAGNO OSELLAME",
+        "n": 15
+      },
+      {
+        "vendedor": "Erika Martins da Silva",
+        "n": 6
+      },
+      {
+        "vendedor": "Fernanda Xanteli Faissel ",
+        "n": 1
+      }
+    ],
+    "prospeccao_detalhe": [
+      {
+        "id": 221235,
+        "numero": 245,
+        "nome": "AGV SELENT - ASSESSORIA JURIDICA",
+        "cliente_nome": "AGV Selent Construtora e Incorporadora Ltda",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Briefing",
+        "valor_total": 0,
+        "data": "2022-01-31"
+      },
+      {
+        "id": 221180,
+        "numero": 236,
+        "nome": "ALMEIDA - ASSESSORIA JURIDICA",
+        "cliente_nome": "A DE ALMEIDA & CIA LTDA",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 0,
+        "data": "2022-01-28"
+      },
+      {
+        "id": 254306,
+        "numero": 564,
+        "nome": "ANDERSON HALLA - ASSESSORIA TRIBUTARIA",
+        "cliente_nome": "ANDERSON HALLA",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 3636,
+        "data": "2022-08-01"
+      },
+      {
+        "id": 263151,
+        "numero": 736,
+        "nome": "AS RAMOS - ASSESSORIA CONTRATOS",
+        "cliente_nome": "AS Ramos Empreendimentos Ltda.",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 8484.8,
+        "data": "2022-11-30"
+      },
+      {
+        "id": 221238,
+        "numero": 246,
+        "nome": "C. SEGER - ASSESSORIA JURIDICA",
+        "cliente_nome": "Seger Construtora e Incorporadora Ltda",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Briefing",
+        "valor_total": 0,
+        "data": "2022-01-31"
+      },
+      {
+        "id": 222243,
+        "numero": 279,
+        "nome": "FANTOY -  DIFAL ",
+        "cliente_nome": "R&R Staack Comércio de Colecionáveis Eireli ME",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Negociação",
+        "valor_total": 3500,
+        "data": "2022-02-09"
+      },
+      {
+        "id": 221936,
+        "numero": 265,
+        "nome": "GAIO SERPA - ASSESSORIA JURIDICA TRABALHISTA E CONTRATOS",
+        "cliente_nome": "SERPA PRÉ FABRICADOS LTDA - SERPA",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Negociação",
+        "valor_total": 3636,
+        "data": "2022-02-04"
+      },
+      {
+        "id": 221148,
+        "numero": 223,
+        "nome": "GIACOMOSSI - ASSESSORIA JURIDICA",
+        "cliente_nome": "GIACOMOSSI ESTRUTURAS EIRELI",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 0,
+        "data": "2022-01-28"
+      },
+      {
+        "id": 248421,
+        "numero": 455,
+        "nome": "INOVEN - COBRANCA (EXTRA) JUDICIAL",
+        "cliente_nome": "INOVEN COMÉRCIO INTERNACIONAL LTDA - INOVEN",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 6060,
+        "data": "2022-05-23"
+      },
+      {
+        "id": 263344,
+        "numero": 741,
+        "nome": "INPASA - ASSESSORIA ADUANEIRO",
+        "cliente_nome": "Inpasa Agroindustrial S/A",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 16968,
+        "data": "2022-12-05"
+      },
+      {
+        "id": 229664,
+        "numero": 429,
+        "nome": "LUCAS SALUM - ASSESSORIA MENSAL",
+        "cliente_nome": "Lucas Habib Salum Mello",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 2424,
+        "data": "2022-05-03"
+      },
+      {
+        "id": 228027,
+        "numero": 397,
+        "nome": "MAGO EMPREENDIMENTOS SPE - RENOVAÇÃO DO CONTRATO",
+        "cliente_nome": "MAGO EMPREENDIMENTOS SPE LTDA - MAGO",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 3030,
+        "data": "2022-04-07"
+      },
+      {
+        "id": 224491,
+        "numero": 338,
+        "nome": "RECH COMERCIO - ASSESSORIA JURIDICA",
+        "cliente_nome": "KMR BRASIL LTDA - FILIAL - HELI BRASIL EMPILHADEIRAS",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 2424,
+        "data": "2022-03-09"
+      },
+      {
+        "id": 221967,
+        "numero": 268,
+        "nome": "SISPLAN SISTEMAS - ASSESSORIA JURIDICA",
+        "cliente_nome": "Sisplan Sistemas e Planejamento Eireli",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 8484,
+        "data": "2022-02-04"
+      },
+      {
+        "id": 225528,
+        "numero": 352,
+        "nome": "SUPERIA - ASSESSORIA JURIDICA ",
+        "cliente_nome": "SUPERIA TRADING LTDA",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 6060,
+        "data": "2022-03-18"
+      },
+      {
+        "id": 254237,
+        "numero": 559,
+        "nome": "VERSATIL - ASSESSORIA JURIDICA",
+        "cliente_nome": "VERSATIL INTERNACIONAL LTDA - IMPORTADORA VERSATIL",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 4242,
+        "data": "2022-07-29"
+      },
+      {
+        "id": 251211,
+        "numero": 492,
+        "nome": "WS GROUP - ASSESSORIA MENSAL",
+        "cliente_nome": "WS ARQUITETURA E EDIFICACOES EIRELI",
+        "responsavel_nome": "Bruna Gabrielli Vidal ",
+        "status_label": "Proposta",
+        "valor_total": 6060,
+        "data": "2022-06-17"
+      },
+      {
+        "id": 213629,
+        "numero": 19,
+        "nome": "LUFAMAR - ASSESSORIA",
+        "cliente_nome": "Lufamar Tecidos Ltda.",
+        "responsavel_nome": "Erika Martins da Silva",
+        "status_label": "Proposta",
+        "valor_total": 4400,
+        "data": "2021-10-21"
+      },
+      {
+        "id": 215405,
+        "numero": 72,
+        "nome": "MUNDO MANIA  - ASSESSORIA",
+        "cliente_nome": "Mundo Mania Confecção Ltda",
+        "responsavel_nome": "Erika Martins da Silva",
+        "status_label": "Negociação",
+        "valor_total": 2200,
+        "data": "2021-11-12"
+      },
+      {
+        "id": 215427,
+        "numero": 75,
+        "nome": "MURILO - ASSESSORIA",
+        "cliente_nome": "MURILO COELHO DE SOUZA FILHO",
+        "responsavel_nome": "Erika Martins da Silva",
+        "status_label": "Negociação",
+        "valor_total": 2200,
+        "data": "2021-11-12"
+      },
+      {
+        "id": 217533,
+        "numero": 109,
+        "nome": "ROCKENBACH - PLANEJAMENTO TRIBUTÁRIO",
+        "cliente_nome": "Rockenbach & Rockenbach Ltda",
+        "responsavel_nome": "Erika Martins da Silva",
+        "status_label": "Negociação",
+        "valor_total": 3800,
+        "data": "2021-12-03"
+      },
+      {
+        "id": 215291,
+        "numero": 67,
+        "nome": "TECELAGEM MARTINS - ASSESSORIA",
+        "cliente_nome": "TECELAGEM MARTINS LTDA",
+        "responsavel_nome": "Erika Martins da Silva",
+        "status_label": "Proposta",
+        "valor_total": 3300,
+        "data": "2021-11-11"
+      },
+      {
+        "id": 215294,
+        "numero": 70,
+        "nome": "ZANELLA - ASSESSORIA",
+        "cliente_nome": "ZANELLA CONSTRUTORA EIRELI",
+        "responsavel_nome": "Erika Martins da Silva",
+        "status_label": "Negociação",
+        "valor_total": 3300,
+        "data": "2021-11-11"
+      },
+      {
+        "id": 542276,
+        "numero": 2673,
+        "nome": "ASSESSORIA TRIBUTÁRIA + TRANSAÇÃO",
+        "cliente_nome": "VITALMAR COMERCIO E INDUSTRIA DE PESCADOS LTDA",
+        "responsavel_nome": "Fernanda Xanteli Faissel ",
+        "status_label": "Proposta",
+        "valor_total": 8105,
+        "data": "2026-01-26"
+      },
+      {
+        "id": 402892,
+        "numero": 1356,
+        "nome": "AIN GLOBAL ASSESSORIA ADUANEIRA",
+        "cliente_nome": "AIN GLOBAL IMPORTAÇÃO E EXPORTAÇÃO LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 4942,
+        "data": "2024-03-13"
+      },
+      {
+        "id": 401040,
+        "numero": 1335,
+        "nome": "ALIVEPRO - ASSESSORIA ADUANEIRO",
+        "cliente_nome": "ALIVEPRO IMPORTACAO E DISTRIBUICAO LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 2824,
+        "data": "2024-03-01"
+      },
+      {
+        "id": 372477,
+        "numero": 1111,
+        "nome": "AM CONSTRUTORA - ASSESSORIA MENSAL",
+        "cliente_nome": "AM SELECT CONSTRUCOES LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 2824,
+        "data": "2023-09-19"
+      },
+      {
+        "id": 407684,
+        "numero": 1442,
+        "nome": "AYA - ASSESSORIA ADUANEIRA",
+        "cliente_nome": "AYA GLOBAL AGENCIAMENTOS LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 2824,
+        "data": "2024-04-15"
+      },
+      {
+        "id": 381038,
+        "numero": 1175,
+        "nome": "BLUE KING - ASSESSORIA",
+        "cliente_nome": "BLUE KING ESTUDIO DE ARTE GRAFICA E COMERCIO DE MOVEIS LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 3960,
+        "data": "2023-11-10"
+      },
+      {
+        "id": 402629,
+        "numero": 1349,
+        "nome": "DOBRASIL  ASSESSORIA MENSAL",
+        "cliente_nome": "DOBRASIL INDÚSTRIA DE ARTEFATOS PLÁSTICOS LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 7060,
+        "data": "2024-03-12"
+      },
+      {
+        "id": 429871,
+        "numero": 1716,
+        "nome": "GRUPO KEFRAYA - ASSESSORIA MENSAL ",
+        "cliente_nome": "KIM AUGUSTO ZANONI",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 5648,
+        "data": "2024-08-19"
+      },
+      {
+        "id": 395046,
+        "numero": 1310,
+        "nome": "GUILHERME - CONTRATO POR MES ",
+        "cliente_nome": "GUILHERME WENDPAP",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 2400,
+        "data": "2024-02-19"
+      },
+      {
+        "id": 382313,
+        "numero": 1195,
+        "nome": "INOVEN - DEMANDAS DE COBRANÇA",
+        "cliente_nome": "INOVEN COMÉRCIO INTERNACIONAL LTDA - INOVEN",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 2640,
+        "data": "2023-11-22"
+      },
+      {
+        "id": 390526,
+        "numero": 1270,
+        "nome": "K2 ASSESSORIA",
+        "cliente_nome": "K2 MADEIRAS LTDA EPP - KREIBICH",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 3530,
+        "data": "2024-01-24"
+      },
+      {
+        "id": 288404,
+        "numero": 982,
+        "nome": "MARCO AURELIO CARDOZO - ASSESSORIA MENSAL P. FISICA",
+        "cliente_nome": "MARCO AURELIO CARDOZO AMBROSIO - MG7",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 7920,
+        "data": "2023-07-07"
+      },
+      {
+        "id": 402257,
+        "numero": 1345,
+        "nome": "NWR DO BRASIL - ASSESSORIA ADUANEIRA",
+        "cliente_nome": "NWR DO BRASIL IMPORTACAO E EXPORTACAO LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Briefing",
+        "valor_total": 2840,
+        "data": "2024-03-08"
+      },
+      {
+        "id": 395893,
+        "numero": 1318,
+        "nome": "PUPI - ASSESSORIA ADUANEIRA TRAB",
+        "cliente_nome": "PUPI IMPORTS IMPORTACAO E COMERCIO LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 2824,
+        "data": "2024-02-22"
+      },
+      {
+        "id": 289447,
+        "numero": 995,
+        "nome": "ROY INCORPORADORA - ASSESSORIA MENSAL",
+        "cliente_nome": "ROY INCORPORADORA LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 2640,
+        "data": "2023-07-18"
+      },
+      {
+        "id": 287603,
+        "numero": 976,
+        "nome": "TURMINA - ASSEESSORIA MENSAL ",
+        "cliente_nome": "TURMINA EMPREENDIMENTOS IMOBILIARIOS LTDA",
+        "responsavel_nome": "VANESSA MARAGNO OSELLAME",
+        "status_label": "Proposta",
+        "valor_total": 3960,
+        "data": "2023-06-30"
+      },
+      {
+        "id": 453197,
+        "numero": 2033,
+        "nome": "ADMINISTRAÇÃO DE PASSIVO",
+        "cliente_nome": "DANIELA DE MORAES GARCIA DE ABREU",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 6072,
+        "data": "2025-01-28"
+      },
+      {
+        "id": 558193,
+        "numero": 2798,
+        "nome": "ADMINISTRAÇÃO PASSIVO FISCAL",
+        "cliente_nome": "LATICINIOS MONDAI LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 9726,
+        "data": "2026-04-09"
+      },
+      {
+        "id": 410922,
+        "numero": 1480,
+        "nome": "ASSESSORIA BANCARIA",
+        "cliente_nome": "BEVIANI TRANSPORTES LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 8472,
+        "data": "2024-05-06"
+      },
+      {
+        "id": 422062,
+        "numero": 1586,
+        "nome": "ASSESSORIA LICITAÇÃO ",
+        "cliente_nome": "ALTERMED MATERIAL MEDICO HOSPITALAR LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 4942,
+        "data": "2024-06-28"
+      },
+      {
+        "id": 595184,
+        "numero": 3157,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "JNF ITAPEMA FITNESS ACADEMIA LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Negociação",
+        "valor_total": 3340,
+        "data": "2026-09-01"
+      },
+      {
+        "id": 571397,
+        "numero": 2957,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "VIDAL EMPREENDIMENTOS LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 1500,
+        "data": "2026-06-23"
+      },
+      {
+        "id": 551569,
+        "numero": 2740,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "NATHALIA PARANHOS BUZANELLO",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 5000,
+        "data": "2026-03-06"
+      },
+      {
+        "id": 520971,
+        "numero": 2524,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "BELL´ARTE INDUSTRIA DE ESTOFADOS LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 3036,
+        "data": "2025-09-16"
+      },
+      {
+        "id": 496837,
+        "numero": 2291,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "MARIOTTO ENGENHARIA LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 4554,
+        "data": "2025-05-12"
+      },
+      {
+        "id": 493162,
+        "numero": 2253,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "A BRASILEIRA COMERCIO DE SOUVENIRS LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 1867.14,
+        "data": "2025-04-16"
+      },
+      {
+        "id": 490265,
+        "numero": 2207,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "GT HOME ADMINISTRACAO DE BENS E PARTICIPACOES LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 6072,
+        "data": "2025-04-02"
+      },
+      {
+        "id": 490053,
+        "numero": 2197,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "KALANI EMPREENDIMENTOS",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 3812.4,
+        "data": "2025-04-01"
+      },
+      {
+        "id": 486058,
+        "numero": 2154,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "INCOR EMPREENDIMENTOS IMOBILIARIOS LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 4554,
+        "data": "2025-03-14"
+      },
+      {
+        "id": 452990,
+        "numero": 2012,
+        "nome": "ASSESSORIA MENSAL",
+        "cliente_nome": "INCOR EMPREENDIMENTOS IMOBILIARIOS LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 4554,
+        "data": "2025-01-27"
+      },
+      {
+        "id": 435395,
+        "numero": 1809,
+        "nome": "ASSESSORIA MENSAL ",
+        "cliente_nome": "VINICIUS ANTONIO BENELLI ALVES DA SILVA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 4942,
+        "data": "2024-09-19"
+      },
+      {
+        "id": 431374,
+        "numero": 1742,
+        "nome": "ASSESSORIA MENSAL ",
+        "cliente_nome": "HUB PORT OPERADOR LOGISTICO LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 2824,
+        "data": "2024-08-27"
+      },
+      {
+        "id": 420798,
+        "numero": 1564,
+        "nome": "ASSESSORIA MENSAL ",
+        "cliente_nome": "Thais Vandoni Curvo",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 2824,
+        "data": "2024-06-19"
+      },
+      {
+        "id": 506860,
+        "numero": 2383,
+        "nome": "ASSESSORIA MENSAL - TRIBUTÁRIO",
+        "cliente_nome": "JH TINTURARIA E ESTAMPARIA LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 3036,
+        "data": "2025-07-04"
+      },
+      {
+        "id": 532403,
+        "numero": 2634,
+        "nome": "ASSESSORIA MENSAL CONTENCIOSO",
+        "cliente_nome": "EXPRESSO NOVA ROTA TRANSPORTES DE CARGAS LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 2000,
+        "data": "2025-11-26"
+      },
+      {
+        "id": 420851,
+        "numero": 1566,
+        "nome": "ASSESSORIA MENSAL EXTRA",
+        "cliente_nome": "PREMIUM DECOR DECORACOES LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 0.01,
+        "data": "2024-06-19"
+      },
+      {
+        "id": 556672,
+        "numero": 2787,
+        "nome": "Auditoria Preventiva Tributária",
+        "cliente_nome": "DYNAMIS IMPORTADORA E DISTRIBUIDORA LTDA - DYNAMIS",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 50000,
+        "data": "2026-03-31"
+      },
+      {
+        "id": 484052,
+        "numero": 2123,
+        "nome": "BANCARIO 6 BANCOS",
+        "cliente_nome": "LATICINIOS MONDAI LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 6072,
+        "data": "2025-03-05"
+      },
+      {
+        "id": 484103,
+        "numero": 2125,
+        "nome": "BANCÁRIO",
+        "cliente_nome": "GLINFERTIL FERTILIZANTES LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 6072,
+        "data": "2025-03-05"
+      },
+      {
+        "id": 403580,
+        "numero": 1372,
+        "nome": "CLASSE TEXTIL PASSIVO BANCARIO ",
+        "cliente_nome": "CLASSE TEXTIL LTDA - CLASSE",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 7060,
+        "data": "2024-03-18"
+      },
+      {
+        "id": 404821,
+        "numero": 1405,
+        "nome": "GLINFERTIL - BANCARIO ",
+        "cliente_nome": "GLINFERTIL FERTILIZANTES LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 8472,
+        "data": "2024-03-26"
+      },
+      {
+        "id": 429002,
+        "numero": 1695,
+        "nome": "PASSIVO FISCAL",
+        "cliente_nome": "A E B EMPREENDIMENTOS TURISTICOS LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Negociação",
+        "valor_total": 2824,
+        "data": "2024-08-13"
+      },
+      {
+        "id": 453127,
+        "numero": 2026,
+        "nome": "PRESTAÇÃO DE SERVIÇOS",
+        "cliente_nome": "FIACAO ALLIANCE LTDA",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 6072,
+        "data": "2025-01-27"
+      },
+      {
+        "id": 592183,
+        "numero": 3144,
+        "nome": "REVISÃO BANCÁRIA",
+        "cliente_nome": "SANTA AGRO AGRICOLA E INSUMOS S/A",
+        "responsavel_nome": "Yasmin Lazouwnik",
+        "status_label": "Proposta",
+        "valor_total": 3242,
+        "data": "2026-08-26"
+      }
+    ]
+  },
+  "periodo": {
+    "hoje": "2026-09-03",
+    "mes": {
+      "inicio": "2026-09-01",
+      "rotulo": "2026-09",
+      "todas": {
+        "criadas": 8,
+        "fechadas": 2,
+        "recusadas": 0,
+        "valor_criadas": 3340,
+        "valor_fechadas": 35210,
+        "por_vendedor": [
+          {
+            "vendedor": "Yasmin Lazouwnik",
+            "criadas": 4,
+            "fechadas": 2,
+            "recusadas": 0,
+            "valor_fechado": 35210
+          },
+          {
+            "vendedor": "Lisandra Vieira Holzmann",
+            "criadas": 3,
+            "fechadas": 0,
+            "recusadas": 0,
+            "valor_fechado": 0
+          },
+          {
+            "vendedor": "Lucas Freitas Honorato de Oliveira",
+            "criadas": 1,
+            "fechadas": 0,
+            "recusadas": 0,
+            "valor_fechado": 0
+          }
+        ]
+      },
+      "mensais": {
+        "criadas": 1,
+        "fechadas": 1,
+        "recusadas": 0,
+        "valor_criadas": 3340,
+        "valor_fechadas": 16210,
+        "por_vendedor": [
+          {
+            "vendedor": "Yasmin Lazouwnik",
+            "criadas": 1,
+            "fechadas": 1,
+            "recusadas": 0,
+            "valor_fechado": 16210
+          }
+        ]
+      }
+    },
+    "semana": {
+      "inicio": "2026-08-31",
+      "rotulo": "2026-08-31 → 2026-09-03",
+      "todas": {
+        "criadas": 10,
+        "fechadas": 2,
+        "recusadas": 0,
+        "valor_criadas": 3340,
+        "valor_fechadas": 35210,
+        "por_vendedor": [
+          {
+            "vendedor": "Yasmin Lazouwnik",
+            "criadas": 4,
+            "fechadas": 2,
+            "recusadas": 0,
+            "valor_fechado": 35210
+          },
+          {
+            "vendedor": "Lisandra Vieira Holzmann",
+            "criadas": 5,
+            "fechadas": 0,
+            "recusadas": 0,
+            "valor_fechado": 0
+          },
+          {
+            "vendedor": "Lucas Freitas Honorato de Oliveira",
+            "criadas": 1,
+            "fechadas": 0,
+            "recusadas": 0,
+            "valor_fechado": 0
+          }
+        ]
+      },
+      "mensais": {
+        "criadas": 1,
+        "fechadas": 1,
+        "recusadas": 0,
+        "valor_criadas": 3340,
+        "valor_fechadas": 16210,
+        "por_vendedor": [
+          {
+            "vendedor": "Yasmin Lazouwnik",
+            "criadas": 1,
+            "fechadas": 1,
+            "recusadas": 0,
+            "valor_fechado": 16210
+          }
+        ]
+      }
+    }
+  }
+}
