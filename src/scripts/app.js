@@ -445,6 +445,61 @@
         card('Causa ≥ R$ 1 mi', fmtNum(gr.acima_1mi||0), 'Processos grandes') +
         card('Causa ≥ R$ 500 mil', fmtNum(gr.acima_500k||0), 'Alto valor');
     }
+
+    // ===== TIMESHEET últimos 30 dias =====
+    const ts = await carregar('timesheet_30d');
+    if(ts && Array.isArray(ts.lancamentos)){
+      // Helper: converte "HH:MM:SS" ou "HH:MM" em minutos
+      const paraMinutos = (str)=>{
+        if(!str) return 0;
+        const partes = String(str).split(':').map(n=>parseInt(n,10)||0);
+        return (partes[0]||0)*60 + (partes[1]||0);
+      };
+      const fmtHoras = (min)=>{
+        const h = Math.floor(min/60);
+        const m = min%60;
+        return h.toLocaleString('pt-BR')+'h'+String(m).padStart(2,'0');
+      };
+      const porAdv = {};
+      const porCli = {};
+      let totalMin = 0;
+      let qtdLan = 0;
+      ts.lancamentos.forEach(l => {
+        const min = paraMinutos(l.tempo_timesheet);
+        totalMin += min;
+        qtdLan++;
+        const adv = String(l.nome_responsavel || '').trim() || '—';
+        porAdv[adv] = (porAdv[adv]||0) + min;
+        const cli = String(l.nome_cliente || '').trim() || '—';
+        porCli[cli] = (porCli[cli]||0) + min;
+      });
+
+      if($('#prod-timesheet-cards')){
+        const nAdv = Object.keys(porAdv).length;
+        const nCli = Object.keys(porCli).length;
+        $('#prod-timesheet-cards').innerHTML =
+          card('Horas registradas', fmtHoras(totalMin), `Nos últimos 30 dias · <b>${fmtNum(qtdLan)}</b> lançamentos`, true) +
+          card('Advogados ativos', fmtNum(nAdv), 'Com timesheet no período') +
+          card('Clientes atendidos', fmtNum(nCli), 'Com horas registradas') +
+          card('Média por lançamento', qtdLan? fmtHoras(Math.round(totalMin/qtdLan)) : '—', 'Duração média');
+      }
+      // top 12 advogados
+      if($('#prod-timesheet-adv')){
+        const top = Object.entries(porAdv).sort((a,b)=>b[1]-a[1]).slice(0,12);
+        const mx = top.length ? top[0][1] : 1;
+        barras($('#prod-timesheet-adv'), top.map(([nome, min])=>({
+          nome, valor: min, label: fmtHoras(min),
+        })), {gold:true, max:mx});
+      }
+      // top 12 clientes
+      if($('#prod-timesheet-cli')){
+        const top = Object.entries(porCli).sort((a,b)=>b[1]-a[1]).slice(0,12);
+        const mx = top.length ? top[0][1] : 1;
+        barras($('#prod-timesheet-cli'), top.map(([nome, min])=>({
+          nome, valor: min, label: fmtHoras(min),
+        })), {max:mx});
+      }
+    }
   }
 
   // ---------- ABA COMERCIAL ----------
@@ -1445,6 +1500,7 @@
     fluxo_futuro_receitas: 'dados/fluxo_futuro_receitas.json',
     fluxo_futuro_despesas: 'dados/fluxo_futuro_despesas.json',
     comparativo_fixa: 'dados/comparativo_fixa.json',
+    timesheet_30d: 'dados/timesheet_ultimos_30d.json',
   });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);

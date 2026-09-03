@@ -48,6 +48,8 @@ MAPA = {
     "fluxo_futuro_despesas":          "fluxo_futuro_despesas.json",
     # comparativo receita fixa x despesa fixa (serie historica)
     "comparativo_fixa":               "comparativo_fixa.json",
+    # timesheet dos ultimos 30 dias (por advogado + por cliente)
+    "timesheet_30d":                  "timesheet_ultimos_30d.json",
 }
 
 def main():
