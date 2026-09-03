@@ -1,0 +1,38 @@
+{
+  "gerado_em": "2026-09-03",
+  "fonte": "EasyJur list_processos (status=1) por area",
+  "pasta": "dados/processos_por_area",
+  "qtd_total": 13230,
+  "areas": [
+    {
+      "area_id": 35,
+      "area_nome": "Bancário",
+      "hash": "6ceb744ec231",
+      "qtd": 797
+    },
+    {
+      "area_id": 2,
+      "area_nome": "Cível",
+      "hash": "b13db90a9670",
+      "qtd": 7098
+    },
+    {
+      "area_id": 4,
+      "area_nome": "Penal-Criminal",
+      "hash": "63260bee45cf",
+      "qtd": 960
+    },
+    {
+      "area_id": 6,
+      "area_nome": "Trabalhista",
+      "hash": "8525480b5264",
+      "qtd": 1442
+    },
+    {
+      "area_id": 7,
+      "area_nome": "Tributário",
+      "hash": "39f167106c5e",
+      "qtd": 2933
+    }
+  ]
+}

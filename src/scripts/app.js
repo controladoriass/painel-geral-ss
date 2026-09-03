@@ -453,10 +453,13 @@
         row.setAttribute('data-drill-ctx', ctx);
       }
     });
-    // Cards do funil comercial → detalhe vendedores
-    $$('#com-funil-cards .fin-card').forEach(c=>{
+    // Cards do funil comercial: cada card = 1 etapa (Briefing/Proposta/etc)
+    const funilCards = $$('#com-funil-cards .fin-card');
+    const funilCtx = ['1','2','3','4','5']; // ordem: Briefing, Proposta, Negociação, Fechado, Recusado
+    funilCards.forEach((c,i)=>{
       c.classList.add('ss-drill');
-      c.setAttribute('data-drill','vendedores');
+      c.setAttribute('data-drill','oportunidades-etapa');
+      c.setAttribute('data-drill-ctx', funilCtx[i]||'');
     });
     // Cards de faturamento: cada um abre com seu recorte
     const fatCards = $$('#fin-fat-ano .fin-card');
@@ -480,10 +483,35 @@
     // Comercial: top oportunidades
     const topOp = $('#com-top-oport');
     if(topOp){ topOp.classList.add('ss-drill'); topOp.setAttribute('data-drill','top-oportunidades'); }
-    // Ranking vendedores
+    // Ranking vendedores: cada linha do ranking vira clicável (leva às oportunidades do vendedor)
     const panelVend = $('#com-por-vendedor');
-    const parentVend = panelVend && panelVend.closest('.panel');
-    if(parentVend){ parentVend.classList.add('ss-drill'); parentVend.setAttribute('data-drill','vendedores'); }
+    if(panelVend){
+      $$('#com-por-vendedor .hbar-row').forEach(row=>{
+        const nome = row.querySelector('.hb-name')?.getAttribute('title') || row.querySelector('.hb-name')?.textContent?.trim();
+        if(nome){
+          row.classList.add('ss-drill');
+          row.setAttribute('data-drill','oportunidades-vendedor');
+          row.setAttribute('data-drill-ctx', nome);
+        }
+      });
+    }
+    // Cards de alertas de produção: cada um leva ao drill correspondente
+    const alertasCards = $$('#prod-alertas-cards .fin-card');
+    // Ordem esperada: Parados >30d, Parados >90d, ≥R$1mi, ≥R$500k
+    const alertasCfg = [
+      {drill:'processos-parados', ctx:'30'},
+      {drill:'processos-parados', ctx:'90'},
+      {drill:'processos-grandes', ctx:'1000000'},
+      {drill:'processos-grandes', ctx:'500000'},
+    ];
+    alertasCards.forEach((c,i)=>{
+      const cfg = alertasCfg[i];
+      if(cfg){
+        c.classList.add('ss-drill');
+        c.setAttribute('data-drill', cfg.drill);
+        c.setAttribute('data-drill-ctx', cfg.ctx);
+      }
+    });
   }
 
   // ==========================================================
@@ -953,15 +981,193 @@
   registrarDrill('processos-por-area', {
     eyebrow: 'Produção · Carteira',
     titulo: 'Processos ativos por área',
-    carregar: ()=> carregar('detalhe_processos_por_area'),
-    renderizar: (d)=>{
-      if(!d || !d.areas){ drawerTabela([],[]); return; }
+    carregar: async ()=>{
+      const agregado = await carregar('detalhe_processos_por_area');
+      const indice = await carregar('processos_por_area_indice');
+      return { agregado, indice };
+    },
+    renderizar: ({agregado, indice})=>{
+      if(!agregado || !agregado.areas){ drawerTabela([],[]); return; }
       document.getElementById('ss-drawer-sub').innerHTML =
-        `<b>${fmtNum(d.total)}</b> processos ativos · <b>${d.areas.length}</b> áreas`;
+        `<b>${fmtNum(agregado.total)}</b> processos ativos · <b>${agregado.areas.length}</b> áreas · <i style="color:var(--ss-mute)">clique para detalhar</i>`;
+      // se tem indice detalhado, permite clique em cascata
+      const areasComDetalhe = new Set((indice?.areas||[]).map(a => (a.area_nome||'').toLowerCase()));
       drawerTabela([
-        {h:'Área do direito', render:a=>a.area||a.nome||'—'},
+        {h:'Área do direito', render:a=>{
+          const nome = a.area||a.nome||'—';
+          const temDetalhe = areasComDetalhe.has(nome.toLowerCase());
+          return temDetalhe
+            ? `<span style="color:var(--ss-navy);font-weight:600">${nome}</span> <span style="color:var(--ss-mute-2);font-size:10px">↗</span>`
+            : nome;
+        }},
         {h:'Ativos', num:true, render:a=>fmtNum(a.ativos||a.total||0)},
-      ], d.areas);
+      ], agregado.areas.map(a=>{
+        const nome = a.area||a.nome||'';
+        const temDetalhe = areasComDetalhe.has(nome.toLowerCase());
+        return temDetalhe ? {...a, _drill:'processos-area-lista', _drill_ctx:nome} : a;
+      }));
+    }
+  });
+
+  // Helper: baixa processos de uma area especifica
+  async function baixarProcessosArea(nomeArea){
+    const idx = await carregar('processos_por_area_indice');
+    if(!idx || !idx.areas) return null;
+    const meta = idx.areas.find(a => (a.area_nome||'').toLowerCase() === (nomeArea||'').toLowerCase());
+    if(!meta) return null;
+    try{
+      const r = await fetch(idx.pasta + '/' + meta.hash + '.json', {cache:'no-store'});
+      if(!r.ok) return null;
+      return await r.json();
+    }catch(e){ return null; }
+  }
+
+  // Drill: lista de processos de uma área específica
+  registrarDrill('processos-area-lista', {
+    eyebrow: 'Produção · Carteira por área',
+    titulo: (ctx)=> ctx ? `Processos ativos · ${ctx}` : 'Processos ativos',
+    carregar: (ctx)=> baixarProcessosArea(ctx),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.processos){
+        document.getElementById('ss-drawer-body').innerHTML =
+          `<div class="ss-drawer__empty"><b>Área sem coleta individual</b>${ctx||''}</div>`;
+        return;
+      }
+      const totalValor = d.processos.reduce((s,p)=>s+(p.valor_causa||0),0);
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(d.qtd)}</b> processos ativos · valor de causa total <b>${fmtBRLk(totalValor)}</b>`;
+      drawerTabela([
+        {h:'Nº processo', render:p=>p.numero||'—'},
+        {h:'Cliente', render:p=>p.cliente||'—'},
+        {h:'Contrário', render:p=>p.contrario||'—', mute:true},
+        {h:'Advogado', render:p=>p.advogado||'—', mute:true},
+        {h:'Cadastro', render:p=>fmtData(p.data_cadastro), mute:true},
+        {h:'Valor causa', num:true, render:p=>p.valor_causa ? fmtBRLk(p.valor_causa) : '—'},
+      ], d.processos, {dateKey:'data_cadastro'});
+    }
+  });
+
+  // Drill: processos parados (>30d ou >90d)
+  registrarDrill('processos-parados', {
+    eyebrow: 'Produção · Alertas',
+    titulo: (ctx)=> ctx === '90' ? 'Processos parados há mais de 90 dias' : 'Processos parados há mais de 30 dias',
+    carregar: ()=> carregar('processos_parados'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.processos){
+        document.getElementById('ss-drawer-body').innerHTML =
+          '<div class="ss-drawer__empty"><b>Sem coleta individual</b>Os processos parados individuais serão exibidos após a coleta terminar.</div>';
+        return;
+      }
+      // filtra por ctx (30 ou 90)
+      const dias = parseInt(ctx,10) || 30;
+      const hoje = new Date();
+      const filtrados = d.processos.filter(p=>{
+        const dt = p.data_atualizacao || p.ultimo_andamento || p.data_cadastro;
+        if(!dt) return false;
+        const t = new Date(String(dt).slice(0,10));
+        if(isNaN(t)) return false;
+        const diff = (hoje - t) / (1000*60*60*24);
+        return diff >= dias;
+      });
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(filtrados.length)}</b> processos parados há mais de <b>${dias} dias</b>`;
+      drawerTabela([
+        {h:'Nº processo', render:p=>p.numero||'—'},
+        {h:'Cliente', render:p=>p.cliente||'—'},
+        {h:'Área', render:p=>p.area_nome||'—', mute:true},
+        {h:'Advogado', render:p=>p.advogado||'—', mute:true},
+        {h:'Última movimentação', render:p=>fmtData(p.data_atualizacao||p.ultimo_andamento||p.data_cadastro), mute:true},
+        {h:'Valor causa', num:true, render:p=>p.valor_causa ? fmtBRLk(p.valor_causa) : '—'},
+      ], filtrados, {dateKey:'data_atualizacao'});
+    }
+  });
+
+  // Drill: processos grandes (valor de causa alto)
+  registrarDrill('processos-grandes', {
+    eyebrow: 'Produção · Alertas',
+    titulo: (ctx)=> ctx === '500000' ? 'Processos com causa ≥ R$ 500 mil' : 'Processos com causa ≥ R$ 1 milhão',
+    carregar: ()=> carregar('processos_grandes'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.processos){
+        document.getElementById('ss-drawer-body').innerHTML =
+          '<div class="ss-drawer__empty"><b>Sem coleta individual</b>Os processos grandes serão exibidos após a coleta terminar.</div>';
+        return;
+      }
+      const corte = parseInt(ctx,10) || 1000000;
+      const filtrados = d.processos.filter(p => (p.valor_causa||0) >= corte)
+        .sort((a,b)=>(b.valor_causa||0)-(a.valor_causa||0));
+      const totalValor = filtrados.reduce((s,p)=>s+(p.valor_causa||0),0);
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(filtrados.length)}</b> processos · valor de causa ≥ <b>${fmtBRLk(corte)}</b> · total <b>${fmtBRLk(totalValor)}</b>`;
+      drawerTabela([
+        {h:'Nº processo', render:p=>p.numero||'—'},
+        {h:'Cliente', render:p=>p.cliente||'—'},
+        {h:'Contrário', render:p=>p.contrario||'—', mute:true},
+        {h:'Área', render:p=>p.area_nome||'—', mute:true},
+        {h:'Cadastro', render:p=>fmtData(p.data_cadastro), mute:true},
+        {h:'Valor causa', num:true, render:p=>fmtBRLk(p.valor_causa||0)},
+      ], filtrados, {dateKey:'data_cadastro'});
+    }
+  });
+
+  // Drill: oportunidades por etapa do funil
+  registrarDrill('oportunidades-etapa', {
+    eyebrow: 'Comercial · Funil',
+    titulo: (ctx)=>{
+      const lbl = {'1':'Briefing','2':'Proposta','3':'Negociação','4':'Fechado','5':'Recusado'};
+      return `Oportunidades · ${lbl[ctx]||'Todas'}`;
+    },
+    carregar: ()=> carregar('detalhe_oportunidades_completo'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.oportunidades){
+        document.getElementById('ss-drawer-body').innerHTML =
+          '<div class="ss-drawer__empty"><b>Sem coleta individual</b>As oportunidades individuais serão exibidas após a coleta terminar.</div>';
+        return;
+      }
+      const filtradas = ctx ? d.oportunidades.filter(o=>String(o.status)===String(ctx)) : d.oportunidades;
+      const soma = filtradas.reduce((s,o)=>s+(o.valor_total||0),0);
+      const zeradas = filtradas.filter(o=>!o.valor_total).length;
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(filtradas.length)}</b> oportunidades · valor total <b>${fmtBRLk(soma)}</b>` +
+        (zeradas ? ` · <span style="color:var(--ss-warn)"><b>${zeradas}</b> sem valor cadastrado</span>` : '');
+      drawerTabela([
+        {h:'Nº', render:o=>o.numero||'—'},
+        {h:'Cliente', render:o=>o.cliente_nome||'—'},
+        {h:'Descrição', render:o=>o.nome||'—', mute:true},
+        {h:'Vendedor', render:o=>o.responsavel_nome||'—', mute:true},
+        {h:'Data', render:o=>fmtData(o.data), mute:true},
+        {h:'Valor', num:true, render:o=>o.valor_total ? fmtBRL(o.valor_total) : '<span class="ss-tag warn">R$ 0</span>'},
+      ], filtradas.slice().sort((a,b)=>(b.valor_total||0)-(a.valor_total||0)), {dateKey:'data'});
+    }
+  });
+
+  // Drill: oportunidades de um vendedor específico
+  registrarDrill('oportunidades-vendedor', {
+    eyebrow: 'Comercial · Vendedor',
+    titulo: (ctx)=> ctx ? `Oportunidades · ${ctx}` : 'Oportunidades',
+    carregar: ()=> carregar('detalhe_oportunidades_completo'),
+    renderizar: (d, ctx)=>{
+      if(!d || !d.oportunidades){
+        document.getElementById('ss-drawer-body').innerHTML =
+          '<div class="ss-drawer__empty"><b>Sem coleta individual</b>As oportunidades individuais serão exibidas após a coleta terminar.</div>';
+        return;
+      }
+      const alvo = (ctx||'').toLowerCase();
+      const filtradas = d.oportunidades.filter(o => (o.responsavel_nome||'').toLowerCase() === alvo);
+      const lbl = {'1':'Briefing','2':'Proposta','3':'Negociação','4':'Fechado','5':'Recusado'};
+      const porStatus = {};
+      filtradas.forEach(o => { porStatus[o.status] = (porStatus[o.status]||0)+1; });
+      const resumo = Object.entries(porStatus).map(([s,q]) => `${lbl[s]||s}: <b>${q}</b>`).join(' · ');
+      document.getElementById('ss-drawer-sub').innerHTML =
+        `<b>${fmtNum(filtradas.length)}</b> oportunidades · ${resumo}`;
+      drawerTabela([
+        {h:'Nº', render:o=>o.numero||'—'},
+        {h:'Cliente', render:o=>o.cliente_nome||'—'},
+        {h:'Descrição', render:o=>o.nome||'—', mute:true},
+        {h:'Etapa', render:o=>`<span class="ss-tag">${lbl[o.status]||o.status||'—'}</span>`},
+        {h:'Data', render:o=>fmtData(o.data), mute:true},
+        {h:'Valor', num:true, render:o=>o.valor_total ? fmtBRL(o.valor_total) : '<span class="ss-tag warn">R$ 0</span>'},
+      ], filtradas.slice().sort((a,b)=>(b.valor_total||0)-(a.valor_total||0)), {dateKey:'data'});
     }
   });
 
@@ -987,6 +1193,10 @@
     detalhe_processos_por_area: 'dados/detalhe_processos_por_area.json',
     lancamentos_receitas_indice: 'dados/lancamentos_receitas_indice.json',
     lancamentos_despesas_indice: 'dados/lancamentos_despesas_indice.json',
+    detalhe_oportunidades_completo: 'dados/detalhe_oportunidades_completo.json',
+    processos_por_area_indice: 'dados/processos_por_area_indice.json',
+    processos_parados: 'dados/processos_parados.json',
+    processos_grandes: 'dados/processos_grandes.json',
   });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);

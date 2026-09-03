@@ -37,6 +37,12 @@ MAPA = {
     # sao carregados sob demanda via fetch quando o usuario clica num plano especifico.
     "lancamentos_receitas_indice":  "lancamentos_receitas_indice.json",
     "lancamentos_despesas_indice":  "lancamentos_despesas_indice.json",
+    # NOTA: os arquivos abaixo NÃO vão no embed (grandes, carregados sob demanda via fetch quando usuário clica):
+    #   detalhe_oportunidades_completo (3k oportunidades ~1.4MB)
+    #   processos_por_area/*.json (16k processos)
+    #   processos_parados / processos_grandes
+    # Só os índices leves são embutidos:
+    "processos_por_area_indice":      "processos_por_area_indice.json",
 }
 
 def main():
