@@ -394,6 +394,110 @@
           </div>`;
       }
     }
+
+    // ===== 5B Rateio da assessoria mensal =====
+    const rat = await carregar('rateio_assessoria');
+    if(rat && $('#fin-rateio-cards')){
+      $('#fin-rateio-cards').innerHTML =
+        card('MRR analisado', fmtBRLk(rat.mrr_analisado||0),
+          `Top <b>${rat.clientes_analisados}</b> clientes com contrato mensal`, true) +
+        card('Com processos casados', fmtNum(rat.clientes_com_match_processos||0),
+          `De <b>${rat.clientes_analisados}</b> analisados`) +
+        card('Áreas rateadas', fmtNum((rat.rateio_geral_por_area||[]).length), 'Distribuição por área do direito') +
+        card('Advogados rateados', fmtNum((rat.rateio_geral_por_advogado||[]).length), 'Da capa dos processos');
+
+      if($('#fin-rateio-area')){
+        const areas = rat.rateio_geral_por_area || [];
+        const mx = areas.length ? areas[0].mrr_mensal : 1;
+        barras($('#fin-rateio-area'), areas.map(a => ({
+          nome: a.area, valor: a.mrr_mensal, label: fmtBRL(a.mrr_mensal)+' /mês'
+        })), {gold:true, max:mx});
+      }
+      if($('#fin-rateio-adv')){
+        const advs = (rat.rateio_geral_por_advogado || []).slice(0,12);
+        const mx = advs.length ? advs[0].mrr_mensal : 1;
+        barras($('#fin-rateio-adv'), advs.map(a => ({
+          nome: a.advogado, valor: a.mrr_mensal, label: fmtBRL(a.mrr_mensal)+' /mês'
+        })), {max:mx});
+      }
+      if($('#fin-rateio-nota')){
+        $('#fin-rateio-nota').innerHTML = `⚠️ ${rat.nota || ''}`;
+      }
+    }
+
+    // ===== 06 Faturamento por mês (últimos 24 meses) =====
+    const ext = await carregar('visoes_extras');
+    if(ext && Array.isArray(ext.serie_mensal_24m) && ext.serie_mensal_24m.length){
+      const s = ext.serie_mensal_24m;
+      const mxTot = Math.max(...s.map(m => m.total)) || 1;
+      const rows = s.map(m => {
+        const tot = m.total;
+        const pm = tot? (m.mensal/tot*100).toFixed(0):0;
+        const pe = tot? (m.exito/tot*100).toFixed(0):0;
+        const ph = tot? (m.honorarios/tot*100).toFixed(0):0;
+        const larg = Math.round(tot/mxTot*100);
+        return `<div class="hbar-row">
+          <div class="hb-name">${fmtMesAno(m.mes)}</div>
+          <div class="hbar-track" style="display:flex;width:${larg}%;min-width:${larg}%">
+            <div style="height:100%;background:var(--ss-gold);width:${m.mensal/tot*100||0}%" title="Mensal ${fmtBRLk(m.mensal)}"></div>
+            <div style="height:100%;background:var(--ss-navy);width:${m.exito/tot*100||0}%" title="Êxito ${fmtBRLk(m.exito)}"></div>
+            <div style="height:100%;background:#8a92ab;width:${m.honorarios/tot*100||0}%" title="Honorários ${fmtBRLk(m.honorarios)}"></div>
+            <div style="height:100%;background:#c9cdd6;width:${m.outros/tot*100||0}%" title="Outros ${fmtBRLk(m.outros)}"></div>
+          </div>
+          <div class="hb-val">${fmtBRLk(tot)}<small>M ${pm}% · Ê ${pe}% · H ${ph}%</small></div>
+        </div>`;
+      }).join('');
+      if($('#fin-fat-mes')){
+        $('#fin-fat-mes').innerHTML = `<div class="panel-label">Faturamento operacional por mês
+          <span style="display:inline-flex;align-items:center;gap:6px;margin-left:14px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-gold);border-radius:2px"></span>Mensal</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:var(--ss-navy);border-radius:2px"></span>Êxito</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;margin-left:10px;color:var(--ss-ink);text-transform:none;letter-spacing:.02em;font-size:11.5px"><span style="display:inline-block;width:10px;height:10px;background:#8a92ab;border-radius:2px"></span>Honorários</span>
+        </div><div class="hbar-list">${rows}</div>`;
+      }
+    }
+
+    // ===== 07 Top clientes por faturamento =====
+    if(ext && Array.isArray(ext.ranking_top_clientes) && $('#fin-top-clientes')){
+      const nomes = await carregar('clientes_top_nomes');
+      const mapaNomes = {};
+      if(nomes && Array.isArray(nomes.clientes)){
+        nomes.clientes.forEach(c => { mapaNomes[c.id] = c.nome || ''; });
+      }
+      const top = ext.ranking_top_clientes;
+      const mx = top.length ? top[0].total : 1;
+      const rows = top.map((c,i) => {
+        const nome = mapaNomes[c.id_cliente] || `Cliente #${c.id_cliente}`;
+        const larg = Math.round(c.total/mx*100);
+        return `<div class="hbar-row">
+          <div class="hb-name" title="${nome}"><span style="color:var(--ss-mute);margin-right:6px">${(i+1).toString().padStart(2,'0')}</span>${nome}</div>
+          <div class="hbar-track"><div class="hbar-fill gold" style="width:${larg}%"></div></div>
+          <div class="hb-val">${fmtBRLk(c.total)}<small>${fmtNum(c.qtd)} recebimentos · último ${fmtData(c.ultimo_pagamento)}</small></div>
+        </div>`;
+      }).join('');
+      $('#fin-top-clientes').innerHTML = `<div class="panel-label">Top ${top.length} clientes</div><div class="hbar-list">${rows}</div>`;
+    }
+
+    // ===== 08 Auditoria pendente =====
+    if($('#fin-auditoria-cards')){
+      // conta contratos com vigencia vencida
+      const cont = await carregar('detalhe_contratos');
+      const vencidos = cont && cont.vigencia_vencida || 0;
+      // valor do plano "erro operacional" nas despesas
+      let erroOp = 0;
+      if(desp && Array.isArray(desp.despesas_por_plano_de_contas)){
+        const p = desp.despesas_por_plano_de_contas.find(x => (x.descricao||'').includes('Erro operacional'));
+        if(p) erroOp = p.total_pago || 0;
+      }
+      $('#fin-auditoria-cards').innerHTML =
+        card('Plano "3.12.29 Erro operacional"', fmtBRLk(erroOp),
+          '10 lançamentos em nov/2023 — ajustes de saldo. <b>Financeiro precisa validar.</b>', true) +
+        card('Contratos vigência vencida', fmtNum(vencidos),
+          `De 53 contratos mensais vigentes. <b>data_final no passado</b>, mas ainda com status VIGENTE.`) +
+        card('Oportunidades sem valor', '593',
+          'Propostas sem valor_total cadastrado. Comercial precisa <b>preencher o valor</b> no EasyJur.') +
+        card('Bug EasyJur despesas', '—',
+          'Filtro <b>data_pagamento</b> de list_despesas ignora o ano. <b>Reportar ao EasyJur.</b>');
+    }
   }
 
   // ---------- ABA PRODUÇÃO ----------
@@ -1501,6 +1605,9 @@
     fluxo_futuro_despesas: 'dados/fluxo_futuro_despesas.json',
     comparativo_fixa: 'dados/comparativo_fixa.json',
     timesheet_30d: 'dados/timesheet_ultimos_30d.json',
+    visoes_extras: 'dados/financeiro_visoes_extras.json',
+    clientes_top_nomes: 'dados/clientes_top_nomes.json',
+    rateio_assessoria: 'dados/rateio_assessoria.json',
   });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);

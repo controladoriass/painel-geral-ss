@@ -50,6 +50,10 @@ MAPA = {
     "comparativo_fixa":               "comparativo_fixa.json",
     # timesheet dos ultimos 30 dias (por advogado + por cliente)
     "timesheet_30d":                  "timesheet_ultimos_30d.json",
+    # visoes extras: faturamento por mes 24m + ranking top clientes
+    "visoes_extras":                  "financeiro_visoes_extras.json",
+    "clientes_top_nomes":             "clientes_top_nomes.json",
+    "rateio_assessoria":              "rateio_assessoria.json",
 }
 
 def main():
