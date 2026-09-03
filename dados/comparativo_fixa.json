@@ -1,0 +1,183 @@
+{
+  "gerado_em": "2026-09-03",
+  "fonte": "EasyJur - Partido Mensal (receita) vs planos recorrentes (despesa)",
+  "nota": "Receita fixa = plano 1.1.02 (Partido Mensal). Despesa fixa = planos tipicamente recorrentes (aluguel, salarios, pro-labore, tributos, servicos essenciais). Aproximacao - confirmar com o financeiro se algum plano deve entrar/sair.",
+  "planos_fixos_considerados": [
+    {
+      "descricao": "3.3.30 - Ajuda de Custo",
+      "total": 6832065.46
+    },
+    {
+      "descricao": "3.5.04 - IRPJ",
+      "total": 4344532.75
+    },
+    {
+      "descricao": "3.3.29 - Pró-Labore",
+      "total": 3872063.48
+    },
+    {
+      "descricao": "3.4.02 - Repasses de Honorários Advocatícios sócios",
+      "total": 1894667.12
+    },
+    {
+      "descricao": "3.2.01 - Aluguel",
+      "total": 1777632.92
+    },
+    {
+      "descricao": "3.5.06 - CSLL",
+      "total": 1385390.63
+    },
+    {
+      "descricao": "3.3.01 - Salários",
+      "total": 1335982.81
+    },
+    {
+      "descricao": "3.3.26 - Comissões",
+      "total": 1193057.01
+    },
+    {
+      "descricao": "3.3.03 - Bonificações",
+      "total": 1091330.58
+    },
+    {
+      "descricao": "3.12.30 - Despesas com Software",
+      "total": 788140.73
+    },
+    {
+      "descricao": "3.5.02 - COFINS",
+      "total": 398523.0
+    },
+    {
+      "descricao": "3.3.29 - Pro-Labore",
+      "total": 303167.1
+    },
+    {
+      "descricao": "3.5.16 - Impostos e Taxas (Geral)",
+      "total": 289441.69
+    },
+    {
+      "descricao": "3.2.11 - Manutenção de Casa",
+      "total": 186139.41
+    },
+    {
+      "descricao": "3.2.04 - Telefonia Fixa",
+      "total": 126722.37
+    },
+    {
+      "descricao": "3.2.03 - Energia Elétrica",
+      "total": 114305.97
+    },
+    {
+      "descricao": "3.5.03 - ISS",
+      "total": 89404.07
+    },
+    {
+      "descricao": "3.5.01 - PIS",
+      "total": 86112.44
+    },
+    {
+      "descricao": "3.12.04 - Material de Limpeza",
+      "total": 53984.55
+    },
+    {
+      "descricao": "3.2.02 - Condomínio",
+      "total": 45567.68
+    },
+    {
+      "descricao": "3.2.08 - Água",
+      "total": 34078.64
+    },
+    {
+      "descricao": "3.5.09 - Taxas Diversas",
+      "total": 31949.99
+    },
+    {
+      "descricao": "3.2.09 - Seguros de Imóveis",
+      "total": 31697.21
+    },
+    {
+      "descricao": "3.5.14 - Anuidade OAB",
+      "total": 31174.38
+    },
+    {
+      "descricao": "3.5.10 - DAS - Simples Nacional",
+      "total": 28545.42
+    },
+    {
+      "descricao": "3.2.07 - Serviços de Internet",
+      "total": 20873.25
+    },
+    {
+      "descricao": "3.2.10 - IPTU",
+      "total": 11643.59
+    },
+    {
+      "descricao": "3.2.05 - Telefonia Móvel",
+      "total": 9694.73
+    },
+    {
+      "descricao": "3.3.26 - Comissoes",
+      "total": 9367.19
+    },
+    {
+      "descricao": "3.2.03 - Energia Eletrica",
+      "total": 3735.86
+    },
+    {
+      "descricao": "3.2.07 - Servicos de Internet",
+      "total": 630.0
+    },
+    {
+      "descricao": "3.5.05 - IRPF",
+      "total": 291.44
+    },
+    {
+      "descricao": "3.12.05 - Material de Manutenção",
+      "total": 186.72
+    }
+  ],
+  "serie_anual": [
+    {
+      "ano": 2022,
+      "receita_fixa": 4968774.01,
+      "despesa_fixa": 2507989.41,
+      "saldo": 2460784.6,
+      "cobertura_pct": 198.1,
+      "qtd_lancamentos_despesa": 614
+    },
+    {
+      "ano": 2023,
+      "receita_fixa": 5841115.73,
+      "despesa_fixa": 4296762.45,
+      "saldo": 1544353.28,
+      "cobertura_pct": 135.9,
+      "qtd_lancamentos_despesa": 504
+    },
+    {
+      "ano": 2024,
+      "receita_fixa": 6845736.41,
+      "despesa_fixa": 6815748.31,
+      "saldo": 29988.1,
+      "cobertura_pct": 100.4,
+      "qtd_lancamentos_despesa": 2169
+    },
+    {
+      "ano": 2025,
+      "receita_fixa": 7989157.08,
+      "despesa_fixa": 7143832.53,
+      "saldo": 845324.55,
+      "cobertura_pct": 111.8,
+      "qtd_lancamentos_despesa": 3318
+    },
+    {
+      "ano": 2026,
+      "receita_fixa": 5693354.4,
+      "despesa_fixa": 5657767.49,
+      "saldo": 35586.91,
+      "cobertura_pct": 100.6,
+      "qtd_lancamentos_despesa": 5267
+    }
+  ],
+  "total_receita_fixa": 31338137.63,
+  "total_despesa_fixa": 26422100.19
+}

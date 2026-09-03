@@ -336,6 +336,64 @@
         }
       }
     }
+
+    // ===== COMPARATIVO RECEITA FIXA vs DESPESA FIXA =====
+    const comp = await carregar('comparativo_fixa');
+    if(comp && Array.isArray(comp.serie_anual) && comp.serie_anual.length){
+      const serie = comp.serie_anual;
+      const total_r = comp.total_receita_fixa || 0;
+      const total_d = comp.total_despesa_fixa || 0;
+      const total_saldo = total_r - total_d;
+      const cob_medio = total_d > 0 ? (total_r/total_d*100) : 0;
+      const anoUltimo = serie[serie.length-1];
+
+      // 4 cards de resumo
+      if($('#fin-comparativo-cards')){
+        const sinal = total_saldo >= 0 ? '+' : '';
+        const corSaldo = total_saldo >= 0 ? 'var(--ss-pos)' : 'var(--ss-neg)';
+        const corCob = cob_medio >= 130 ? 'var(--ss-pos)' : (cob_medio >= 100 ? 'var(--ss-warn)' : 'var(--ss-neg)');
+        $('#fin-comparativo-cards').innerHTML =
+          card('Cobertura média (5 anos)', `<span style="color:${corCob}">${cob_medio.toFixed(0)}%</span>`,
+            'Receita fixa ÷ Despesa fixa', true) +
+          card('Receita fixa (5 anos)', fmtBRLk(total_r),
+            'Partido Mensal · assessoria recorrente') +
+          card('Despesa fixa (5 anos)', fmtBRLk(total_d),
+            `Aluguel · salários · pró-labore · tributos · ${(comp.planos_fixos_considerados||[]).length} planos`) +
+          card('Saldo acumulado', `<span style="color:${corSaldo}">${sinal}${fmtBRLk(total_saldo)}</span>`,
+            `${anoUltimo.ano}: ${(anoUltimo.cobertura_pct||0).toFixed(0)}% de cobertura`);
+      }
+
+      // gráfico por ano
+      const contSerie = $('#fin-comparativo-serie');
+      if(contSerie){
+        const maxAbs = Math.max(...serie.map(s => Math.max(s.receita_fixa, s.despesa_fixa))) || 1;
+        const rows = serie.map(s => {
+          const barR = Math.round(s.receita_fixa/maxAbs*50);
+          const barD = Math.round(s.despesa_fixa/maxAbs*50);
+          const cob = s.cobertura_pct||0;
+          const corCob = cob >= 130 ? 'var(--ss-pos)' : (cob >= 100 ? 'var(--ss-warn)' : 'var(--ss-neg)');
+          return `<div class="hbar-row">
+            <div class="hb-name">${s.ano}</div>
+            <div style="position:relative;height:14px;background:transparent">
+              <div style="position:absolute;left:0;top:0;width:50%;height:100%;display:flex;justify-content:flex-end;align-items:center">
+                <div style="height:8px;width:${barD}%;background:#e59993;border-radius:2px 0 0 2px" title="Despesa fixa: ${fmtBRLk(s.despesa_fixa)}"></div>
+              </div>
+              <div style="position:absolute;left:50%;top:50%;width:1px;height:100%;background:var(--ss-line-2);transform:translate(-50%,-50%)"></div>
+              <div style="position:absolute;left:50%;top:0;width:50%;height:100%;display:flex;align-items:center">
+                <div style="height:8px;width:${barR}%;background:#7fce9a;border-radius:0 2px 2px 0" title="Receita fixa: ${fmtBRLk(s.receita_fixa)}"></div>
+              </div>
+            </div>
+            <div class="hb-val" style="color:${corCob}">${cob.toFixed(0)}%<small style="color:var(--ss-mute)">R $ ${fmtBRLk(s.receita_fixa).replace('R$ ','')} · D ${fmtBRLk(s.despesa_fixa).replace('R$ ','')}</small></div>
+          </div>`;
+        }).join('');
+        contSerie.innerHTML = `<div class="hbar-list">${rows}</div>
+          <div class="data-note" style="margin-top:14px">
+            <span style="display:inline-flex;align-items:center;gap:6px;color:var(--ss-ink);font-size:11.5px"><span style="width:10px;height:10px;background:#7fce9a;border-radius:2px;display:inline-block"></span>Receita fixa (Partido Mensal)</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;margin-left:14px;color:var(--ss-ink);font-size:11.5px"><span style="width:10px;height:10px;background:#e59993;border-radius:2px;display:inline-block"></span>Despesa fixa (aluguel, salários, pró-labore, tributos, etc.)</span>
+            <div style="margin-top:8px;color:var(--ss-mute);font-size:11px;font-style:italic">${comp.nota || ''}</div>
+          </div>`;
+      }
+    }
   }
 
   // ---------- ABA PRODUÇÃO ----------
@@ -1386,6 +1444,7 @@
     processos_grandes: 'dados/processos_grandes.json',
     fluxo_futuro_receitas: 'dados/fluxo_futuro_receitas.json',
     fluxo_futuro_despesas: 'dados/fluxo_futuro_despesas.json',
+    comparativo_fixa: 'dados/comparativo_fixa.json',
   });
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);

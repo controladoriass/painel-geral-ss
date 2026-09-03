@@ -46,6 +46,8 @@ MAPA = {
     # fluxo de caixa futuro (receitas + despesas em aberto - só 6 meses de venc, arquivos pequenos)
     "fluxo_futuro_receitas":          "fluxo_futuro_receitas.json",
     "fluxo_futuro_despesas":          "fluxo_futuro_despesas.json",
+    # comparativo receita fixa x despesa fixa (serie historica)
+    "comparativo_fixa":               "comparativo_fixa.json",
 }
 
 def main():
