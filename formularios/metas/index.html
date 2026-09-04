@@ -41,11 +41,7 @@
 
       <div class="field">
         <label>Referência <span class="req">*</span></label>
-        <input type="text" name="referencia" placeholder="Ex.: 2026-09" required>
-      </div>
-
-      <div class="field full">
-        <div class="hint">Formato sugerido: <b>AAAA-MM</b> (mês) · <b>AAAA-Wnn</b> (semana) · <b>AAAA-Qn</b> (trimestre).</div>
+        <input type="date" name="referencia" id="refData" required>
       </div>
     </div>
 
@@ -97,10 +93,12 @@
 // COLE aqui a URL /exec do Apps Script (Parte 2 do INSTRUCOES.md).
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJRjp7sXY-r4UHpOvBuWXbQf2Bew87uOS6naMlNKwsarK9-mdXkUN1gQGw/exec";
 mascaraMoeda(document.getElementById('metaValor'));
+dataHoje(document.getElementById('refData'));   // referência começa preenchida com hoje
 formSetup({
   form: document.getElementById('form'),
   formId: 'metas',
-  msgOk: 'Meta salva!'
+  msgOk: 'Meta salva!',
+  afterOk: () => dataHoje(document.getElementById('refData'))
 });
 </script>
 </body>
