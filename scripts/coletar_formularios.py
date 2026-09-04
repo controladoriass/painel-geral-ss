@@ -75,27 +75,56 @@ def processar_metas(linhas):
 def processar_atividade(linhas):
     if not linhas: return None
     from collections import defaultdict
-    por_vendedor = defaultdict(lambda: {"ligacoes":0,"leads":0,"reunioes":0,"propostas":0,"dias":0})
+    por_resp = defaultdict(lambda: {
+        "ligacoes":0,"leads":0,"reunioes":0,"propostas":0,"dias":0,
+        "ligacoes_nomes":[], "leads_nomes":[], "reunioes_nomes":[], "propostas_nomes":[],
+    })
     por_dia = defaultdict(lambda: {"ligacoes":0,"leads":0,"reunioes":0,"propostas":0})
+    registros_recentes = []
+
+    def split_nomes(s):
+        if not s: return []
+        return [n.strip() for n in str(s).replace(";", ",").split(",") if n.strip()]
+
     for l in linhas:
-        v = str(l.get("Vendedor","")).strip()
+        # aceita ambos os cabeçalhos: "Responsável" (novo) e "Vendedor" (legado)
+        v = str(l.get("Responsável") or l.get("Vendedor") or "").strip()
         d = str(l.get("Data da Atividade","")).strip()[:10]
         if not v: continue
-        pv = por_vendedor[v]
+        pv = por_resp[v]
         pv["ligacoes"] += to_int(l.get("Ligações Realizadas"))
         pv["leads"] += to_int(l.get("Leads Novos"))
         pv["reunioes"] += to_int(l.get("Reuniões"))
         pv["propostas"] += to_int(l.get("Propostas Enviadas Hoje"))
         pv["dias"] += 1
+        pv["ligacoes_nomes"].extend(split_nomes(l.get("Ligações · Com quem")))
+        pv["leads_nomes"].extend(split_nomes(l.get("Leads · Nomes")))
+        pv["reunioes_nomes"].extend(split_nomes(l.get("Reuniões · Com quem")))
+        pv["propostas_nomes"].extend(split_nomes(l.get("Propostas · Para quem")))
         if d:
             pd = por_dia[d]
             pd["ligacoes"] += to_int(l.get("Ligações Realizadas"))
             pd["leads"] += to_int(l.get("Leads Novos"))
             pd["reunioes"] += to_int(l.get("Reuniões"))
             pd["propostas"] += to_int(l.get("Propostas Enviadas Hoje"))
+        registros_recentes.append({
+            "data": d, "responsavel": v,
+            "ligacoes": to_int(l.get("Ligações Realizadas")),
+            "ligacoes_nomes": split_nomes(l.get("Ligações · Com quem")),
+            "leads": to_int(l.get("Leads Novos")),
+            "leads_nomes": split_nomes(l.get("Leads · Nomes")),
+            "reunioes": to_int(l.get("Reuniões")),
+            "reunioes_nomes": split_nomes(l.get("Reuniões · Com quem")),
+            "propostas": to_int(l.get("Propostas Enviadas Hoje")),
+            "propostas_nomes": split_nomes(l.get("Propostas · Para quem")),
+            "observacoes": str(l.get("Observações","")).strip(),
+        })
+    # ordena registros do mais recente pro mais antigo
+    registros_recentes.sort(key=lambda r: r.get("data",""), reverse=True)
     return {
-        "por_vendedor": [dict(vendedor=k, **v) for k,v in por_vendedor.items()],
+        "por_vendedor": [dict(vendedor=k, **v) for k,v in por_resp.items()],
         "por_dia": dict(sorted(por_dia.items())),
+        "registros_recentes": registros_recentes[:100],
         "qtd_registros": len(linhas),
     }
 

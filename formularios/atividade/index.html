@@ -22,7 +22,7 @@
 
   <form id="form" class="card" autocomplete="off">
 
-    <div class="sec-title">Vendedor e data</div>
+    <div class="sec-title">Responsável e data</div>
 
     <div class="grid">
       <div class="field">
@@ -31,45 +31,53 @@
       </div>
 
       <div class="field">
-        <label>Vendedor <span class="req">*</span></label>
-        <select name="vendedor" required>
-          <option value="" disabled selected>Selecione…</option>
-          <option>Yasmin Lazouwnik</option>
-          <option>Vanessa Maragno Osellame</option>
-          <option>Bruna Gabrielli Vidal</option>
-          <option>Erika Martins da Silva</option>
-          <option>Kelly Bento</option>
-          <option>Giovanna Julia Paulina da Silva</option>
-          <option>Outro</option>
-        </select>
+        <label>Responsável <span class="req">*</span></label>
+        <input type="text" name="vendedor" required placeholder="Seu nome completo">
       </div>
     </div>
 
     <div class="sec-title mt">Atividade do dia</div>
+    <div class="hint" style="margin:-6px 0 14px">Deixe em branco o que não fez — só preenche o que rolou. Nos "com quem", separe nomes por vírgula.</div>
 
-    <div class="grid grid-4">
+    <div class="grid">
       <div class="field">
-        <label>Ligações</label>
+        <label>Ligações · quantidade</label>
         <input type="number" name="ligacoes" min="0" step="1" placeholder="0">
       </div>
       <div class="field">
-        <label>Leads novos</label>
+        <label>Com quem (ligações)</label>
+        <input type="text" name="ligacoesNomes" placeholder="Ex.: João Silva, Maria, Pedro Costa">
+      </div>
+
+      <div class="field">
+        <label>Leads novos · quantidade</label>
         <input type="number" name="leads" min="0" step="1" placeholder="0">
       </div>
       <div class="field">
-        <label>Reuniões</label>
+        <label>Nome dos leads</label>
+        <input type="text" name="leadsNomes" placeholder="Ex.: Ana (indicação Ambev), TechCorp">
+      </div>
+
+      <div class="field">
+        <label>Reuniões · quantidade</label>
         <input type="number" name="reunioes" min="0" step="1" placeholder="0">
       </div>
       <div class="field">
-        <label>Propostas</label>
+        <label>Com quem (reuniões)</label>
+        <input type="text" name="reunioesNomes" placeholder="Ex.: Cliente XYZ, Prospect ABC">
+      </div>
+
+      <div class="field">
+        <label>Propostas · quantidade</label>
         <input type="number" name="propostas" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Para quem (propostas)</label>
+        <input type="text" name="propostasNomes" placeholder="Ex.: Construtora BHM, Loja Beta">
       </div>
     </div>
 
     <div class="grid" style="margin-top:14px">
-      <div class="field full">
-        <div class="hint">Deixe em branco o que não fez — só preenche o que rolou.</div>
-      </div>
       <div class="field full">
         <label>Observações <span class="opt">opcional</span></label>
         <textarea name="observacoes" placeholder="Destaques do dia, contatos importantes, obstáculos…"></textarea>

@@ -39,11 +39,15 @@ var ABAS = {
     cabecalho: [
       "Data/Hora",
       "Data da Atividade",
-      "Vendedor",
+      "Responsável",                  // renomeado de "Vendedor" — coletor aceita ambos
       "Ligações Realizadas",
+      "Ligações · Com quem",          // NOVO — nomes separados por vírgula
       "Leads Novos",
+      "Leads · Nomes",                // NOVO
       "Reuniões",
+      "Reuniões · Com quem",          // NOVO
       "Propostas Enviadas Hoje",
+      "Propostas · Para quem",        // NOVO
       "Observações"
     ]
   },
@@ -165,11 +169,15 @@ function montarLinha_(qual, d) {
     return [
       d.dataHora || agora,
       d.dataAtividade || "",
-      d.vendedor || "",
+      d.vendedor || d.responsavel || "",     // aceita ambos os nomes
       num_(d.ligacoes),
+      d.ligacoesNomes || "",
       num_(d.leads),
+      d.leadsNomes || "",
       num_(d.reunioes),
+      d.reunioesNomes || "",
       num_(d.propostas),
+      d.propostasNomes || "",
       d.observacoes || ""
     ];
   }
