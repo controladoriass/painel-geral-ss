@@ -128,8 +128,8 @@ window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJR
 // ===== LOGIN =====
 // Nota: senha visível no HTML público — barreira leve pra evitar acesso casual.
 // Não é segurança real; qualquer pessoa que "ver código-fonte" enxerga.
+// SEMPRE pede a senha ao entrar/recarregar a página (não guarda sessão).
 const SENHA_METAS = 'Silva2026';
-const KEY_SESSION = 'painel-metas-liberado';
 
 const loginCard = document.getElementById('loginCard');
 const conteudo  = document.getElementById('conteudo');
@@ -142,7 +142,6 @@ function liberar(){
   loginCard.hidden = true;
   conteudo.hidden = false;
   subMain.hidden = false;
-  try { sessionStorage.setItem(KEY_SESSION, '1'); } catch(e) {}
   init(); // dispara init do form + carrega metas
 }
 
@@ -162,11 +161,8 @@ loginPwd.addEventListener('keydown', (e) => {
   else { loginErr.textContent = ''; }
 });
 
-// Reabre direto se já entrou nesta sessão do navegador
-try {
-  if (sessionStorage.getItem(KEY_SESSION) === '1') liberar();
-  else loginPwd.focus();
-} catch(e) { loginPwd.focus(); }
+// Sempre foca no campo de senha ao abrir
+loginPwd.focus();
 
 // ===== INIT (só roda depois de liberar) =====
 function init(){
