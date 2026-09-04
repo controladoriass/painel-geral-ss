@@ -155,6 +155,65 @@ button.submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .modal-close.alt{background:var(--err)}
 .modal-close.alt:hover{background:#a93226}
 
+/* Tela de login (senha simples pra evitar acesso casual) */
+.login-card{
+  max-width:380px;margin:60px auto;padding:32px 28px 26px;
+  background:var(--card-bg);border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 8px 30px rgba(30,34,63,.08);text-align:center;
+}
+.login-card h2{
+  font-size:16px;font-weight:700;color:var(--navy);letter-spacing:.02em;
+  margin-bottom:6px;
+}
+.login-card .login-sub{font-size:12.5px;color:var(--txt-dim);margin-bottom:20px}
+.login-card input[type="password"]{
+  width:100%;padding:12px 14px;font-family:inherit;font-size:14px;text-align:center;
+  background:#fff;border:1px solid var(--field-border);border-radius:9px;
+  letter-spacing:.14em;margin-bottom:10px;
+}
+.login-card input[type="password"]:focus{outline:none;border-color:var(--gold);background:#fffdf9}
+.login-card .login-err{
+  color:var(--err);font-size:12px;font-weight:600;margin:6px 0 0;min-height:16px;
+}
+.login-card button{
+  width:100%;font-family:inherit;font-size:13.5px;font-weight:700;letter-spacing:.06em;
+  color:#fff;background:linear-gradient(160deg,var(--navy) 0%,#161A31 100%);
+  border:none;border-radius:9px;padding:12px 0;margin-top:10px;cursor:pointer;
+  transition:transform .12s, box-shadow .18s;
+}
+.login-card button:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(30,34,63,.18)}
+
+/* Abas Cadastrar / Visualizar */
+.mode-tabs{
+  display:flex;gap:2px;background:#eef1f7;padding:4px;border-radius:10px;
+  margin-bottom:18px;max-width:420px;
+}
+.mode-tab{
+  flex:1;padding:9px 14px;font-family:inherit;font-size:13px;font-weight:600;
+  color:var(--txt-dim);background:transparent;border:none;border-radius:7px;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.mode-tab:hover{color:var(--navy)}
+.mode-tab.active{background:#fff;color:var(--navy);box-shadow:0 2px 6px rgba(30,34,63,.08)}
+
+/* Tabela de metas cadastradas (modo visualizar) */
+.metas-tabela{
+  width:100%;border-collapse:collapse;font-size:13px;
+  background:#fff;border:1px solid #e2e6ef;border-radius:10px;overflow:hidden;
+}
+.metas-tabela th{
+  background:var(--navy);color:#fff;font-weight:700;letter-spacing:.04em;
+  font-size:11px;text-transform:uppercase;text-align:left;padding:10px 12px;
+}
+.metas-tabela td{padding:10px 12px;border-top:1px solid #eef1f7;color:var(--txt)}
+.metas-tabela tr:hover td{background:#fafbfd}
+.metas-tabela .mt-num{text-align:right;font-variant-numeric:tabular-nums;color:var(--navy);font-weight:600}
+.metas-tabela .mt-empty{text-align:center;padding:30px 12px;color:var(--txt-dim);font-style:italic}
+@media (max-width:720px){
+  .metas-tabela{font-size:12px}
+  .metas-tabela th,.metas-tabela td{padding:7px 8px}
+}
+
 /* Blocos dinâmicos de atividade — 1 card compacto por atividade, em GRID 2 colunas */
 .act-group{
   margin-top:18px;padding:14px 14px 12px;

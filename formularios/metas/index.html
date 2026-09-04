@@ -17,89 +17,275 @@
   <header class="top">
     <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
     <h1><span class="tick"></span>Metas Comerciais</h1>
-    <div class="sub">Cadastro das metas por responsável e período. Para <b>atualizar uma meta</b>, basta preencher o formulário de novo com a mesma pessoa/período/referência — a mais recente vale. Também é possível editar direto na planilha "Painel Geral - Dados", aba <b>Metas</b>.</div>
+    <div class="sub" id="subMain" hidden>
+      Cadastro das metas por responsável e período. Para <b>atualizar uma meta</b>, basta preencher o formulário de novo com a mesma pessoa/período/referência — a mais recente vale. Também é possível editar direto na planilha "Painel Geral - Dados", aba <b>Metas</b>.
+    </div>
   </header>
 
-  <form id="form" class="card" autocomplete="off">
+  <!-- TELA 1 · LOGIN -->
+  <div class="login-card" id="loginCard">
+    <h2>Área restrita</h2>
+    <div class="login-sub">Digite a senha para acessar o cadastro de metas.</div>
+    <input type="password" id="loginPwd" placeholder="Senha" autocomplete="off">
+    <div class="login-err" id="loginErr"></div>
+    <button type="button" id="loginBtn">Entrar</button>
+  </div>
 
-    <div class="sec-title">Responsável e período</div>
+  <!-- TELA 2 · CONTEÚDO (visível só após login) -->
+  <div id="conteudo" hidden>
 
-    <div class="grid">
-      <div class="field full">
-        <label>Responsável <span class="req">*</span></label>
-        <input type="text" name="responsavel" required placeholder="Seu nome completo">
-      </div>
-
-      <div class="field">
-        <label>Período <span class="req">*</span></label>
-        <select name="periodo" required>
-          <option value="mes" selected>Mensal</option>
-          <option value="semana">Semanal</option>
-          <option value="trimestre">Trimestral</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Referência <span class="req">*</span></label>
-        <input type="date" name="referencia" id="refData" required>
-      </div>
+    <div class="mode-tabs">
+      <button type="button" class="mode-tab active" data-mode="cadastrar">Cadastrar meta</button>
+      <button type="button" class="mode-tab" data-mode="visualizar">Visualizar metas</button>
     </div>
 
-    <div class="sec-title mt">Metas do período</div>
+    <!-- MODO A · Cadastrar -->
+    <form id="form" class="card" autocomplete="off" data-mode-panel="cadastrar">
 
-    <div class="grid">
-      <div class="field">
-        <label>Propostas (quantidade) <span class="opt">opcional</span></label>
-        <input type="number" name="metaPropostasQtd" min="0" step="1" placeholder="Ex.: 30">
-      </div>
+      <div class="sec-title">Responsável e período</div>
 
-      <div class="field">
-        <label>Propostas (valor) <span class="opt">opcional</span></label>
-        <div class="money">
-          <span class="cur">R$</span>
-          <input type="text" name="metaPropostasValor" id="metaValor" placeholder="0,00" inputmode="decimal">
+      <div class="grid">
+        <div class="field full">
+          <label>Responsável <span class="req">*</span></label>
+          <input type="text" name="responsavel" required placeholder="Seu nome completo">
+        </div>
+
+        <div class="field">
+          <label>Período <span class="req">*</span></label>
+          <select name="periodo" required>
+            <option value="mes" selected>Mensal</option>
+            <option value="semana">Semanal</option>
+            <option value="trimestre">Trimestral</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Referência <span class="req">*</span></label>
+          <input type="date" name="referencia" id="refData" required>
         </div>
       </div>
 
-      <div class="field">
-        <label>Assessorias mensais a fechar <span class="opt">opcional</span></label>
-        <input type="number" name="metaAssessorias" min="0" step="1" placeholder="Ex.: 3">
+      <div class="sec-title mt">Metas do período</div>
+
+      <div class="grid">
+        <div class="field">
+          <label>Propostas (quantidade) <span class="opt">opcional</span></label>
+          <input type="number" name="metaPropostasQtd" min="0" step="1" placeholder="Ex.: 30">
+        </div>
+
+        <div class="field">
+          <label>Propostas (valor) <span class="opt">opcional</span></label>
+          <div class="money">
+            <span class="cur">R$</span>
+            <input type="text" name="metaPropostasValor" id="metaValor" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Assessorias mensais a fechar <span class="opt">opcional</span></label>
+          <input type="number" name="metaAssessorias" min="0" step="1" placeholder="Ex.: 3">
+        </div>
+
+        <div class="field">
+          <label>Ligações <span class="opt">opcional</span></label>
+          <input type="number" name="metaLigacoes" min="0" step="1" placeholder="Ex.: 100">
+        </div>
+
+        <div class="field full">
+          <label>Leads novos <span class="opt">opcional</span></label>
+          <input type="number" name="metaLeads" min="0" step="1" placeholder="Ex.: 20">
+        </div>
+
+        <div class="field full">
+          <label>Observações <span class="opt">opcional</span></label>
+          <textarea name="observacoes" placeholder="Contexto do período, ajustes especiais, campanhas…"></textarea>
+        </div>
       </div>
 
-      <div class="field">
-        <label>Ligações <span class="opt">opcional</span></label>
-        <input type="number" name="metaLigacoes" min="0" step="1" placeholder="Ex.: 100">
+      <div class="actions">
+        <button type="submit" class="submit">Salvar meta</button>
       </div>
+    </form>
 
-      <div class="field full">
-        <label>Leads novos <span class="opt">opcional</span></label>
-        <input type="number" name="metaLeads" min="0" step="1" placeholder="Ex.: 20">
-      </div>
-
-      <div class="field full">
-        <label>Observações <span class="opt">opcional</span></label>
-        <textarea name="observacoes" placeholder="Contexto do período, ajustes especiais, campanhas…"></textarea>
+    <!-- MODO B · Visualizar -->
+    <div class="card" data-mode-panel="visualizar" hidden>
+      <div class="sec-title">Metas cadastradas</div>
+      <div class="hint" style="margin:-6px 0 14px">Consolida a última meta cadastrada por cada combinação de responsável + período + referência. Atualiza todo dia às 8h (BR).</div>
+      <div id="listaMetasWrap">
+        <div class="metas-tabela mt-empty">Carregando…</div>
       </div>
     </div>
 
-    <div class="actions">
-      <button type="submit" class="submit">Salvar meta</button>
-    </div>
-  </form>
+  </div>
 </div>
 
 <script src="../form.js"></script>
 <script>
-// COLE aqui a URL /exec do Apps Script (Parte 2 do INSTRUCOES.md).
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJRjp7sXY-r4UHpOvBuWXbQf2Bew87uOS6naMlNKwsarK9-mdXkUN1gQGw/exec";
-mascaraMoeda(document.getElementById('metaValor'));
-dataHoje(document.getElementById('refData'));   // referência começa preenchida com hoje
-formSetup({
-  form: document.getElementById('form'),
-  formId: 'metas',
-  msgOk: 'Meta salva!',
-  afterOk: () => dataHoje(document.getElementById('refData'))
+
+// ===== LOGIN =====
+// Nota: senha visível no HTML público — barreira leve pra evitar acesso casual.
+// Não é segurança real; qualquer pessoa que "ver código-fonte" enxerga.
+const SENHA_METAS = 'Silva2026';
+const KEY_SESSION = 'painel-metas-liberado';
+
+const loginCard = document.getElementById('loginCard');
+const conteudo  = document.getElementById('conteudo');
+const subMain   = document.getElementById('subMain');
+const loginPwd  = document.getElementById('loginPwd');
+const loginErr  = document.getElementById('loginErr');
+const loginBtn  = document.getElementById('loginBtn');
+
+function liberar(){
+  loginCard.hidden = true;
+  conteudo.hidden = false;
+  subMain.hidden = false;
+  try { sessionStorage.setItem(KEY_SESSION, '1'); } catch(e) {}
+  init(); // dispara init do form + carrega metas
+}
+
+function tentarLogin(){
+  const val = (loginPwd.value || '').trim();
+  if (val === SENHA_METAS) {
+    liberar();
+  } else {
+    loginErr.textContent = 'Senha incorreta.';
+    loginPwd.select();
+  }
+}
+
+loginBtn.addEventListener('click', tentarLogin);
+loginPwd.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); tentarLogin(); }
+  else { loginErr.textContent = ''; }
 });
+
+// Reabre direto se já entrou nesta sessão do navegador
+try {
+  if (sessionStorage.getItem(KEY_SESSION) === '1') liberar();
+  else loginPwd.focus();
+} catch(e) { loginPwd.focus(); }
+
+// ===== INIT (só roda depois de liberar) =====
+function init(){
+  mascaraMoeda(document.getElementById('metaValor'));
+  dataHoje(document.getElementById('refData'));
+
+  formSetup({
+    form: document.getElementById('form'),
+    formId: 'metas',
+    msgOk: 'Meta salva!',
+    afterOk: () => {
+      dataHoje(document.getElementById('refData'));
+      // Se a tabela já foi carregada, recarrega pra mostrar a nova meta
+      if (window._metasCarregadas) carregarMetas();
+    }
+  });
+
+  // Alternador de modo
+  document.querySelectorAll('.mode-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const alvo = btn.dataset.mode;
+      document.querySelectorAll('[data-mode-panel]').forEach(el => {
+        el.hidden = el.dataset.modePanel !== alvo;
+      });
+      if (alvo === 'visualizar' && !window._metasCarregadas) carregarMetas();
+    });
+  });
+}
+
+// ===== VISUALIZAR METAS =====
+function carregarMetas(){
+  const wrap = document.getElementById('listaMetasWrap');
+  wrap.innerHTML = '<div class="metas-tabela mt-empty">Carregando…</div>';
+
+  fetch(window.APPS_SCRIPT_URL + '?dados=1', {cache: 'no-store'})
+    .then(r => r.json())
+    .then(d => {
+      window._metasCarregadas = true;
+      const linhas = (d && d.abas && d.abas.metas) || [];
+      renderMetas(linhas);
+    })
+    .catch(err => {
+      wrap.innerHTML = '<div class="metas-tabela mt-empty">Erro ao carregar. Tente novamente em instantes.</div>';
+      console.error(err);
+    });
+}
+
+function renderMetas(linhas){
+  const wrap = document.getElementById('listaMetasWrap');
+
+  // Consolida: (responsável, período, referência) → última linha vence
+  const mapa = {};
+  linhas.forEach(l => {
+    const resp = (l['Responsável'] || l['Vendedor'] || '').trim();
+    const per  = (l['Período'] || '').trim();
+    const ref  = (l['Referência'] || '').trim();
+    if (!resp) return;
+    mapa[resp + '|' + per + '|' + ref] = l;
+  });
+  const metas = Object.values(mapa);
+
+  if (!metas.length){
+    wrap.innerHTML = '<div class="metas-tabela mt-empty">Nenhuma meta cadastrada ainda.</div>';
+    return;
+  }
+
+  // Ordena por responsável, depois por referência DESC
+  metas.sort((a,b) => {
+    const ra = (a['Responsável'] || a['Vendedor'] || '').localeCompare(b['Responsável'] || b['Vendedor'] || '');
+    if (ra) return ra;
+    return String(b['Referência'] || '').localeCompare(String(a['Referência'] || ''));
+  });
+
+  const fmtNum = n => (Number(n)||0).toLocaleString('pt-BR');
+  const fmtBRL = n => {
+    const v = Number(n)||0;
+    if (v >= 1000) return 'R$ ' + (v/1000).toLocaleString('pt-BR', {maximumFractionDigits:1}) + 'k';
+    return 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  };
+  const fmtData = s => {
+    if (!s) return '—';
+    const str = String(s).slice(0,10);
+    const m = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : str;
+  };
+  const fmtPeriodo = p => ({mes:'Mensal', semana:'Semanal', trimestre:'Trimestral'}[String(p).toLowerCase()] || p || '—');
+
+  const rows = metas.map(m => `
+    <tr>
+      <td><b>${m['Responsável'] || m['Vendedor'] || '—'}</b></td>
+      <td>${fmtPeriodo(m['Período'])}</td>
+      <td>${fmtData(m['Referência'])}</td>
+      <td class="mt-num">${fmtNum(m['Meta Propostas (nº)'])}</td>
+      <td class="mt-num">${m['Meta Propostas (R$)'] ? fmtBRL(m['Meta Propostas (R$)']) : '—'}</td>
+      <td class="mt-num">${fmtNum(m['Meta Assessorias Mensais'])}</td>
+      <td class="mt-num">${fmtNum(m['Meta Ligações'])}</td>
+      <td class="mt-num">${fmtNum(m['Meta Leads'])}</td>
+    </tr>
+  `).join('');
+
+  wrap.innerHTML = `
+    <table class="metas-tabela">
+      <thead>
+        <tr>
+          <th>Responsável</th>
+          <th>Período</th>
+          <th>Referência</th>
+          <th style="text-align:right">Propostas</th>
+          <th style="text-align:right">Valor (R$)</th>
+          <th style="text-align:right">Assessorias</th>
+          <th style="text-align:right">Ligações</th>
+          <th style="text-align:right">Leads</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="data-note" style="margin-top:10px">${metas.length} meta(s) cadastrada(s) · lista atualiza ao trocar de aba ou salvar nova.</div>
+  `;
+}
 </script>
 </body>
 </html>
