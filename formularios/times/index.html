@@ -28,10 +28,6 @@
   <!-- MODO A · Cadastrar -->
   <form id="form" class="card" autocomplete="off" data-mode-panel="cadastrar">
 
-    <!-- Banner de edição (aparece só quando editando um advogado existente) -->
-    <div class="editing-banner" id="editingBanner" hidden>
-      <span>Editando <b id="editingWho"></b>. As alterações vão <b>sobrescrever</b> a linha original.</span>
-    </div>
 
     <div class="sec-title">Vínculo</div>
 
@@ -148,8 +144,6 @@ window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJR
 
 // ===== STATE DE EDIÇÃO =====
 let editingRow = null;
-const editingBanner = document.getElementById('editingBanner');
-const editingWho    = document.getElementById('editingWho');
 const submitBtn = () => document.querySelector('#form button[type="submit"]');
 let ADVS_CACHE = [];
 
@@ -169,13 +163,6 @@ function entrarModoEdicao(a){
   });
 
   editingRow = a._row;
-  const nome = a['Advogado'] || '';
-  if (nome) {
-    editingWho.textContent = nome;
-    editingBanner.hidden = false;
-  } else {
-    editingBanner.hidden = true;
-  }
   submitBtn().textContent = 'Salvar alterações';
 
   document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
@@ -188,7 +175,6 @@ function entrarModoEdicao(a){
 
 function sairModoEdicao(limparCampos){
   editingRow = null;
-  editingBanner.hidden = true;
   submitBtn().textContent = 'Salvar advogado';
   if (limparCampos) document.getElementById('form').reset();
 }

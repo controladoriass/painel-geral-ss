@@ -44,11 +44,6 @@
     <!-- MODO A · Cadastrar -->
     <form id="form" class="card" autocomplete="off" data-mode-panel="cadastrar">
 
-      <!-- Banner de edição (aparece só quando editando uma linha existente) -->
-      <div class="editing-banner" id="editingBanner" hidden>
-        <span>Editando meta de <b id="editingWho"></b>. As alterações vão <b>sobrescrever</b> a linha original.</span>
-      </div>
-
       <div class="sec-title">Responsável e período</div>
 
       <div class="grid">
@@ -179,8 +174,6 @@ loginPwd.focus();
 
 // ===== STATE DE EDIÇÃO =====
 let editingRow = null;  // número da linha na planilha quando estamos editando
-const editingBanner = document.getElementById('editingBanner');
-const editingWho    = document.getElementById('editingWho');
 const submitBtn = () => document.querySelector('#form button[type="submit"]');
 
 // Refs do <select> Responsável
@@ -266,13 +259,6 @@ function entrarModoEdicao(m){
   form.querySelector('[name="observacoes"]').value     = m['Observações'] || '';
 
   editingRow = m._row;
-  // Só monta o banner se tem nome; senão, esconde (evita "Editando meta de —")
-  if (nomeResp) {
-    editingWho.textContent = nomeResp + ' · ' + (m['Período']||'') + ' · ' + (String(m['Referência']||'').slice(0,10));
-    editingBanner.hidden = false;
-  } else {
-    editingBanner.hidden = true;
-  }
   submitBtn().textContent = 'Salvar alterações';
 
   // Muda pra aba Cadastrar
@@ -286,7 +272,6 @@ function entrarModoEdicao(m){
 
 function sairModoEdicao(limparCampos){
   editingRow = null;
-  editingBanner.hidden = true;
   submitBtn().textContent = 'Salvar meta';
   if (limparCampos) {
     document.getElementById('form').reset();
