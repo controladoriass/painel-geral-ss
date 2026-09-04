@@ -222,15 +222,14 @@ def processar_reajustes(linhas):
         if not cli: continue
         reajustes.append({
             "cliente": cli,
-            "id_cliente": str(l.get("ID Cliente","")).strip(),
             "numero_contrato": str(l.get("Nº Contrato","")).strip(),
+            "valor_atual": to_float(l.get("Valor Atual (R$)")),
             "data": str(l.get("Data do Reajuste","")).strip()[:10],
             "valor_anterior": to_float(l.get("Valor Anterior (R$)")),
             "valor_novo": to_float(l.get("Valor Novo (R$)")),
             "variacao_pct": to_float(l.get("Variação (%)")),
             "indice": str(l.get("Índice","")).strip(),
             "nova_data_final": str(l.get("Nova Data Final","")).strip()[:10],
-            "aprovado_por": str(l.get("Aprovado Por","")).strip(),
             "motivo": str(l.get("Motivo","")).strip(),
         })
     reajustes.sort(key=lambda r: r["data"], reverse=True)

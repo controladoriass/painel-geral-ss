@@ -69,15 +69,14 @@ var ABAS = {
     cabecalho: [
       "Data/Hora",
       "Cliente",
-      "ID Cliente",              // NOVO — id_cliente do EasyJur (facilita cruzamento)
       "Nº Contrato",
+      "Valor Atual (R$)",        // referência informada pelo usuário (opcional)
       "Data do Reajuste",
       "Valor Anterior (R$)",
       "Valor Novo (R$)",
       "Variação (%)",
       "Índice",                  // IPCA, IGPM, etc
-      "Nova Data Final",         // NOVO — nova vigência se veio junto com renovação
-      "Aprovado Por",            // NOVO
+      "Nova Data Final",         // nova vigência se veio junto com renovação
       "Motivo",
       "Observações"
     ]
@@ -301,15 +300,14 @@ function montarLinha_(qual, d) {
     return [
       d.dataHora || agora,
       d.cliente || "",
-      d.id_cliente || "",
       d.numeroContrato || "",
+      num_(d.valorAtual),
       d.dataReajuste || "",
       vA,
       vN,
       Math.round(variacao * 100) / 100,
       d.indice || "",
       d.novaDataFinal || "",
-      d.aprovadoPor || "",
       d.motivo || "",
       d.observacoes || ""
     ];

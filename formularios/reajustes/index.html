@@ -17,7 +17,6 @@
   <header class="top">
     <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
     <h1><span class="tick"></span>Reajuste de Assessoria</h1>
-    <div class="sub">Histórico de reajustes dos contratos de assessoria mensal. O EasyJur guarda só o valor atual. Aqui você preserva a linha do tempo.</div>
   </header>
 
   <form id="form" class="card" autocomplete="off">
@@ -27,25 +26,20 @@
     <div class="grid">
       <div class="field full">
         <label>Cliente <span class="req">*</span></label>
-        <select name="cliente" id="selCliente" required>
-          <option value="" disabled selected>Carregando lista de clientes…</option>
-        </select>
-        <div class="hint">Lista puxa os 53 clientes com contrato de assessoria mensal. Se não encontrar, selecione <b>Outro (digitar)</b> no fim.</div>
-      </div>
-
-      <div class="field" id="wrapClienteOutro" style="display:none">
-        <label>Cliente (digitar) <span class="req">*</span></label>
-        <input type="text" name="clienteOutro" id="clienteOutro" placeholder="Nome do cliente">
+        <input type="text" name="cliente" required placeholder="Nome do cliente">
       </div>
 
       <div class="field">
         <label>Nº do contrato <span class="opt">opcional</span></label>
-        <input type="text" name="numeroContrato" id="numContrato" placeholder="Preenche automático se você escolher da lista">
+        <input type="text" name="numeroContrato" placeholder="Ex.: 2360">
       </div>
 
       <div class="field">
-        <label>Valor atual (do EasyJur) <span class="opt">referência</span></label>
-        <input type="text" id="valorAtualRef" readonly placeholder="—" style="background:#f4f6fa;color:var(--navy);font-weight:600">
+        <label>Valor atual <span class="opt">opcional</span></label>
+        <div class="money">
+          <span class="cur">R$</span>
+          <input type="text" name="valorAtual" id="vAtual" inputmode="decimal" placeholder="0,00">
+        </div>
       </div>
     </div>
 
@@ -95,12 +89,6 @@
       <div class="field">
         <label>Nova vigência (data final do contrato) <span class="opt">opcional</span></label>
         <input type="date" name="novaDataFinal">
-        <div class="hint">Preencher só se o reajuste veio junto com renovação. Ajuda a manter as vigências em dia.</div>
-      </div>
-
-      <div class="field">
-        <label>Aprovado por <span class="opt">opcional</span></label>
-        <input type="text" name="aprovadoPor" placeholder="Nome do sócio/gestor que aprovou">
       </div>
 
       <div class="field full">
@@ -124,64 +112,13 @@
 <script>
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJRjp7sXY-r4UHpOvBuWXbQf2Bew87uOS6naMlNKwsarK9-mdXkUN1gQGw/exec";
 
+const vAtual = document.getElementById('vAtual');
 const vAnt = document.getElementById('vAnt');
 const vNov = document.getElementById('vNov');
 const calc = document.getElementById('calc');
-mascaraMoeda(vAnt); mascaraMoeda(vNov);
-
-// Carrega lista pública de clientes de assessoria mensal (gerada por scripts/gerar_lista_clientes_publica.py)
-const selCli = document.getElementById('selCliente');
-const wrapOutro = document.getElementById('wrapClienteOutro');
-const inpOutro = document.getElementById('clienteOutro');
-const inpNumCt = document.getElementById('numContrato');
-const inpValRef = document.getElementById('valorAtualRef');
-let CLIENTES = [];
-
-function fmtBRL(n){
-  return (n||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
-}
-
-fetch('../dados/clientes-assessoria-mensal.json', {cache:'no-store'})
-  .then(r => r.ok ? r.json() : Promise.reject(r.status))
-  .then(d => {
-    CLIENTES = d.clientes || [];
-    selCli.innerHTML = '<option value="" disabled selected>Selecione o cliente…</option>' +
-      CLIENTES.map((c,i) => {
-        const val = fmtBRL(c.valor_atual);
-        const alerta = c.vigencia_vencida ? ' ⚠️ vigência vencida' : '';
-        return `<option value="${i}">${c.cliente} · R$ ${val}${alerta}</option>`;
-      }).join('') +
-      '<option value="__outro__">Outro (digitar) →</option>';
-  })
-  .catch(err => {
-    console.warn('Não carregou lista de clientes, caindo pra texto livre', err);
-    selCli.outerHTML = '<input type="text" name="cliente" placeholder="Nome do cliente" required>';
-  });
-
-selCli.addEventListener('change', () => {
-  const v = selCli.value;
-  if(v === '__outro__'){
-    wrapOutro.style.display = '';
-    inpOutro.required = true;
-    inpNumCt.value = '';
-    inpValRef.value = '';
-    inpOutro.focus();
-  } else {
-    wrapOutro.style.display = 'none';
-    inpOutro.required = false;
-    inpOutro.value = '';
-    const c = CLIENTES[parseInt(v,10)];
-    if(c){
-      inpNumCt.value = c.numero_contrato || '';
-      inpValRef.value = c.valor_atual ? 'R$ ' + fmtBRL(c.valor_atual) : '';
-      // Pré-preenche o valor anterior com o valor atual do EasyJur
-      if(c.valor_atual && !vAnt.value){
-        vAnt.value = fmtBRL(c.valor_atual);
-        atualizarCalc();
-      }
-    }
-  }
-});
+mascaraMoeda(vAtual);
+mascaraMoeda(vAnt);
+mascaraMoeda(vNov);
 
 function num(v){
   if(!v) return 0;
@@ -203,34 +140,7 @@ formSetup({
   form: document.getElementById('form'),
   formId: 'reajustes',
   msgOk: 'Reajuste registrado!',
-  beforeSend: (dados) => {
-    // Normaliza o campo cliente: se veio índice da lista, troca pelo nome do cliente
-    // e adiciona id_cliente pra facilitar o cruzamento no painel
-    if(dados.cliente === '__outro__'){
-      dados.cliente = (dados.clienteOutro || '').trim();
-      dados.id_cliente = '';
-      if(!dados.cliente){
-        alert('Por favor, digite o nome do cliente.');
-        return false;
-      }
-    } else {
-      const idx = parseInt(dados.cliente, 10);
-      const c = CLIENTES[idx];
-      if(c){
-        dados.cliente = c.cliente;
-        dados.id_cliente = c.id_cliente || '';
-      }
-    }
-    delete dados.clienteOutro; // não enviar campo auxiliar
-    return true;
-  },
-  afterOk: ()=>{
-    atualizarCalc();
-    // Reset também da UI auxiliar
-    wrapOutro.style.display = 'none';
-    inpOutro.required = false;
-    inpValRef.value = '';
-  }
+  afterOk: () => atualizarCalc()
 });
 </script>
 </body>
