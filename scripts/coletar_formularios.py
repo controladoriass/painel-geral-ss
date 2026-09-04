@@ -73,59 +73,107 @@ def processar_metas(linhas):
 
 # ---------- Atividade ----------
 def processar_atividade(linhas):
+    """
+    Aceita 2 formatos de linha:
+      NOVO (set/2026, uma por atividade):
+        Data/Hora, Data da Atividade, Responsável, Registro ID, Tipo,
+        Índice, Identificação, Observação, Observações do dia
+      LEGADO (agregado, uma por dia por vendedor):
+        Data/Hora, Data da Atividade, Vendedor|Responsável,
+        Ligações Realizadas, Leads Novos, Reuniões, Propostas Enviadas Hoje,
+        Observações  (+ colunas *Nomes de uma versão intermediária)
+    """
     if not linhas: return None
     from collections import defaultdict
-    por_resp = defaultdict(lambda: {
-        "ligacoes":0,"leads":0,"reunioes":0,"propostas":0,"dias":0,
-        "ligacoes_nomes":[], "leads_nomes":[], "reunioes_nomes":[], "propostas_nomes":[],
-    })
-    por_dia = defaultdict(lambda: {"ligacoes":0,"leads":0,"reunioes":0,"propostas":0})
-    registros_recentes = []
 
     def split_nomes(s):
         if not s: return []
         return [n.strip() for n in str(s).replace(";", ",").split(",") if n.strip()]
 
+    TIPO_MAP = {
+        "ligação": "ligacoes", "ligacao": "ligacoes", "ligações": "ligacoes",
+        "lead": "leads", "leads": "leads",
+        "reunião": "reunioes", "reuniao": "reunioes", "reuniões": "reunioes",
+        "proposta": "propostas", "propostas": "propostas",
+    }
+
+    por_resp = defaultdict(lambda: {
+        "ligacoes":0,"leads":0,"reunioes":0,"propostas":0,"dias":set(),
+        "atividades":[],  # todas as atividades individuais dessa pessoa
+    })
+    por_dia = defaultdict(lambda: {"ligacoes":0,"leads":0,"reunioes":0,"propostas":0})
+    atividades_todas = []  # 1 registro por atividade individual
+
     for l in linhas:
-        # aceita ambos os cabeçalhos: "Responsável" (novo) e "Vendedor" (legado)
         v = str(l.get("Responsável") or l.get("Vendedor") or "").strip()
         d = str(l.get("Data da Atividade","")).strip()[:10]
         if not v: continue
         pv = por_resp[v]
-        pv["ligacoes"] += to_int(l.get("Ligações Realizadas"))
-        pv["leads"] += to_int(l.get("Leads Novos"))
-        pv["reunioes"] += to_int(l.get("Reuniões"))
-        pv["propostas"] += to_int(l.get("Propostas Enviadas Hoje"))
-        pv["dias"] += 1
-        pv["ligacoes_nomes"].extend(split_nomes(l.get("Ligações · Com quem")))
-        pv["leads_nomes"].extend(split_nomes(l.get("Leads · Nomes")))
-        pv["reunioes_nomes"].extend(split_nomes(l.get("Reuniões · Com quem")))
-        pv["propostas_nomes"].extend(split_nomes(l.get("Propostas · Para quem")))
-        if d:
-            pd = por_dia[d]
-            pd["ligacoes"] += to_int(l.get("Ligações Realizadas"))
-            pd["leads"] += to_int(l.get("Leads Novos"))
-            pd["reunioes"] += to_int(l.get("Reuniões"))
-            pd["propostas"] += to_int(l.get("Propostas Enviadas Hoje"))
-        registros_recentes.append({
-            "data": d, "responsavel": v,
-            "ligacoes": to_int(l.get("Ligações Realizadas")),
-            "ligacoes_nomes": split_nomes(l.get("Ligações · Com quem")),
-            "leads": to_int(l.get("Leads Novos")),
-            "leads_nomes": split_nomes(l.get("Leads · Nomes")),
-            "reunioes": to_int(l.get("Reuniões")),
-            "reunioes_nomes": split_nomes(l.get("Reuniões · Com quem")),
-            "propostas": to_int(l.get("Propostas Enviadas Hoje")),
-            "propostas_nomes": split_nomes(l.get("Propostas · Para quem")),
-            "observacoes": str(l.get("Observações","")).strip(),
+        if d: pv["dias"].add(d)
+
+        # Detecta se é linha do formato NOVO (tem "Tipo") ou LEGADO
+        tipo_raw = str(l.get("Tipo","")).strip().lower()
+        if tipo_raw:
+            # === NOVO: 1 linha = 1 atividade ===
+            chave = TIPO_MAP.get(tipo_raw)
+            if not chave: continue
+            pv[chave] += 1
+            if d: por_dia[d][chave] += 1
+            item = {
+                "data": d,
+                "responsavel": v,
+                "tipo": tipo_raw,
+                "chave": chave,
+                "ident": str(l.get("Identificação","")).strip(),
+                "obs": str(l.get("Observação","")).strip(),
+                "registro_id": str(l.get("Registro ID","")).strip(),
+                "obs_dia": str(l.get("Observações do dia","")).strip(),
+            }
+            pv["atividades"].append(item)
+            atividades_todas.append(item)
+        else:
+            # === LEGADO: 1 linha = 1 dia agregado ===
+            pv["ligacoes"]  += to_int(l.get("Ligações Realizadas"))
+            pv["leads"]     += to_int(l.get("Leads Novos"))
+            pv["reunioes"]  += to_int(l.get("Reuniões"))
+            pv["propostas"] += to_int(l.get("Propostas Enviadas Hoje"))
+            if d:
+                pd = por_dia[d]
+                pd["ligacoes"]  += to_int(l.get("Ligações Realizadas"))
+                pd["leads"]     += to_int(l.get("Leads Novos"))
+                pd["reunioes"]  += to_int(l.get("Reuniões"))
+                pd["propostas"] += to_int(l.get("Propostas Enviadas Hoje"))
+            # nomes que uma versão intermediária capturou
+            for chave, campo in [
+                ("ligacoes","Ligações · Com quem"),
+                ("leads","Leads · Nomes"),
+                ("reunioes","Reuniões · Com quem"),
+                ("propostas","Propostas · Para quem"),
+            ]:
+                for nome in split_nomes(l.get(campo)):
+                    it = {"data":d,"responsavel":v,"tipo":chave,"chave":chave,
+                          "ident":nome,"obs":"","registro_id":"legado_"+d,
+                          "obs_dia": str(l.get("Observações","")).strip()}
+                    pv["atividades"].append(it)
+                    atividades_todas.append(it)
+
+    # normaliza estrutura pra JSON
+    por_vendedor = []
+    for k, v in por_resp.items():
+        por_vendedor.append({
+            "vendedor": k,
+            "ligacoes": v["ligacoes"], "leads": v["leads"],
+            "reunioes": v["reunioes"], "propostas": v["propostas"],
+            "dias": len(v["dias"]),
         })
-    # ordena registros do mais recente pro mais antigo
-    registros_recentes.sort(key=lambda r: r.get("data",""), reverse=True)
+
+    atividades_todas.sort(key=lambda r: r.get("data",""), reverse=True)
     return {
-        "por_vendedor": [dict(vendedor=k, **v) for k,v in por_resp.items()],
+        "por_vendedor": por_vendedor,
         "por_dia": dict(sorted(por_dia.items())),
-        "registros_recentes": registros_recentes[:100],
+        "atividades_recentes": atividades_todas[:200],  # p/ drill-down no painel
         "qtd_registros": len(linhas),
+        "qtd_atividades_individuais": len(atividades_todas),
     }
 
 # ---------- Times ----------

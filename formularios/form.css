@@ -155,6 +155,36 @@ button.submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .modal-close.alt{background:var(--err)}
 .modal-close.alt:hover{background:#a93226}
 
+/* Blocos dinâmicos de atividade (1 por ligação/lead/reunião/proposta) */
+.act-group{margin-top:14px}
+.act-group-title{
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-soft);margin-bottom:8px;display:flex;align-items:center;gap:8px;
+}
+.act-group-title .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:22px;height:22px;padding:0 7px;border-radius:11px;
+  background:var(--navy);color:#fff;font-size:11px;font-weight:700;letter-spacing:0;
+}
+.act-items{display:flex;flex-direction:column;gap:10px}
+.act-item{
+  border:1px solid #e2e6ef;border-radius:10px;padding:12px 14px 10px;background:#fafbfd;
+  display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:start;
+}
+.act-item .act-idx{
+  grid-column:1/-1;font-size:11px;font-weight:700;color:var(--navy);opacity:.6;margin-bottom:-4px;
+}
+.act-item label{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:3px;display:block}
+.act-item input{
+  width:100%;padding:9px 12px;font-family:inherit;font-size:13.5px;
+  background:#fff;border:1px solid var(--field-border);border-radius:8px;color:var(--txt);
+}
+.act-item input:focus{outline:none;border-color:var(--gold);background:#fffdf9}
+.act-item input.err{border-color:var(--err);background:#fff5f4}
+@media (max-width:560px){
+  .act-item{grid-template-columns:1fr}
+}
+
 .checks{
   display:flex;flex-wrap:wrap;gap:8px 14px;
   padding:10px 12px;border:1px solid #e2e6ef;border-radius:9px;background:#fafbfd;

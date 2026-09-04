@@ -36,19 +36,19 @@ var ABAS = {
   },
   atividade: {
     nome: "Atividade",
+    // NOVO FORMATO (set/2026): 1 linha por atividade individual.
+    // Se pessoa lança 3 ligações + 2 reuniões, viram 5 linhas todas com o
+    // mesmo Registro ID (agrupa como "1 lançamento do dia").
     cabecalho: [
       "Data/Hora",
       "Data da Atividade",
-      "Responsável",                  // renomeado de "Vendedor" — coletor aceita ambos
-      "Ligações Realizadas",
-      "Ligações · Com quem",          // NOVO — nomes separados por vírgula
-      "Leads Novos",
-      "Leads · Nomes",                // NOVO
-      "Reuniões",
-      "Reuniões · Com quem",          // NOVO
-      "Propostas Enviadas Hoje",
-      "Propostas · Para quem",        // NOVO
-      "Observações"
+      "Responsável",
+      "Registro ID",         // agrupador (mesmo p/ N linhas do mesmo envio)
+      "Tipo",                // Ligação | Lead | Reunião | Proposta
+      "Índice",              // 1, 2, 3... dentro do tipo (ex: Ligação 2 de 3)
+      "Identificação",       // nome/empresa (obrigatório)
+      "Observação",          // por atividade (opcional)
+      "Observações do dia"   // observação geral do dia (repete em todas as linhas do mesmo Registro ID)
     ]
   },
   times: {
@@ -97,12 +97,100 @@ function doPost(e) {
     }
     var cfg = ABAS[qual];
     var aba = pegarAba_(cfg);
+
+    // Atividade tem tratamento especial: gera N linhas (uma por atividade individual)
+    if (qual === "atividade") {
+      var linhas = montarLinhasAtividade_(dados);
+      if (!linhas.length) {
+        // sem itens individuais → grava só 1 linha com quantidades zero
+        // (mantém compatibilidade caso alguém envie form vazio)
+        linhas = [linhaAtividadeVazia_(dados)];
+      }
+      var startRow = aba.getLastRow() + 1;
+      aba.getRange(startRow, 1, linhas.length, linhas[0].length).setValues(linhas);
+      return json_({ ok: true, aba: cfg.nome, linhas: linhas.length });
+    }
+
     var linha = montarLinha_(qual, dados);
     aba.appendRow(linha);
     return json_({ ok: true, aba: cfg.nome });
   } catch (err) {
     return json_({ ok: false, erro: String(err) });
   }
+}
+
+/**
+ * Atividade: transforma o payload em N linhas (uma por atividade individual).
+ * Ex.: 3 ligações + 2 reuniões → 5 linhas, todas com o mesmo Registro ID.
+ */
+function montarLinhasAtividade_(d) {
+  var agora = new Date().toLocaleString("pt-BR");
+  var dataHora = d.dataHora || agora;
+  var dataAt = d.dataAtividade || "";
+  var resp = d.responsavel || d.vendedor || "";
+  var obsDia = d.observacoes || "";
+  var regId = registroId_(dataHora, resp);
+
+  var itens = d.itens || {};
+  var mapa = {
+    ligacoes: "Ligação",
+    leads:    "Lead",
+    reunioes: "Reunião",
+    propostas:"Proposta"
+  };
+  var linhas = [];
+  Object.keys(mapa).forEach(function (chave) {
+    var arr = itens[chave] || [];
+    arr.forEach(function (it, i) {
+      linhas.push([
+        dataHora,
+        dataAt,
+        resp,
+        regId,
+        mapa[chave],
+        i + 1,
+        (it && it.ident) || "",
+        (it && it.obs) || "",
+        obsDia
+      ]);
+    });
+  });
+  return linhas;
+}
+
+function linhaAtividadeVazia_(d) {
+  var agora = new Date().toLocaleString("pt-BR");
+  return [
+    d.dataHora || agora,
+    d.dataAtividade || "",
+    d.responsavel || d.vendedor || "",
+    registroId_(d.dataHora || agora, d.responsavel || d.vendedor || ""),
+    "",  // Tipo
+    "",  // Índice
+    "",  // Identificação
+    "",  // Observação
+    d.observacoes || ""
+  ];
+}
+
+/**
+ * Gera um id curto p/ agrupar as N linhas do mesmo envio (data/hora + responsável).
+ * Ex.: "20260904_1547_YASMIN"
+ */
+function registroId_(dataHora, resp) {
+  var d = new Date();
+  try {
+    // dataHora vem como "04/09/2026 15:47:00" (pt-BR) — tenta parse simples
+    if (typeof dataHora === "string" && dataHora.indexOf("/") > -1) {
+      var m = dataHora.match(/(\d{2})\/(\d{2})\/(\d{4})[^\d]+(\d{2}):(\d{2})/);
+      if (m) d = new Date(m[3], m[2]-1, m[1], m[4], m[5]);
+    }
+  } catch(e){}
+  var pad = function(n){ return n < 10 ? "0"+n : ""+n; };
+  var stamp = d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate())
+            + "_" + pad(d.getHours()) + pad(d.getMinutes());
+  var slug = String(resp||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,10) || "ANON";
+  return stamp + "_" + slug;
 }
 
 /**
@@ -165,22 +253,7 @@ function montarLinha_(qual, d) {
       d.observacoes || ""
     ];
   }
-  if (qual === "atividade") {
-    return [
-      d.dataHora || agora,
-      d.dataAtividade || "",
-      d.vendedor || d.responsavel || "",     // aceita ambos os nomes
-      num_(d.ligacoes),
-      d.ligacoesNomes || "",
-      num_(d.leads),
-      d.leadsNomes || "",
-      num_(d.reunioes),
-      d.reunioesNomes || "",
-      num_(d.propostas),
-      d.propostasNomes || "",
-      d.observacoes || ""
-    ];
-  }
+  // atividade tem tratamento próprio (montarLinhasAtividade_) — não passa por aqui
   if (qual === "times") {
     // areasSec vem como array (checkboxes múltiplos) → junta em string
     var areasSec = d.areasSec;

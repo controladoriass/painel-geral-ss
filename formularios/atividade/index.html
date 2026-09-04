@@ -17,7 +17,7 @@
   <header class="top">
     <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
     <h1><span class="tick"></span>Atividade Diária</h1>
-    <div class="sub">Registro rápido do dia: ligações, leads, reuniões e propostas. Leva 30 segundos.</div>
+    <div class="sub">Registre cada ligação, lead, reunião e proposta do dia. Ao digitar a quantidade, os campos aparecem embaixo.</div>
   </header>
 
   <form id="form" class="card" autocomplete="off">
@@ -32,55 +32,55 @@
 
       <div class="field">
         <label>Responsável <span class="req">*</span></label>
-        <input type="text" name="vendedor" required placeholder="Seu nome completo">
+        <input type="text" name="responsavel" required placeholder="Seu nome completo">
       </div>
     </div>
 
     <div class="sec-title mt">Atividade do dia</div>
-    <div class="hint" style="margin:-6px 0 14px">Deixe em branco o que não fez — só preenche o que rolou. Nos "com quem", separe nomes por vírgula.</div>
+    <div class="hint" style="margin:-6px 0 8px">Preencha só o que fez. A <b>Identificação</b> é obrigatória em cada item. A <b>Observação</b> é opcional.</div>
 
-    <div class="grid">
+    <!-- Contadores -->
+    <div class="grid grid-4">
       <div class="field">
         <label>Ligações · quantidade</label>
-        <input type="number" name="ligacoes" min="0" step="1" placeholder="0">
+        <input type="number" min="0" max="200" step="1" placeholder="0" id="qtdLigacoes" data-tipo="ligacoes">
       </div>
-      <div class="field">
-        <label>Com quem (ligações)</label>
-        <input type="text" name="ligacoesNomes" placeholder="Ex.: João Silva, Maria, Pedro Costa">
-      </div>
-
       <div class="field">
         <label>Leads novos · quantidade</label>
-        <input type="number" name="leads" min="0" step="1" placeholder="0">
+        <input type="number" min="0" max="200" step="1" placeholder="0" id="qtdLeads" data-tipo="leads">
       </div>
-      <div class="field">
-        <label>Nome dos leads</label>
-        <input type="text" name="leadsNomes" placeholder="Ex.: Ana (indicação Ambev), TechCorp">
-      </div>
-
       <div class="field">
         <label>Reuniões · quantidade</label>
-        <input type="number" name="reunioes" min="0" step="1" placeholder="0">
+        <input type="number" min="0" max="200" step="1" placeholder="0" id="qtdReunioes" data-tipo="reunioes">
       </div>
-      <div class="field">
-        <label>Com quem (reuniões)</label>
-        <input type="text" name="reunioesNomes" placeholder="Ex.: Cliente XYZ, Prospect ABC">
-      </div>
-
       <div class="field">
         <label>Propostas · quantidade</label>
-        <input type="number" name="propostas" min="0" step="1" placeholder="0">
+        <input type="number" min="0" max="200" step="1" placeholder="0" id="qtdPropostas" data-tipo="propostas">
       </div>
-      <div class="field">
-        <label>Para quem (propostas)</label>
-        <input type="text" name="propostasNomes" placeholder="Ex.: Construtora BHM, Loja Beta">
-      </div>
+    </div>
+
+    <!-- Blocos dinâmicos (populados via JS) -->
+    <div id="grp-ligacoes" class="act-group" hidden>
+      <div class="act-group-title">Ligações <span class="num" id="numLigacoes">0</span></div>
+      <div class="act-items" id="itensLigacoes"></div>
+    </div>
+    <div id="grp-leads" class="act-group" hidden>
+      <div class="act-group-title">Leads novos <span class="num" id="numLeads">0</span></div>
+      <div class="act-items" id="itensLeads"></div>
+    </div>
+    <div id="grp-reunioes" class="act-group" hidden>
+      <div class="act-group-title">Reuniões <span class="num" id="numReunioes">0</span></div>
+      <div class="act-items" id="itensReunioes"></div>
+    </div>
+    <div id="grp-propostas" class="act-group" hidden>
+      <div class="act-group-title">Propostas <span class="num" id="numPropostas">0</span></div>
+      <div class="act-items" id="itensPropostas"></div>
     </div>
 
     <div class="grid" style="margin-top:14px">
       <div class="field full">
-        <label>Observações <span class="opt">opcional</span></label>
-        <textarea name="observacoes" placeholder="Destaques do dia, contatos importantes, obstáculos…"></textarea>
+        <label>Observações gerais do dia <span class="opt">opcional</span></label>
+        <textarea name="observacoes" placeholder="Destaques do dia, contexto, obstáculos gerais…"></textarea>
       </div>
     </div>
 
@@ -94,11 +94,123 @@
 <script>
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJRjp7sXY-r4UHpOvBuWXbQf2Bew87uOS6naMlNKwsarK9-mdXkUN1gQGw/exec";
 dataHoje(document.getElementById('dataAt'));
+
+// Config dos 4 tipos de atividade
+const TIPOS = [
+  { tipo:'ligacoes', label:'Ligação',   labelIdent:'Identificação (nome ou empresa)' },
+  { tipo:'leads',    label:'Lead',      labelIdent:'Identificação do lead'           },
+  { tipo:'reunioes', label:'Reunião',   labelIdent:'Identificação (com quem)'        },
+  { tipo:'propostas',label:'Proposta',  labelIdent:'Identificação (para quem)'       },
+];
+
+// Renderiza N blocos pra um tipo, preservando o que já foi digitado
+function renderBlocos(tipo, cfg){
+  const wrap = document.getElementById('grp-'+tipo);
+  const cont = document.getElementById('itens'+cap(tipo));
+  const num  = document.getElementById('num'+cap(tipo));
+  const qtd  = Math.max(0, Math.min(200, parseInt(document.getElementById('qtd'+cap(tipo)).value,10) || 0));
+  num.textContent = qtd;
+  wrap.hidden = qtd === 0;
+
+  // Preserva valores atuais
+  const atuais = Array.from(cont.querySelectorAll('.act-item')).map(el => ({
+    ident: el.querySelector('input[name$="_ident"]').value,
+    obs:   el.querySelector('input[name$="_obs"]').value,
+  }));
+  cont.innerHTML = '';
+  for (let i=0; i<qtd; i++){
+    const at = atuais[i] || {ident:'', obs:''};
+    const div = document.createElement('div');
+    div.className = 'act-item';
+    div.innerHTML = `
+      <div class="act-idx">${cfg.label} ${i+1}</div>
+      <div>
+        <label>${cfg.labelIdent} <span class="req">*</span></label>
+        <input type="text" name="${tipo}_${i}_ident" required placeholder="Nome ou empresa">
+      </div>
+      <div>
+        <label>Observação <span class="opt">opcional</span></label>
+        <input type="text" name="${tipo}_${i}_obs" placeholder="Ex.: não atendeu, marcou reunião…">
+      </div>
+    `;
+    cont.appendChild(div);
+    div.querySelector('input[name$="_ident"]').value = at.ident;
+    div.querySelector('input[name$="_obs"]').value = at.obs;
+  }
+}
+
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+TIPOS.forEach(cfg => {
+  document.getElementById('qtd'+cap(cfg.tipo)).addEventListener('input', () => renderBlocos(cfg.tipo, cfg));
+});
+
+// Coleta os itens numa lista pronta pra enviar
+function coletarItens(){
+  const out = { ligacoes:[], leads:[], reunioes:[], propostas:[] };
+  TIPOS.forEach(cfg => {
+    const cont = document.getElementById('itens'+cap(cfg.tipo));
+    cont.querySelectorAll('.act-item').forEach(el => {
+      out[cfg.tipo].push({
+        ident: el.querySelector('input[name$="_ident"]').value.trim(),
+        obs:   el.querySelector('input[name$="_obs"]').value.trim(),
+      });
+    });
+  });
+  return out;
+}
+
+// Marca campos vazios em vermelho
+function validarObrigatorios(){
+  let primeiroErro = null;
+  TIPOS.forEach(cfg => {
+    const cont = document.getElementById('itens'+cap(cfg.tipo));
+    cont.querySelectorAll('input[name$="_ident"]').forEach(el => {
+      const vazio = !el.value.trim();
+      el.classList.toggle('err', vazio);
+      if (vazio && !primeiroErro) primeiroErro = el;
+    });
+  });
+  if (primeiroErro){
+    primeiroErro.focus();
+    primeiroErro.scrollIntoView({behavior:'smooth', block:'center'});
+    return false;
+  }
+  return true;
+}
+
 formSetup({
   form: document.getElementById('form'),
   formId: 'atividade',
   msgOk: 'Registro salvo. Bom trabalho!',
-  afterOk: ()=> dataHoje(document.getElementById('dataAt'))
+  beforeSend: (dados) => {
+    if (!validarObrigatorios()){
+      alert('Preencha a Identificação de todas as atividades marcadas em vermelho.');
+      return false;
+    }
+    const itens = coletarItens();
+    // Enviamos os totais + os itens estruturados. O Apps Script vai
+    // desdobrar em 1 linha por atividade individual na aba.
+    dados.qtdLigacoes = itens.ligacoes.length;
+    dados.qtdLeads    = itens.leads.length;
+    dados.qtdReunioes = itens.reunioes.length;
+    dados.qtdPropostas= itens.propostas.length;
+    dados.itens = itens;
+    // Remove os campos individuais (ligacoes_0_ident etc) — vão dentro de dados.itens
+    Object.keys(dados).forEach(k => {
+      if (/_\d+_(ident|obs)$/.test(k)) delete dados[k];
+    });
+    return true;
+  },
+  afterOk: () => {
+    dataHoje(document.getElementById('dataAt'));
+    ['Ligacoes','Leads','Reunioes','Propostas'].forEach(t => {
+      document.getElementById('qtd'+t).value = '';
+      document.getElementById('itens'+t).innerHTML = '';
+      document.getElementById('grp-'+t.toLowerCase()).hidden = true;
+      document.getElementById('num'+t).textContent = '0';
+    });
+  }
 });
 </script>
 </body>
