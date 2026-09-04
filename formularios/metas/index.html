@@ -46,8 +46,7 @@
 
       <!-- Banner de edição (aparece só quando editando uma linha existente) -->
       <div class="editing-banner" id="editingBanner" hidden>
-        <span>Editando meta de <b id="editingWho">—</b>. As alterações vão <b>sobrescrever</b> a linha original.</span>
-        <button type="button" id="cancelEditBtn">Cancelar edição</button>
+        <span>Editando meta de <b id="editingWho"></b>. As alterações vão <b>sobrescrever</b> a linha original.</span>
       </div>
 
       <div class="sec-title">Responsável e período</div>
@@ -55,7 +54,15 @@
       <div class="grid">
         <div class="field full">
           <label>Responsável <span class="req">*</span></label>
-          <input type="text" name="responsavel" required placeholder="Seu nome completo">
+          <select name="responsavel" id="selResponsavel" required>
+            <option value="" disabled selected>Selecione…</option>
+            <option value="__outro__">➕ Outro (digitar novo nome)</option>
+          </select>
+        </div>
+
+        <div class="field full" id="wrapRespOutro" hidden>
+          <label>Novo responsável <span class="req">*</span></label>
+          <input type="text" name="responsavelOutro" id="respOutro" placeholder="Nome completo">
         </div>
 
         <div class="field">
@@ -174,13 +181,78 @@ loginPwd.focus();
 let editingRow = null;  // número da linha na planilha quando estamos editando
 const editingBanner = document.getElementById('editingBanner');
 const editingWho    = document.getElementById('editingWho');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
 const submitBtn = () => document.querySelector('#form button[type="submit"]');
+
+// Refs do <select> Responsável
+const selResp    = document.getElementById('selResponsavel');
+const wrapRespOutro = document.getElementById('wrapRespOutro');
+const respOutro  = document.getElementById('respOutro');
+
+// Popula o <select> Responsável com nomes únicos já cadastrados na aba Metas.
+// Preserva a seleção atual (útil ao entrar em modo edição antes de a lista chegar).
+function popularResponsaveis(linhas){
+  const nomes = new Set();
+  linhas.forEach(l => {
+    const n = (l['Responsável'] || l['Vendedor'] || '').trim();
+    if (n) nomes.add(n);
+  });
+  // Deduplica case-insensitive (mantém a primeira grafia encontrada)
+  const canon = {};
+  Array.from(nomes).forEach(n => {
+    const k = n.toLowerCase();
+    if (!canon[k]) canon[k] = n;
+  });
+  const ordenados = Object.values(canon).sort((a,b) => a.localeCompare(b));
+
+  const valorAtual = selResp.value;
+  const opts = ['<option value="" disabled>Selecione…</option>']
+    .concat(ordenados.map(n => `<option value="${n.replace(/"/g,'&quot;')}">${n}</option>`))
+    .concat(['<option value="__outro__">➕ Outro (digitar novo nome)</option>']);
+  selResp.innerHTML = opts.join('');
+  // Restaura seleção anterior se o valor ainda existe
+  if (valorAtual && Array.from(selResp.options).some(o => o.value === valorAtual)) {
+    selResp.value = valorAtual;
+  } else if (valorAtual && valorAtual !== '__outro__' && valorAtual !== '') {
+    // Valor antigo não está na lista — adiciona ele mesmo pra não perder
+    const opt = document.createElement('option');
+    opt.value = valorAtual; opt.textContent = valorAtual;
+    selResp.insertBefore(opt, selResp.querySelector('option[value="__outro__"]'));
+    selResp.value = valorAtual;
+  } else {
+    selResp.value = '';
+  }
+}
+
+// Toggle "Outro"
+selResp.addEventListener('change', () => {
+  if (selResp.value === '__outro__') {
+    wrapRespOutro.hidden = false;
+    respOutro.required = true;
+    respOutro.focus();
+  } else {
+    wrapRespOutro.hidden = true;
+    respOutro.required = false;
+    respOutro.value = '';
+  }
+});
 
 function entrarModoEdicao(m){
   const form = document.getElementById('form');
-  // Preenche o form com os valores da linha selecionada
-  form.querySelector('[name="responsavel"]').value = m['Responsável'] || m['Vendedor'] || '';
+  const nomeResp = m['Responsável'] || m['Vendedor'] || '';
+
+  // Se o nome existe na lista, seleciona; senão, cria opção temporária
+  if (nomeResp) {
+    let existe = Array.from(selResp.options).some(o => o.value === nomeResp);
+    if (!existe) {
+      const opt = document.createElement('option');
+      opt.value = nomeResp; opt.textContent = nomeResp;
+      selResp.insertBefore(opt, selResp.querySelector('option[value="__outro__"]'));
+    }
+    selResp.value = nomeResp;
+    wrapRespOutro.hidden = true;
+    respOutro.required = false;
+  }
+
   form.querySelector('[name="periodo"]').value = String(m['Período']||'').toLowerCase() || 'mes';
   const ref = String(m['Referência']||'').slice(0,10);
   form.querySelector('[name="referencia"]').value = /^\d{4}-\d{2}-\d{2}$/.test(ref) ? ref : '';
@@ -194,8 +266,13 @@ function entrarModoEdicao(m){
   form.querySelector('[name="observacoes"]').value     = m['Observações'] || '';
 
   editingRow = m._row;
-  editingWho.textContent = (m['Responsável']||m['Vendedor']||'')+' · '+(m['Período']||'')+' · '+(String(m['Referência']||'').slice(0,10));
-  editingBanner.hidden = false;
+  // Só monta o banner se tem nome; senão, esconde (evita "Editando meta de —")
+  if (nomeResp) {
+    editingWho.textContent = nomeResp + ' · ' + (m['Período']||'') + ' · ' + (String(m['Referência']||'').slice(0,10));
+    editingBanner.hidden = false;
+  } else {
+    editingBanner.hidden = true;
+  }
   submitBtn().textContent = 'Salvar alterações';
 
   // Muda pra aba Cadastrar
@@ -213,22 +290,36 @@ function sairModoEdicao(limparCampos){
   submitBtn().textContent = 'Salvar meta';
   if (limparCampos) {
     document.getElementById('form').reset();
+    wrapRespOutro.hidden = true;
+    respOutro.required = false;
     dataHoje(document.getElementById('refData'));
   }
 }
-
-cancelEditBtn.addEventListener('click', () => sairModoEdicao(true));
 
 // ===== INIT (só roda depois de liberar) =====
 function init(){
   mascaraMoeda(document.getElementById('metaValor'));
   dataHoje(document.getElementById('refData'));
 
+  // Carrega a lista de responsáveis já cadastrados (dropdown)
+  carregarMetas();
+
   formSetup({
     form: document.getElementById('form'),
     formId: 'metas',
     msgOk: 'Meta salva!',
     beforeSend: (dados) => {
+      // Resolve o campo responsável: se veio da lista, mantém; se veio "Outro", usa o input digitado
+      if (dados.responsavel === '__outro__') {
+        const novo = (dados.responsavelOutro || '').trim();
+        if (!novo) {
+          alert('Por favor, digite o nome do novo responsável.');
+          return false;
+        }
+        dados.responsavel = novo;
+      }
+      delete dados.responsavelOutro;
+
       // Se estamos editando, envia _op=update com o número da linha
       if (editingRow) {
         dados._op = 'update';
@@ -240,7 +331,11 @@ function init(){
       const eraEdicao = !!editingRow;
       sairModoEdicao(false);
       dataHoje(document.getElementById('refData'));
-      // Recarrega a tabela pra refletir a mudança
+      wrapRespOutro.hidden = true;
+      respOutro.required = false;
+      respOutro.value = '';
+      selResp.value = '';
+      // Recarrega a tabela pra refletir a mudança (e atualiza o dropdown)
       window._metasCarregadas = false;
       const wrap = document.getElementById('listaMetasWrap');
       if (wrap) wrap.innerHTML = '<div class="metas-tabela mt-empty">Carregando…</div>';
@@ -285,6 +380,7 @@ function carregarMetas(){
     .then(d => {
       window._metasCarregadas = true;
       METAS_CACHE = (d && d.abas && d.abas.metas) || [];
+      popularResponsaveis(METAS_CACHE);
       renderMetas(METAS_CACHE);
     })
     .catch(err => {

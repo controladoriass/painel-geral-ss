@@ -17,18 +17,21 @@
   <header class="top">
     <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
     <h1><span class="tick"></span>Advogados por área</h1>
-    <div class="sub">
-      Vínculo de cada advogado ao seu time. Para <b>editar um vínculo</b>, cadastre o mesmo advogado de novo (a última linha vale) ou edite direto na planilha "Painel Geral - Dados", aba <b>Times</b>.
-    </div>
+    <div class="sub" id="subMain">Para editar ou excluir, entre em <b>Visualizar advogados</b>.</div>
   </header>
 
   <div class="mode-tabs">
-    <button type="button" class="mode-tab active" data-mode="cadastrar">Cadastrar vínculo</button>
+    <button type="button" class="mode-tab active" data-mode="cadastrar">Cadastrar advogado</button>
     <button type="button" class="mode-tab" data-mode="visualizar">Visualizar advogados</button>
   </div>
 
   <!-- MODO A · Cadastrar -->
   <form id="form" class="card" autocomplete="off" data-mode-panel="cadastrar">
+
+    <!-- Banner de edição (aparece só quando editando um advogado existente) -->
+    <div class="editing-banner" id="editingBanner" hidden>
+      <span>Editando <b id="editingWho"></b>. As alterações vão <b>sobrescrever</b> a linha original.</span>
+    </div>
 
     <div class="sec-title">Vínculo</div>
 
@@ -124,7 +127,7 @@
     </div>
 
     <div class="actions">
-      <button type="submit" class="submit">Salvar vínculo</button>
+      <button type="submit" class="submit">Salvar advogado</button>
     </div>
   </form>
 
@@ -143,13 +146,81 @@
 <script>
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJRjp7sXY-r4UHpOvBuWXbQf2Bew87uOS6naMlNKwsarK9-mdXkUN1gQGw/exec";
 
+// ===== STATE DE EDIÇÃO =====
+let editingRow = null;
+const editingBanner = document.getElementById('editingBanner');
+const editingWho    = document.getElementById('editingWho');
+const submitBtn = () => document.querySelector('#form button[type="submit"]');
+let ADVS_CACHE = [];
+
+function entrarModoEdicao(a){
+  const form = document.getElementById('form');
+  form.querySelector('[name="advogado"]').value = a['Advogado'] || '';
+  form.querySelector('[name="time"]').value = a['Time / Área Principal'] || a['Time / Equipe'] || '';
+  form.querySelector('[name="situacao"]').value = (String(a['Situação']||'ativo').toLowerCase() === 'inativo') ? 'inativo' : 'ativo';
+  form.querySelector('[name="lider"]').value = a['Líder do Time'] || '';
+  form.querySelector('[name="email"]').value = a['E-mail'] || '';
+  form.querySelector('[name="observacoes"]').value = a['Observações'] || '';
+
+  // Áreas secundárias: marcar checkboxes correspondentes
+  const secs = String(a['Áreas Secundárias'] || '').split(',').map(s => s.trim()).filter(Boolean);
+  form.querySelectorAll('input[name="areasSec"]').forEach(chk => {
+    chk.checked = secs.includes(chk.value);
+  });
+
+  editingRow = a._row;
+  const nome = a['Advogado'] || '';
+  if (nome) {
+    editingWho.textContent = nome;
+    editingBanner.hidden = false;
+  } else {
+    editingBanner.hidden = true;
+  }
+  submitBtn().textContent = 'Salvar alterações';
+
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector('.mode-tab[data-mode="cadastrar"]').classList.add('active');
+  document.querySelectorAll('[data-mode-panel]').forEach(el => {
+    el.hidden = el.dataset.modePanel !== 'cadastrar';
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function sairModoEdicao(limparCampos){
+  editingRow = null;
+  editingBanner.hidden = true;
+  submitBtn().textContent = 'Salvar advogado';
+  if (limparCampos) document.getElementById('form').reset();
+}
+
 formSetup({
   form: document.getElementById('form'),
   formId: 'times',
-  msgOk: 'Vínculo salvo!',
+  msgOk: 'Salvo!',
+  beforeSend: (dados) => {
+    if (editingRow) {
+      dados._op = 'update';
+      dados._row = editingRow;
+    }
+    return true;
+  },
   afterOk: () => {
-    // se a lista já foi carregada, atualiza sozinha
-    if (window._advsCarregados) carregarAdvogados();
+    const eraEdicao = !!editingRow;
+    sairModoEdicao(false);
+    window._advsCarregados = false;
+    const wrap = document.getElementById('listaAdvsWrap');
+    if (wrap) wrap.innerHTML = '<div class="metas-tabela mt-empty">Carregando…</div>';
+    carregarAdvogados();
+    if (eraEdicao) {
+      setTimeout(() => {
+        document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+        const btnV = document.querySelector('.mode-tab[data-mode="visualizar"]');
+        if (btnV) btnV.classList.add('active');
+        document.querySelectorAll('[data-mode-panel]').forEach(el => {
+          el.hidden = el.dataset.modePanel !== 'visualizar';
+        });
+      }, 200);
+    }
   }
 });
 
@@ -174,8 +245,8 @@ function carregarAdvogados(){
     .then(r => r.json())
     .then(d => {
       window._advsCarregados = true;
-      const linhas = (d && d.abas && d.abas.times) || [];
-      renderAdvogados(linhas);
+      ADVS_CACHE = (d && d.abas && d.abas.times) || [];
+      renderAdvogados(ADVS_CACHE);
     })
     .catch(err => {
       wrap.innerHTML = '<div class="metas-tabela mt-empty">Erro ao carregar. Tente novamente em instantes.</div>';
@@ -185,15 +256,7 @@ function carregarAdvogados(){
 
 function renderAdvogados(linhas){
   const wrap = document.getElementById('listaAdvsWrap');
-
-  // última linha por advogado vence (mesma lógica do coletor Python)
-  const mapa = {};
-  linhas.forEach(l => {
-    const adv = (l['Advogado'] || '').trim();
-    if (!adv) return;
-    mapa[adv] = l;
-  });
-  const advs = Object.values(mapa);
+  const advs = linhas.filter(l => (l['Advogado']||'').trim());
 
   if (!advs.length){
     wrap.innerHTML = '<div class="metas-tabela mt-empty">Nenhum advogado cadastrado ainda.</div>';
@@ -214,13 +277,17 @@ function renderAdvogados(linhas){
     const situacao = inativo
       ? '<span style="color:var(--err);font-weight:700">inativo</span>'
       : '<span style="color:#2f7a44;font-weight:700">ativo</span>';
-    return `<tr style="${opacity}">
+    return `<tr style="${opacity}" data-row="${a._row}">
       <td><b>${a['Advogado']||'—'}</b></td>
       <td>${a['Time / Área Principal'] || a['Time / Equipe'] || '—'}</td>
       <td>${a['Áreas Secundárias'] || '—'}</td>
       <td>${a['Líder do Time'] || '—'}</td>
       <td>${a['E-mail'] || '—'}</td>
       <td>${situacao}</td>
+      <td class="mt-actions">
+        <button type="button" class="mt-btn edit" data-act="edit" data-row="${a._row}">✏ Editar</button>
+        <button type="button" class="mt-btn del" data-act="del" data-row="${a._row}">🗑 Excluir</button>
+      </td>
     </tr>`;
   }).join('');
 
@@ -236,12 +303,46 @@ function renderAdvogados(linhas){
           <th>Líder</th>
           <th>E-mail</th>
           <th>Situação</th>
+          <th style="text-align:right">Ações</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
-    <div class="data-note" style="margin-top:10px">${ativos} ativo(s) · ${advs.length} total cadastrado(s) · última linha por advogado vale.</div>
+    <div class="data-note" style="margin-top:10px">${ativos} ativo(s) · ${advs.length} total cadastrado(s).</div>
   `;
+
+  // Handlers
+  wrap.querySelectorAll('.mt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = parseInt(btn.dataset.row, 10);
+      const item = ADVS_CACHE.find(l => l._row === row);
+      if (!item) return;
+      if (btn.dataset.act === 'edit') {
+        entrarModoEdicao(item);
+      } else if (btn.dataset.act === 'del') {
+        const nome = item['Advogado'] || '(sem nome)';
+        if (!confirm(`Excluir "${nome}" da planilha?\n\nEsta ação apaga a linha e não pode ser desfeita.`)) return;
+        excluirAdvogado(row, btn);
+      }
+    });
+  });
+}
+
+function excluirAdvogado(row, btn){
+  btn.disabled = true;
+  btn.textContent = 'Excluindo…';
+  fetch(window.APPS_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ _form: 'times', _op: 'delete', _row: row })
+  })
+  .then(() => setTimeout(carregarAdvogados, 500))
+  .catch(err => {
+    alert('Erro ao excluir. Tente novamente.');
+    btn.disabled = false;
+    btn.textContent = '🗑 Excluir';
+    console.error(err);
+  });
 }
 </script>
 </body>
