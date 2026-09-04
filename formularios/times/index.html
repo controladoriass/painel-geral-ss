@@ -17,10 +17,18 @@
   <header class="top">
     <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
     <h1><span class="tick"></span>Times &amp; Equipes</h1>
-    <div class="sub">Vincula cada advogado ao seu time. Preencher só quando muda (novo advogado ou troca de área).</div>
+    <div class="sub">
+      Vínculo de cada advogado ao seu time. Para <b>editar um vínculo</b>, cadastre o mesmo advogado de novo (a última linha vale) ou edite direto na planilha "Painel Geral - Dados", aba <b>Times</b>.
+    </div>
   </header>
 
-  <form id="form" class="card" autocomplete="off">
+  <div class="mode-tabs">
+    <button type="button" class="mode-tab active" data-mode="cadastrar">Cadastrar vínculo</button>
+    <button type="button" class="mode-tab" data-mode="visualizar">Visualizar advogados</button>
+  </div>
+
+  <!-- MODO A · Cadastrar -->
+  <form id="form" class="card" autocomplete="off" data-mode-panel="cadastrar">
 
     <div class="sec-title">Vínculo</div>
 
@@ -54,7 +62,6 @@
           <option value="Henrique Juliano de Oliveira">
           <option value="Gabriella Ferigotti Carraro">
         </datalist>
-        <div class="hint">Comece a digitar. A lista sugere os advogados ativos.</div>
       </div>
 
       <div class="field">
@@ -74,7 +81,6 @@
           <option>Direção</option>
           <option>Outro</option>
         </select>
-        <div class="hint">Área onde o advogado atua principalmente.</div>
       </div>
 
       <div class="field">
@@ -99,7 +105,6 @@
           <label class="chk"><input type="checkbox" name="areasSec" value="Consultivo"> Consultivo</label>
           <label class="chk"><input type="checkbox" name="areasSec" value="Extrajudicial / Cobrança"> Extrajudicial</label>
         </div>
-        <div class="hint">Marque só se atua em outra(s) área(s) além da principal.</div>
       </div>
 
       <div class="field">
@@ -110,7 +115,6 @@
       <div class="field">
         <label>E-mail do advogado <span class="opt">opcional</span></label>
         <input type="email" name="email" placeholder="fulano@silvaesilva.com.br">
-        <div class="hint">Usado pra envio direto de relatórios (planilhas de processos parados etc.).</div>
       </div>
 
       <div class="field full">
@@ -123,16 +127,122 @@
       <button type="submit" class="submit">Salvar vínculo</button>
     </div>
   </form>
+
+  <!-- MODO B · Visualizar -->
+  <div class="card" data-mode-panel="visualizar" hidden>
+    <div class="sec-title">Advogados cadastrados</div>
+    <div class="hint" style="margin:-6px 0 14px">Última linha por advogado (edições ficam registradas no histórico da planilha). Atualiza ao trocar de aba ou ao salvar um vínculo.</div>
+    <div id="listaAdvsWrap">
+      <div class="metas-tabela mt-empty">Carregando…</div>
+    </div>
+  </div>
+
 </div>
 
 <script src="../form.js"></script>
 <script>
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzyDRg7mQRoJRjp7sXY-r4UHpOvBuWXbQf2Bew87uOS6naMlNKwsarK9-mdXkUN1gQGw/exec";
+
 formSetup({
   form: document.getElementById('form'),
   formId: 'times',
-  msgOk: 'Vínculo salvo!'
+  msgOk: 'Vínculo salvo!',
+  afterOk: () => {
+    // se a lista já foi carregada, atualiza sozinha
+    if (window._advsCarregados) carregarAdvogados();
+  }
 });
+
+// Alternador de modo
+document.querySelectorAll('.mode-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const alvo = btn.dataset.mode;
+    document.querySelectorAll('[data-mode-panel]').forEach(el => {
+      el.hidden = el.dataset.modePanel !== alvo;
+    });
+    if (alvo === 'visualizar' && !window._advsCarregados) carregarAdvogados();
+  });
+});
+
+function carregarAdvogados(){
+  const wrap = document.getElementById('listaAdvsWrap');
+  wrap.innerHTML = '<div class="metas-tabela mt-empty">Carregando…</div>';
+
+  fetch(window.APPS_SCRIPT_URL + '?dados=1', {cache: 'no-store'})
+    .then(r => r.json())
+    .then(d => {
+      window._advsCarregados = true;
+      const linhas = (d && d.abas && d.abas.times) || [];
+      renderAdvogados(linhas);
+    })
+    .catch(err => {
+      wrap.innerHTML = '<div class="metas-tabela mt-empty">Erro ao carregar. Tente novamente em instantes.</div>';
+      console.error(err);
+    });
+}
+
+function renderAdvogados(linhas){
+  const wrap = document.getElementById('listaAdvsWrap');
+
+  // última linha por advogado vence (mesma lógica do coletor Python)
+  const mapa = {};
+  linhas.forEach(l => {
+    const adv = (l['Advogado'] || '').trim();
+    if (!adv) return;
+    mapa[adv] = l;
+  });
+  const advs = Object.values(mapa);
+
+  if (!advs.length){
+    wrap.innerHTML = '<div class="metas-tabela mt-empty">Nenhum advogado cadastrado ainda.</div>';
+    return;
+  }
+
+  // ordena: ativos primeiro, depois por nome
+  advs.sort((a,b) => {
+    const sa = String(a['Situação']||'ativo').toLowerCase() === 'inativo' ? 1 : 0;
+    const sb = String(b['Situação']||'ativo').toLowerCase() === 'inativo' ? 1 : 0;
+    if (sa !== sb) return sa - sb;
+    return String(a['Advogado']||'').localeCompare(String(b['Advogado']||''));
+  });
+
+  const rows = advs.map(a => {
+    const inativo = String(a['Situação']||'ativo').toLowerCase() === 'inativo';
+    const opacity = inativo ? 'opacity:.55' : '';
+    const situacao = inativo
+      ? '<span style="color:var(--err);font-weight:700">inativo</span>'
+      : '<span style="color:#2f7a44;font-weight:700">ativo</span>';
+    return `<tr style="${opacity}">
+      <td><b>${a['Advogado']||'—'}</b></td>
+      <td>${a['Time / Área Principal'] || a['Time / Equipe'] || '—'}</td>
+      <td>${a['Áreas Secundárias'] || '—'}</td>
+      <td>${a['Líder do Time'] || '—'}</td>
+      <td>${a['E-mail'] || '—'}</td>
+      <td>${situacao}</td>
+    </tr>`;
+  }).join('');
+
+  const ativos = advs.filter(a => String(a['Situação']||'ativo').toLowerCase() !== 'inativo').length;
+
+  wrap.innerHTML = `
+    <table class="metas-tabela">
+      <thead>
+        <tr>
+          <th>Advogado</th>
+          <th>Área principal</th>
+          <th>Secundárias</th>
+          <th>Líder</th>
+          <th>E-mail</th>
+          <th>Situação</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="data-note" style="margin-top:10px">${ativos} ativo(s) · ${advs.length} total cadastrado(s) · última linha por advogado vale.</div>
+  `;
+}
 </script>
 </body>
 </html>
