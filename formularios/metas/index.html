@@ -424,22 +424,24 @@ function renderMetas(linhas){
   `).join('');
 
   wrap.innerHTML = `
-    <table class="metas-tabela">
-      <thead>
-        <tr>
-          <th>Responsável</th>
-          <th>Período</th>
-          <th>Referência</th>
-          <th style="text-align:right">Propostas</th>
-          <th style="text-align:right">Valor (R$)</th>
-          <th style="text-align:right">Assessorias</th>
-          <th style="text-align:right">Ligações</th>
-          <th style="text-align:right">Leads</th>
-          <th style="text-align:right">Ações</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
+    <div class="metas-tabela-wrap">
+      <table class="metas-tabela">
+        <thead>
+          <tr>
+            <th>Responsável</th>
+            <th>Período</th>
+            <th>Referência</th>
+            <th style="text-align:right">Propostas</th>
+            <th style="text-align:right">Valor (R$)</th>
+            <th style="text-align:right">Assessorias</th>
+            <th style="text-align:right">Ligações</th>
+            <th style="text-align:right">Leads</th>
+            <th style="text-align:right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
     <div class="data-note" style="margin-top:10px">${metas.length} meta(s) cadastrada(s) · a mais recente por combinação vale no painel.</div>
   `;
 

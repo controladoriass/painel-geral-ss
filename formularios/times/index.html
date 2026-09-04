@@ -280,20 +280,22 @@ function renderAdvogados(linhas){
   const ativos = advs.filter(a => String(a['Situação']||'ativo').toLowerCase() !== 'inativo').length;
 
   wrap.innerHTML = `
-    <table class="metas-tabela">
-      <thead>
-        <tr>
-          <th>Advogado</th>
-          <th>Área principal</th>
-          <th>Secundárias</th>
-          <th>Líder</th>
-          <th>E-mail</th>
-          <th>Situação</th>
-          <th style="text-align:right">Ações</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
+    <div class="metas-tabela-wrap">
+      <table class="metas-tabela">
+        <thead>
+          <tr>
+            <th>Advogado</th>
+            <th>Área principal</th>
+            <th>Secundárias</th>
+            <th>Líder</th>
+            <th>E-mail</th>
+            <th>Situação</th>
+            <th style="text-align:right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
     <div class="data-note" style="margin-top:10px">${ativos} ativo(s) · ${advs.length} total cadastrado(s).</div>
   `;
 

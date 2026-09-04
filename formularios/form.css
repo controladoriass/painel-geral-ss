@@ -225,10 +225,17 @@ button.submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
   .mode-tab{flex:1;padding:10px 8px;font-size:12px;justify-content:center}
 }
 
+/* Wrapper com scroll horizontal quando a tabela não cabe */
+.metas-tabela-wrap{
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  border:1px solid #e2e6ef;border-radius:10px;background:#fff;
+}
+.metas-tabela-wrap .metas-tabela{border:none;border-radius:0}
 /* Tabela de metas cadastradas (modo visualizar) */
 .metas-tabela{
   width:100%;border-collapse:collapse;font-size:13px;
   background:#fff;border:1px solid #e2e6ef;border-radius:10px;overflow:hidden;
+  min-width:640px;
 }
 .metas-tabela th{
   background:var(--navy);color:#fff;font-weight:700;letter-spacing:.04em;
