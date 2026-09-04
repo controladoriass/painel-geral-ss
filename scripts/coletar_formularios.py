@@ -53,10 +53,12 @@ def to_int(v):
 # ---------- Metas ----------
 def processar_metas(linhas):
     if not linhas: return None
-    # pega a linha mais recente por (vendedor, periodo, referência)
+    # pega a linha mais recente por (responsável, período, referência)
+    # aceita ambos os cabeçalhos: "Responsável" (novo) e "Vendedor" (legado)
     metas = {}
     for l in linhas:
-        k = (l.get("Vendedor",""), l.get("Período",""), l.get("Referência",""))
+        resp = l.get("Responsável") or l.get("Vendedor") or ""
+        k = (resp, l.get("Período",""), l.get("Referência",""))
         metas[k] = l  # última linha vence
     lst = []
     for (vend, per, ref), l in metas.items():

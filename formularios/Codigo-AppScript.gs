@@ -23,7 +23,7 @@ var ABAS = {
     nome: "Metas",
     cabecalho: [
       "Data/Hora",
-      "Vendedor",
+      "Responsável",       // renomeado de "Vendedor" — coletor aceita ambos
       "Período",           // "semana" ou "mês"
       "Referência",        // ex: "2026-09" ou "2026-W36"
       "Meta Propostas (nº)",
@@ -242,7 +242,7 @@ function montarLinha_(qual, d) {
   if (qual === "metas") {
     return [
       d.dataHora || agora,
-      d.vendedor || "",
+      d.responsavel || d.vendedor || "",   // aceita ambos os nomes
       d.periodo || "",
       d.referencia || "",
       num_(d.metaPropostasQtd),
