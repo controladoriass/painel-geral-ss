@@ -18,7 +18,7 @@
     <img class="logo" src="../logo.png" alt="Silva &amp; Silva Advogados Associados">
     <h1><span class="tick"></span>Metas Comerciais</h1>
     <div class="sub" id="subMain" hidden>
-      Cadastro das metas por responsável e período. Para <b>atualizar uma meta</b>, preencha o formulário de novo com a mesma pessoa, período e referência. A mais recente vale. Também dá pra editar direto na planilha "Painel Geral - Dados", aba <b>Metas</b>.
+      Para editar ou excluir uma meta, entre em <b>Visualizar metas</b>.
     </div>
   </header>
 
@@ -43,6 +43,12 @@
 
     <!-- MODO A · Cadastrar -->
     <form id="form" class="card" autocomplete="off" data-mode-panel="cadastrar">
+
+      <!-- Banner de edição (aparece só quando editando uma linha existente) -->
+      <div class="editing-banner" id="editingBanner" hidden>
+        <span>Editando meta de <b id="editingWho">—</b>. As alterações vão <b>sobrescrever</b> a linha original.</span>
+        <button type="button" id="cancelEditBtn">Cancelar edição</button>
+      </div>
 
       <div class="sec-title">Responsável e período</div>
 
@@ -164,6 +170,55 @@ loginPwd.addEventListener('keydown', (e) => {
 // Sempre foca no campo de senha ao abrir
 loginPwd.focus();
 
+// ===== STATE DE EDIÇÃO =====
+let editingRow = null;  // número da linha na planilha quando estamos editando
+const editingBanner = document.getElementById('editingBanner');
+const editingWho    = document.getElementById('editingWho');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const submitBtn = () => document.querySelector('#form button[type="submit"]');
+
+function entrarModoEdicao(m){
+  const form = document.getElementById('form');
+  // Preenche o form com os valores da linha selecionada
+  form.querySelector('[name="responsavel"]').value = m['Responsável'] || m['Vendedor'] || '';
+  form.querySelector('[name="periodo"]').value = String(m['Período']||'').toLowerCase() || 'mes';
+  const ref = String(m['Referência']||'').slice(0,10);
+  form.querySelector('[name="referencia"]').value = /^\d{4}-\d{2}-\d{2}$/.test(ref) ? ref : '';
+  form.querySelector('[name="metaPropostasQtd"]').value  = m['Meta Propostas (nº)'] || '';
+  const valEl = form.querySelector('[name="metaPropostasValor"]');
+  const valNum = Number(m['Meta Propostas (R$)']||0);
+  valEl.value = valNum ? valNum.toLocaleString('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2}) : '';
+  form.querySelector('[name="metaAssessorias"]').value = m['Meta Assessorias Mensais'] || '';
+  form.querySelector('[name="metaLigacoes"]').value    = m['Meta Ligações'] || '';
+  form.querySelector('[name="metaLeads"]').value       = m['Meta Leads'] || '';
+  form.querySelector('[name="observacoes"]').value     = m['Observações'] || '';
+
+  editingRow = m._row;
+  editingWho.textContent = (m['Responsável']||m['Vendedor']||'')+' · '+(m['Período']||'')+' · '+(String(m['Referência']||'').slice(0,10));
+  editingBanner.hidden = false;
+  submitBtn().textContent = 'Salvar alterações';
+
+  // Muda pra aba Cadastrar
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector('.mode-tab[data-mode="cadastrar"]').classList.add('active');
+  document.querySelectorAll('[data-mode-panel]').forEach(el => {
+    el.hidden = el.dataset.modePanel !== 'cadastrar';
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function sairModoEdicao(limparCampos){
+  editingRow = null;
+  editingBanner.hidden = true;
+  submitBtn().textContent = 'Salvar meta';
+  if (limparCampos) {
+    document.getElementById('form').reset();
+    dataHoje(document.getElementById('refData'));
+  }
+}
+
+cancelEditBtn.addEventListener('click', () => sairModoEdicao(true));
+
 // ===== INIT (só roda depois de liberar) =====
 function init(){
   mascaraMoeda(document.getElementById('metaValor'));
@@ -173,10 +228,34 @@ function init(){
     form: document.getElementById('form'),
     formId: 'metas',
     msgOk: 'Meta salva!',
+    beforeSend: (dados) => {
+      // Se estamos editando, envia _op=update com o número da linha
+      if (editingRow) {
+        dados._op = 'update';
+        dados._row = editingRow;
+      }
+      return true;
+    },
     afterOk: () => {
+      const eraEdicao = !!editingRow;
+      sairModoEdicao(false);
       dataHoje(document.getElementById('refData'));
-      // Se a tabela já foi carregada, recarrega pra mostrar a nova meta
-      if (window._metasCarregadas) carregarMetas();
+      // Recarrega a tabela pra refletir a mudança
+      window._metasCarregadas = false;
+      const wrap = document.getElementById('listaMetasWrap');
+      if (wrap) wrap.innerHTML = '<div class="metas-tabela mt-empty">Carregando…</div>';
+      carregarMetas();
+      // Se veio de edição, volta pra aba Visualizar automaticamente pra ver o resultado
+      if (eraEdicao) {
+        setTimeout(() => {
+          document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+          const btnV = document.querySelector('.mode-tab[data-mode="visualizar"]');
+          if (btnV) btnV.classList.add('active');
+          document.querySelectorAll('[data-mode-panel]').forEach(el => {
+            el.hidden = el.dataset.modePanel !== 'visualizar';
+          });
+        }, 200);
+      }
     }
   });
 
@@ -195,6 +274,8 @@ function init(){
 }
 
 // ===== VISUALIZAR METAS =====
+let METAS_CACHE = [];  // linhas cruas da planilha, guardadas pra editar/deletar
+
 function carregarMetas(){
   const wrap = document.getElementById('listaMetasWrap');
   wrap.innerHTML = '<div class="metas-tabela mt-empty">Carregando…</div>';
@@ -203,8 +284,8 @@ function carregarMetas(){
     .then(r => r.json())
     .then(d => {
       window._metasCarregadas = true;
-      const linhas = (d && d.abas && d.abas.metas) || [];
-      renderMetas(linhas);
+      METAS_CACHE = (d && d.abas && d.abas.metas) || [];
+      renderMetas(METAS_CACHE);
     })
     .catch(err => {
       wrap.innerHTML = '<div class="metas-tabela mt-empty">Erro ao carregar. Tente novamente em instantes.</div>';
@@ -215,23 +296,15 @@ function carregarMetas(){
 function renderMetas(linhas){
   const wrap = document.getElementById('listaMetasWrap');
 
-  // Consolida: (responsável, período, referência) → última linha vence
-  const mapa = {};
-  linhas.forEach(l => {
-    const resp = (l['Responsável'] || l['Vendedor'] || '').trim();
-    const per  = (l['Período'] || '').trim();
-    const ref  = (l['Referência'] || '').trim();
-    if (!resp) return;
-    mapa[resp + '|' + per + '|' + ref] = l;
-  });
-  const metas = Object.values(mapa);
+  // Filtra: só linhas com responsável preenchido (evita vazias)
+  const metas = linhas.filter(l => (l['Responsável'] || l['Vendedor'] || '').trim());
 
   if (!metas.length){
     wrap.innerHTML = '<div class="metas-tabela mt-empty">Nenhuma meta cadastrada ainda.</div>';
     return;
   }
 
-  // Ordena por responsável, depois por referência DESC
+  // Ordena por responsável, depois por referência DESC (mais nova em cima)
   metas.sort((a,b) => {
     const ra = (a['Responsável'] || a['Vendedor'] || '').localeCompare(b['Responsável'] || b['Vendedor'] || '');
     if (ra) return ra;
@@ -253,7 +326,7 @@ function renderMetas(linhas){
   const fmtPeriodo = p => ({mes:'Mensal', semana:'Semanal', trimestre:'Trimestral'}[String(p).toLowerCase()] || p || '—');
 
   const rows = metas.map(m => `
-    <tr>
+    <tr data-row="${m._row}">
       <td><b>${m['Responsável'] || m['Vendedor'] || '—'}</b></td>
       <td>${fmtPeriodo(m['Período'])}</td>
       <td>${fmtData(m['Referência'])}</td>
@@ -262,6 +335,10 @@ function renderMetas(linhas){
       <td class="mt-num">${fmtNum(m['Meta Assessorias Mensais'])}</td>
       <td class="mt-num">${fmtNum(m['Meta Ligações'])}</td>
       <td class="mt-num">${fmtNum(m['Meta Leads'])}</td>
+      <td class="mt-actions">
+        <button type="button" class="mt-btn edit" data-act="edit" data-row="${m._row}">✏ Editar</button>
+        <button type="button" class="mt-btn del" data-act="del" data-row="${m._row}">🗑 Excluir</button>
+      </td>
     </tr>
   `).join('');
 
@@ -277,12 +354,46 @@ function renderMetas(linhas){
           <th style="text-align:right">Assessorias</th>
           <th style="text-align:right">Ligações</th>
           <th style="text-align:right">Leads</th>
+          <th style="text-align:right">Ações</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
-    <div class="data-note" style="margin-top:10px">${metas.length} meta(s) cadastrada(s) · lista atualiza ao trocar de aba ou salvar nova.</div>
+    <div class="data-note" style="margin-top:10px">${metas.length} meta(s) cadastrada(s) · a mais recente por combinação vale no painel.</div>
   `;
+
+  // Handlers de editar/excluir
+  wrap.querySelectorAll('.mt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = parseInt(btn.dataset.row, 10);
+      const item = METAS_CACHE.find(l => l._row === row);
+      if (!item) return;
+      if (btn.dataset.act === 'edit') {
+        entrarModoEdicao(item);
+      } else if (btn.dataset.act === 'del') {
+        const nome = item['Responsável'] || item['Vendedor'] || '(sem nome)';
+        if (!confirm(`Excluir a meta de "${nome}" (${item['Período']}, ${String(item['Referência']||'').slice(0,10)})?\n\nEsta ação apaga a linha da planilha e não pode ser desfeita.`)) return;
+        excluirMeta(row, btn);
+      }
+    });
+  });
+}
+
+function excluirMeta(row, btn){
+  btn.disabled = true;
+  btn.textContent = 'Excluindo…';
+  fetch(window.APPS_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ _form: 'metas', _op: 'delete', _row: row })
+  })
+  .then(() => setTimeout(carregarMetas, 500))
+  .catch(err => {
+    alert('Erro ao excluir. Tente novamente.');
+    btn.disabled = false;
+    btn.textContent = '🗑 Excluir';
+    console.error(err);
+  });
 }
 </script>
 </body>

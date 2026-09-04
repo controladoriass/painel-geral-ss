@@ -98,6 +98,30 @@ function doPost(e) {
     var cfg = ABAS[qual];
     var aba = pegarAba_(cfg);
 
+    // Operações de edição/exclusão (por número de linha na planilha)
+    // Compatível com qualquer aba cujo montarLinha_ produza uma linha.
+    var op = String(dados._op || "insert").toLowerCase();
+    if (op === "delete") {
+      var rowDel = parseInt(dados._row, 10);
+      if (!rowDel || rowDel < 2) {
+        return json_({ ok: false, erro: "Linha inválida para exclusão." });
+      }
+      aba.deleteRow(rowDel);
+      return json_({ ok: true, op: "delete", aba: cfg.nome, row: rowDel });
+    }
+    if (op === "update") {
+      var rowUpd = parseInt(dados._row, 10);
+      if (!rowUpd || rowUpd < 2) {
+        return json_({ ok: false, erro: "Linha inválida para atualização." });
+      }
+      var linhaU = montarLinha_(qual, dados);
+      if (!linhaU.length) {
+        return json_({ ok: false, erro: "Sem tratamento de update para: " + qual });
+      }
+      aba.getRange(rowUpd, 1, 1, linhaU.length).setValues([linhaU]);
+      return json_({ ok: true, op: "update", aba: cfg.nome, row: rowUpd });
+    }
+
     // Atividade tem tratamento especial: gera N linhas (uma por atividade individual)
     if (qual === "atividade") {
       var linhas = montarLinhasAtividade_(dados);
@@ -223,9 +247,9 @@ function coletarTodasAbas_() {
     var range = aba.getRange(1, 1, aba.getLastRow(), aba.getLastColumn());
     var vals = range.getValues();
     var head = vals.shift().map(function (h) { return String(h).trim(); });
-    var linhas = vals.map(function (row) {
-      var obj = {};
-      head.forEach(function (col, i) { obj[col] = row[i]; });
+    var linhas = vals.map(function (row, i) {
+      var obj = { _row: i + 2 };  // número real da linha na planilha (1 = cabeçalho)
+      head.forEach(function (col, j) { obj[col] = row[j]; });
       return obj;
     });
     out.abas[qual] = linhas;
