@@ -155,8 +155,21 @@ button.submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .modal-close.alt{background:var(--err)}
 .modal-close.alt:hover{background:#a93226}
 
+.checks{
+  display:flex;flex-wrap:wrap;gap:8px 14px;
+  padding:10px 12px;border:1px solid #e2e6ef;border-radius:9px;background:#fafbfd;
+}
+.chk{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:500;color:var(--navy);cursor:pointer;
+  padding:4px 6px;border-radius:5px;transition:background .15s;
+}
+.chk:hover{background:#eef1f7}
+.chk input[type="checkbox"]{margin:0;accent-color:var(--gold);cursor:pointer}
+
 @media (max-width:560px){
   .grid,.grid.grid-4{grid-template-columns:1fr}
   header.top h1{font-size:22px}
   .card{padding:24px 20px 28px}
+  .checks{gap:6px 10px}
 }

@@ -1,5 +1,15 @@
 # Formulários do Painel Geral — como colocar no ar
 
+> **⚠️ ATUALIZAÇÃO 03/09/2026** — o Apps Script `Codigo-AppScript.gs` foi revisado.
+> Se você já tinha ele publicado, **é preciso republicar** (Editor de Apps Script → Deploy → Manage deployments → editar a versão ativa → New version → Deploy).
+> As colunas novas são apendadas automaticamente à direita das abas existentes; nenhum dado é perdido.
+>
+> **Novidades:**
+> - **Times** ganha: `Áreas Secundárias` (checkbox múltiplo) e `E-mail`
+> - **Reajustes** ganha: `<select>` de cliente (lista os 53 clientes de assessoria mensal, dispensa digitar nome), campos `ID Cliente`, `Nova Data Final`, `Aprovado Por`
+> - **`doGet(?dados=1)`** agora devolve JSON com TODAS as abas (o coletor Python usa isso)
+
+
 4 formulários web + 1 planilha Google + 1 Apps Script. Os formulários enviam via POST
 para o Apps Script, que grava em abas da planilha. O painel puxa a planilha (como
 CSV público) e mostra os dados nas abas certas.

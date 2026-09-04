@@ -1,0 +1,378 @@
+{
+  "gerado_em": "2026-09-01",
+  "descricao": "Lista pública de clientes com contrato de assessoria mensal — usada para popular selects em formulários.",
+  "total": 53,
+  "clientes": [
+    {
+      "cliente": "2017/08",
+      "id_cliente": 2120364,
+      "numero_contrato": 94,
+      "valor_atual": 3960,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "3RS",
+      "id_cliente": 676001655,
+      "numero_contrato": 1498,
+      "valor_atual": 12968,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Assessoria Mensal",
+      "id_cliente": 685332434,
+      "numero_contrato": 2537,
+      "valor_atual": 4376.7,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "BANCARIO",
+      "id_cliente": 2124288,
+      "numero_contrato": 1936,
+      "valor_atual": 2824,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "BLESS",
+      "id_cliente": 3091169,
+      "numero_contrato": 1060,
+      "valor_atual": 1518,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "CHADY CONFECCOES",
+      "id_cliente": 676018001,
+      "numero_contrato": 1613,
+      "valor_atual": 4052.5,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ACESSORIA",
+      "id_cliente": 681045484,
+      "numero_contrato": 2123,
+      "valor_atual": 2431.5,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ADMINISTRACAO PASSIVO BANCARIO",
+      "id_cliente": 685270038,
+      "numero_contrato": 2582,
+      "valor_atual": 9726,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ADMINISTRACAO PASSIVO FISCAL",
+      "id_cliente": 2907715,
+      "numero_contrato": 2483,
+      "valor_atual": 3242,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 685931923,
+      "numero_contrato": 2574,
+      "valor_atual": 22000,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 682052149,
+      "numero_contrato": 2360,
+      "valor_atual": 10000,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 678926233,
+      "numero_contrato": 1799,
+      "valor_atual": 8105,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 2168704,
+      "numero_contrato": 2565,
+      "valor_atual": 6484,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 682986508,
+      "numero_contrato": 2383,
+      "valor_atual": 6484,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 682529991,
+      "numero_contrato": 2327,
+      "valor_atual": 6072,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 675865122,
+      "numero_contrato": 2527,
+      "valor_atual": 6000,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 677269740,
+      "numero_contrato": 1941,
+      "valor_atual": 6000,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 2118745,
+      "numero_contrato": 2141,
+      "valor_atual": 5313,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 681523343,
+      "numero_contrato": 2144,
+      "valor_atual": 4863,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 685237653,
+      "numero_contrato": 2510,
+      "valor_atual": 4400,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 681957359,
+      "numero_contrato": 2190,
+      "valor_atual": 4000,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 685538286,
+      "numero_contrato": 2548,
+      "valor_atual": 3480,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 682227515,
+      "numero_contrato": 2228,
+      "valor_atual": 3242,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL",
+      "id_cliente": 682926974,
+      "numero_contrato": 2377,
+      "valor_atual": 2500,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL banc E RJ",
+      "id_cliente": 679019114,
+      "numero_contrato": 1858,
+      "valor_atual": 3242,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL consultivo",
+      "id_cliente": 681876458,
+      "numero_contrato": 2193,
+      "valor_atual": 4554,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL EXTRAJ.",
+      "id_cliente": 681814962,
+      "numero_contrato": 2211,
+      "valor_atual": 2277,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato ASSESSORIA MENSAL EXTRAJ. E CONTENC.",
+      "id_cliente": 2122943,
+      "numero_contrato": 2075,
+      "valor_atual": 3242,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato BANCARIO",
+      "id_cliente": 679021298,
+      "numero_contrato": 2027,
+      "valor_atual": 10626,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "Contrato BANCARIO 3 BANCOS",
+      "id_cliente": 681575555,
+      "numero_contrato": 2151,
+      "valor_atual": 4554,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato estrategia societaria",
+      "id_cliente": 680985119,
+      "numero_contrato": 2100,
+      "valor_atual": 4554,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato PRETACAO DE SERVICO",
+      "id_cliente": 680630916,
+      "numero_contrato": 2012,
+      "valor_atual": 7590,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato proposta assessoria tributario + bancario",
+      "id_cliente": 679032540,
+      "numero_contrato": 1866,
+      "valor_atual": 5648,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "Contrato RECUPERACAO JUDICIAL",
+      "id_cliente": 677262139,
+      "numero_contrato": 1929,
+      "valor_atual": 7060,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "DARLAN DIAS",
+      "id_cliente": 2129942,
+      "numero_contrato": 1083,
+      "valor_atual": 2431.5,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "ERBS",
+      "id_cliente": 2129734,
+      "numero_contrato": 995,
+      "valor_atual": 3030,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "FITA UP",
+      "id_cliente": 2225424,
+      "numero_contrato": 1062,
+      "valor_atual": 2178,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "GMAD",
+      "id_cliente": 2939212,
+      "numero_contrato": 1129,
+      "valor_atual": 2640,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "INBRAMUN",
+      "id_cliente": "",
+      "numero_contrato": 990,
+      "valor_atual": 3960,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "ITAGRES",
+      "id_cliente": 2142144,
+      "numero_contrato": 1699,
+      "valor_atual": 0,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "JOLITHI",
+      "id_cliente": 3088525,
+      "numero_contrato": 1046,
+      "valor_atual": 3960,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "LATEX FOAM",
+      "id_cliente": 2371960,
+      "numero_contrato": 1014,
+      "valor_atual": 4950,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "MAQUINA DE VENDAS",
+      "id_cliente": 2164466,
+      "numero_contrato": 1065,
+      "valor_atual": 3242,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "MARCO AURELIO CARDOZO",
+      "id_cliente": 675613201,
+      "numero_contrato": 1424,
+      "valor_atual": 18480,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "MULTISHOP",
+      "id_cliente": 2204826,
+      "numero_contrato": 954,
+      "valor_atual": 4400,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "POTI",
+      "id_cliente": "",
+      "numero_contrato": 961,
+      "valor_atual": 9000,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "SEANET",
+      "id_cliente": 677052675,
+      "numero_contrato": 1658,
+      "valor_atual": 3883,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "SELENT GV",
+      "id_cliente": 2337378,
+      "numero_contrato": 991,
+      "valor_atual": 3030,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "STV",
+      "id_cliente": 2149739,
+      "numero_contrato": 985,
+      "valor_atual": 3168,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "TODOS NOS PODEMOS",
+      "id_cliente": 676765077,
+      "numero_contrato": 1612,
+      "valor_atual": 4000,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "VETOR",
+      "id_cliente": 2118817,
+      "numero_contrato": 2,
+      "valor_atual": 12000,
+      "vigencia_vencida": true
+    },
+    {
+      "cliente": "VISION TOWER",
+      "id_cliente": 2301342,
+      "numero_contrato": 972,
+      "valor_atual": 2640,
+      "vigencia_vencida": false
+    },
+    {
+      "cliente": "WELLMIX/FHERER",
+      "id_cliente": 3091169,
+      "numero_contrato": 1061,
+      "valor_atual": 5514.6,
+      "vigencia_vencida": true
+    }
+  ]
+}

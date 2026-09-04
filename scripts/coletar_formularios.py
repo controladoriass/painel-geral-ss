@@ -107,18 +107,30 @@ def processar_times(linhas):
     for l in linhas:
         adv = str(l.get("Advogado","")).strip()
         if not adv: continue
+        # Áreas secundárias podem vir como string separada por vírgula ou nada
+        raw_sec = l.get("Áreas Secundárias") or ""
+        secundarias = [a.strip() for a in str(raw_sec).split(",") if a.strip()]
         mapa[adv] = {
-            "advogado": adv, "time": str(l.get("Time / Equipe","")).strip(),
+            "advogado": adv,
+            "time": str(l.get("Time / Área Principal","") or l.get("Time / Equipe","")).strip(),
+            "areas_secundarias": secundarias,
             "lider": str(l.get("Líder do Time","")).strip(),
             "situacao": str(l.get("Situação","ativo") or "ativo").strip().lower(),
+            "email": str(l.get("E-mail","")).strip(),
         }
     por_time = defaultdict(list)
+    por_area_todas = defaultdict(set)  # área -> advogados (principais + secundárias)
     for adv, info in mapa.items():
-        if info["situacao"] != "inativo":
-            por_time[info["time"]].append(adv)
+        if info["situacao"] == "inativo": continue
+        por_time[info["time"]].append(adv)
+        if info["time"]:
+            por_area_todas[info["time"]].add(adv)
+        for a in info["areas_secundarias"]:
+            por_area_todas[a].add(adv)
     return {
         "advogados": list(mapa.values()),
         "por_time": {t: sorted(a) for t,a in sorted(por_time.items())},
+        "por_area_total": {a: sorted(list(s)) for a,s in sorted(por_area_todas.items())},
         "qtd_registros": len(linhas),
     }
 
@@ -131,16 +143,19 @@ def processar_reajustes(linhas):
         if not cli: continue
         reajustes.append({
             "cliente": cli,
+            "id_cliente": str(l.get("ID Cliente","")).strip(),
             "numero_contrato": str(l.get("Nº Contrato","")).strip(),
             "data": str(l.get("Data do Reajuste","")).strip()[:10],
             "valor_anterior": to_float(l.get("Valor Anterior (R$)")),
             "valor_novo": to_float(l.get("Valor Novo (R$)")),
             "variacao_pct": to_float(l.get("Variação (%)")),
             "indice": str(l.get("Índice","")).strip(),
+            "nova_data_final": str(l.get("Nova Data Final","")).strip()[:10],
+            "aprovado_por": str(l.get("Aprovado Por","")).strip(),
             "motivo": str(l.get("Motivo","")).strip(),
         })
     reajustes.sort(key=lambda r: r["data"], reverse=True)
-    return {"reajustes": reajustes[:50], "qtd_registros": len(linhas)}
+    return {"reajustes": reajustes[:100], "qtd_registros": len(linhas)}
 
 PROCESSADORES = {
     "metas": processar_metas,

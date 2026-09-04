@@ -58,9 +58,9 @@
       </div>
 
       <div class="field">
-        <label>Time / Equipe <span class="req">*</span></label>
+        <label>Time / Área principal <span class="req">*</span></label>
         <select name="time" required>
-          <option value="" disabled selected>Selecione o time…</option>
+          <option value="" disabled selected>Selecione a área principal…</option>
           <option>Cível / Contencioso</option>
           <option>Trabalhista</option>
           <option>Tributário</option>
@@ -74,6 +74,7 @@
           <option>Direção</option>
           <option>Outro</option>
         </select>
+        <div class="hint">Área onde o advogado atua principalmente.</div>
       </div>
 
       <div class="field">
@@ -85,8 +86,31 @@
       </div>
 
       <div class="field full">
+        <label>Áreas secundárias <span class="opt">opcional</span></label>
+        <div class="checks">
+          <label class="chk"><input type="checkbox" name="areasSec" value="Cível / Contencioso"> Cível</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Trabalhista"> Trabalhista</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Tributário"> Tributário</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Empresarial / Societário"> Empresarial</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Imobiliário"> Imobiliário</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Bancário"> Bancário</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Família e Sucessões"> Família</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Penal"> Penal</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Consultivo"> Consultivo</label>
+          <label class="chk"><input type="checkbox" name="areasSec" value="Extrajudicial / Cobrança"> Extrajudicial</label>
+        </div>
+        <div class="hint">Marque só se atua em outra(s) área(s) além da principal.</div>
+      </div>
+
+      <div class="field">
         <label>Líder do time <span class="opt">opcional</span></label>
         <input type="text" name="lider" placeholder="Nome do líder">
+      </div>
+
+      <div class="field">
+        <label>E-mail do advogado <span class="opt">opcional</span></label>
+        <input type="email" name="email" placeholder="fulano@silvaesilva.com.br">
+        <div class="hint">Usado pra envio direto de relatórios (planilhas de processos parados etc.).</div>
       </div>
 
       <div class="field full">

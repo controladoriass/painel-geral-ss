@@ -2913,14 +2913,23 @@ section{ margin-bottom:40px !important }
 
   // ---------- FORMULÁRIOS (dados vindos da planilha via Apps Script) ----------
   async function renderFormularios(){
-    // METAS (aba Comercial)
+    // METAS (aba Comercial) — exibe todos os 5 tipos de meta que o form coleta
     const metas = await carregar('form_metas');
     if(metas && metas.metas && metas.metas.length && $('#com-metas-panel')){
-      const rows = metas.metas.map(m => `<div class="hbar-row">
-        <div class="hb-name" title="${m.vendedor}">${m.vendedor}</div>
-        <div class="hbar-track"><div class="hbar-fill gold" style="width:100%"></div></div>
-        <div class="hb-val">${fmtNum(m.meta_propostas_qtd||0)}<small>${m.referencia||m.periodo||''} · ${m.meta_propostas_valor?fmtBRLk(m.meta_propostas_valor):'—'}</small></div>
-      </div>`).join('');
+      const rows = metas.metas.map(m => {
+        const subs = [];
+        if(m.meta_propostas_qtd) subs.push(`${m.meta_propostas_qtd} propostas`);
+        if(m.meta_propostas_valor) subs.push(fmtBRLk(m.meta_propostas_valor));
+        if(m.meta_assessorias) subs.push(`${m.meta_assessorias} assess.`);
+        if(m.meta_ligacoes) subs.push(`${m.meta_ligacoes} lig.`);
+        if(m.meta_leads) subs.push(`${m.meta_leads} leads`);
+        const sub = subs.join(' · ') || '—';
+        return `<div class="hbar-row">
+          <div class="hb-name" title="${m.vendedor}">${m.vendedor}</div>
+          <div class="hbar-track"><div class="hbar-fill gold" style="width:100%"></div></div>
+          <div class="hb-val">${fmtNum(m.meta_propostas_qtd||m.meta_assessorias||0)}<small>${m.referencia||m.periodo||''} · ${sub}</small></div>
+        </div>`;
+      }).join('');
       $('#com-metas-panel').innerHTML = `<div class="panel-label">Metas cadastradas</div>
         <div class="hbar-list">${rows}</div>
         <div class="data-note">${metas.metas.length} metas registradas · <a href="formularios/metas/" style="color:var(--gold);text-decoration:none">cadastrar nova →</a></div>`;
@@ -2944,31 +2953,44 @@ section{ margin-bottom:40px !important }
         <div class="data-note">${atv.qtd_registros} registros · <a href="formularios/atividade/" style="color:var(--gold);text-decoration:none">registrar dia →</a></div>`;
     }
 
-    // TIMES (aba Produção)
+    // TIMES (aba Produção) — usa por_area_total se disponível (soma principal+secundárias)
     const times = await carregar('form_times');
-    if(times && times.por_time && Object.keys(times.por_time).length && $('#prod-times-panel')){
-      const entradas = Object.entries(times.por_time);
-      const total = times.advogados ? times.advogados.filter(a=>a.situacao!=='inativo').length : 0;
-      const rows = entradas.map(([time, advs]) => `<div class="hbar-row">
-        <div class="hb-name" title="${time}">${time}</div>
-        <div class="hbar-track"><div class="hbar-fill gold" style="width:${Math.round(advs.length/Math.max(...entradas.map(e=>e[1].length))*100)}%"></div></div>
-        <div class="hb-val">${advs.length}<small>${advs.slice(0,3).join(', ')}${advs.length>3?'…':''}</small></div>
-      </div>`).join('');
-      $('#prod-times-panel').innerHTML = `<div class="panel-label">Advogados por time (${total} ativos)</div>
-        <div class="hbar-list">${rows}</div>
-        <div class="data-note">${times.qtd_registros} vínculos cadastrados · <a href="formularios/times/" style="color:var(--gold);text-decoration:none">cadastrar vínculo →</a></div>`;
+    if(times && $('#prod-times-panel')){
+      const fonte = times.por_area_total && Object.keys(times.por_area_total).length
+        ? times.por_area_total
+        : (times.por_time || {});
+      const usaSecundarias = !!times.por_area_total;
+      if(Object.keys(fonte).length){
+        const entradas = Object.entries(fonte);
+        const total = times.advogados ? times.advogados.filter(a=>a.situacao!=='inativo').length : 0;
+        const maxAdvs = Math.max(...entradas.map(e => e[1].length)) || 1;
+        const rows = entradas.map(([area, advs]) => `<div class="hbar-row">
+          <div class="hb-name" title="${area}">${area}</div>
+          <div class="hbar-track"><div class="hbar-fill gold" style="width:${Math.round(advs.length/maxAdvs*100)}%"></div></div>
+          <div class="hb-val">${advs.length}<small>${advs.slice(0,3).join(', ')}${advs.length>3?'…':''}</small></div>
+        </div>`).join('');
+        const nota = usaSecundarias ? 'inclui áreas secundárias' : 'só área principal';
+        $('#prod-times-panel').innerHTML = `<div class="panel-label">Advogados por área (${total} ativos · ${nota})</div>
+          <div class="hbar-list">${rows}</div>
+          <div class="data-note">${times.qtd_registros} vínculos cadastrados · <a href="formularios/times/" style="color:var(--gold);text-decoration:none">cadastrar vínculo →</a></div>`;
+      }
     }
 
-    // REAJUSTES (aba Financeiro)
+    // REAJUSTES (aba Financeiro) — mostra também nova vigência quando informada
     const rea = await carregar('form_reajustes');
     if(rea && rea.reajustes && rea.reajustes.length && $('#fin-reajustes-panel')){
       const rows = rea.reajustes.slice(0,15).map(r => {
         const cor = r.variacao_pct>0?'#2f7a44':(r.variacao_pct<0?'#a63d38':'var(--muted)');
         const sinal = r.variacao_pct>0?'+':'';
+        const extras = [];
+        extras.push(`${fmtBRLk(r.valor_anterior)} → ${fmtBRLk(r.valor_novo)}`);
+        extras.push(fmtData(r.data));
+        if(r.nova_data_final) extras.push(`nova vig. ${fmtData(r.nova_data_final)}`);
+        if(r.indice) extras.push(r.indice);
         return `<div class="hbar-row">
           <div class="hb-name" title="${r.cliente}">${r.cliente}${r.numero_contrato?' <small style="color:var(--muted);font-weight:500">#'+r.numero_contrato+'</small>':''}</div>
           <div class="hbar-track"><div class="hbar-fill gold" style="width:100%"></div></div>
-          <div class="hb-val" style="color:${cor}">${sinal}${(r.variacao_pct||0).toFixed(2)}%<small style="color:var(--muted)">${fmtBRLk(r.valor_anterior)} → ${fmtBRLk(r.valor_novo)} · ${fmtData(r.data)}</small></div>
+          <div class="hb-val" style="color:${cor}">${sinal}${(r.variacao_pct||0).toFixed(2)}%<small style="color:var(--muted)">${extras.join(' · ')}</small></div>
         </div>`;
       }).join('');
       $('#fin-reajustes-panel').innerHTML = `<div class="panel-label">Últimos reajustes registrados</div>
